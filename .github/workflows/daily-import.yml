@@ -26,6 +26,9 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - name: Push Database Schema
+        run: npx prisma db push
+
       - name: Run Import Script
         run: npx tsx src/scripts/import-deals.ts
         env:

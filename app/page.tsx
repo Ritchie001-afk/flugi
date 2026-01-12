@@ -1,9 +1,21 @@
 
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Search, ArrowRight, CheckCircle2, Globe, ShieldCheck } from "lucide-react";
+import prisma from "@/lib/db";
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  // Fetch featured deals (flash deals or just latest 3)
+  const featuredDeals = await prisma.deal.findMany({
+    where: {
+      expiresAt: { gt: new Date() }
+    },
+    orderBy: { isFlashDeal: 'desc' }, // Flash deals first
+    take: 3
+  });
   return (
     <main className="flex flex-col items-center w-full">
       {/* Hero Section */}
@@ -46,38 +58,54 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-slate-900">Oblíbené destinace</h2>
-            <Button variant="ghost" className="text-blue-600 hover:text-blue-700 gap-2">
-              Zobrazit vše <ArrowRight className="h-4 w-4" />
-            </Button>
+            <Link href="/deals">
+              <Button variant="ghost" className="text-blue-600 hover:text-blue-700 gap-2">
+                Zobrazit vše <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
 
-          {/* Carousel Placeholder - Logic to be added */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
-                {/* Placeholder Image replacement */}
-                <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:animate-none group-hover:bg-slate-300 transition-colors" />
+            {featuredDeals.length === 0 ? (
+              <div className="col-span-full py-12 text-center text-slate-500">
+                <p>Zatím žádné top nabídky. Podívejte se na všechny nabídky.</p>
+              </div>
+            ) : (
+              featuredDeals.map((deal: any) => (
+                <Link href={deal.url} key={deal.id} target="_blank" className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
+                  {/* Image */}
+                  {deal.image ? (
+                    <div className="absolute inset-0">
+                      <Image src={deal.image} alt={deal.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent" />
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:animate-none group-hover:bg-slate-300 transition-colors" />
+                  )}
 
-                <div className="absolute inset-0 p-6 flex flex-col justify-end bg-gradient-to-t from-slate-900/90 to-transparent">
-                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full mb-3">
-                      Letenka
-                    </span>
-                    <h3 className="text-2xl font-bold text-white mb-2">Dubaj, SAE</h3>
-                    <p className="text-blue-100 mb-4">Zpáteční z Prahy</p>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-400 line-through">12 490 Kč</p>
-                        <p className="text-xl font-bold text-white">4 990 Kč</p>
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full mb-3">
+                        {deal.type === 'package' ? 'Zájezd' : 'Letenka'}
+                      </span>
+                      <h3 className="text-2xl font-bold text-white mb-2 line-clamp-2">{deal.title}</h3>
+                      <p className="text-blue-100 mb-4">{deal.description && deal.description.substring(0, 30)}...</p>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          {deal.originalPrice && (
+                            <p className="text-xs text-slate-400 line-through">{deal.originalPrice.toLocaleString('cs-CZ')} Kč</p>
+                          )}
+                          <p className="text-xl font-bold text-white">{deal.price.toLocaleString('cs-CZ')} Kč</p>
+                        </div>
+                        <Button size="sm" variant="secondary" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                          Zobrazit
+                        </Button>
                       </div>
-                      <Button size="sm" variant="secondary" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                        Zobrazit
-                      </Button>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </section>
