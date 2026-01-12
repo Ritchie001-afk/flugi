@@ -9,6 +9,8 @@ on:
 jobs:
   import-deals:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     
     steps:
       - name: Checkout code
@@ -36,5 +38,3 @@ jobs:
 
       - name: Run Import Script
         run: npx tsx src/scripts/import-deals.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
