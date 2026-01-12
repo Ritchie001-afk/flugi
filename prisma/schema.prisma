@@ -1,0 +1,66 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Deal {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique @default(cuid())
+  description     String
+  price           Float
+  originalPrice   Float?
+  currency        String    @default("CZK")
+  
+  // Flattened destination fields
+  destination     String    // Full string e.g. "Male, Maldives"
+  destinationCity String?
+  destinationCountry String?
+  
+  image           String
+  images          String[]
+  url             String    @unique // Affiliate link
+  
+  startDate       DateTime?
+  endDate         DateTime?
+  type            String    @default("flight") // flight, hotel, package
+  tags            String[]
+  
+  isFlashDeal     Boolean   @default(false)
+  expiresAt       DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Guide {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String
+  image       String
+  category    String
+  author      String
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Airport {
+  id          String   @id @default(cuid())
+  iata        String   @unique
+  name        String
+  city        String
+  country     String
+  content     String   // Full guide content
+  facilities  String[]
+  transport   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
