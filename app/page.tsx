@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/Button";
 import { Search, ArrowRight, CheckCircle2, Globe, ShieldCheck } from "lucide-react";
 import prisma from "@/lib/db";
 
+import { Deal } from "@prisma/client";
+
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Fetch featured deals (flash deals or just latest 3)
-  let featuredDeals = [];
+  let featuredDeals: Deal[] = [];
   try {
     featuredDeals = await prisma.deal.findMany({
       where: {
