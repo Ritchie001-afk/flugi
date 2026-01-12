@@ -9,13 +9,18 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Fetch featured deals (flash deals or just latest 3)
-  const featuredDeals = await prisma.deal.findMany({
-    where: {
-      expiresAt: { gt: new Date() }
-    },
-    orderBy: { isFlashDeal: 'desc' }, // Flash deals first
-    take: 3
-  });
+  let featuredDeals = [];
+  try {
+    featuredDeals = await prisma.deal.findMany({
+      where: {
+        expiresAt: { gt: new Date() }
+      },
+      orderBy: { isFlashDeal: 'desc' }, // Flash deals first
+      take: 3
+    });
+  } catch (e) {
+    console.error("Failed to fetch featured deals:", e);
+  }
   return (
     <main className="flex flex-col items-center w-full">
       {/* Hero Section */}
