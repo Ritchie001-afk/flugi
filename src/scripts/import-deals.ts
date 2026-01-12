@@ -92,4 +92,12 @@ async function importDeals() {
     }
 }
 
-importDeals();
+importDeals()
+    .then(() => {
+        console.log('Import finished.');
+        process.exit(0);
+    })
+    .catch((e) => {
+        console.error('Fatal import error:', e);
+        process.exit(1);
+    });
