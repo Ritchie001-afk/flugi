@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/Button";
 import { Search, Filter, Plane, Calendar, MapPin } from "lucide-react";
 import prisma from "@/lib/db";
 
+export const dynamic = 'force-dynamic';
+
 // This is a Server Component
 export default async function DealsPage() {
     const deals = await prisma.deal.findMany({
@@ -71,7 +73,7 @@ export default async function DealsPage() {
                                     <p>Zatím žádné nabídky. Zkuste to později.</p>
                                 </div>
                             ) : (
-                                deals.map((deal) => (
+                                deals.map((deal: any) => (
                                     <div key={deal.id} className="group flex flex-col rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300">
                                         {/* Image */}
                                         <div className="relative aspect-video bg-slate-200 overflow-hidden">
