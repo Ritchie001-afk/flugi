@@ -14,7 +14,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Chybí destinace" }, { status: 400 });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
         const prompt = `
         Jsi zkušený cestovní průvodce. Vytvoř detailní itinerář na ${days || 3} dní pro destinaci: ${destination}.
@@ -36,8 +36,11 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ itinerary: text });
 
-    } catch (error) {
-        console.error("Gemini API Error:", error);
-        return NextResponse.json({ error: "Nepodařilo se vygenerovat itinerář." }, { status: 500 });
+    } catch (error: any) {
+        console.error("Gemini API Error Detail:", error?.message || error);
+        return NextResponse.json({
+            error: "Nepodařilo se vygenerovat itinerář.",
+            details: error?.message
+        }, { status: 500 });
     }
 }
