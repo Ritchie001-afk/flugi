@@ -27,6 +27,9 @@ export default function Navbar() {
                     <Link href="/deals" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
                         Akční letenky
                     </Link>
+                    <Link href="/zajezdy" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
+                        Zájezdy
+                    </Link>
                     <Link href="/pruvodce" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
                         Průvodce
                     </Link>
