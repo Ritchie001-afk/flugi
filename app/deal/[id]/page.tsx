@@ -114,7 +114,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                 <>
                                     <h3 className="text-lg font-bold text-slate-900 mb-4">Kam na výlet</h3>
                                     {/* TripAdvisor */}
-                                    <a href={`https://www.tripadvisor.cz/Search?q=${encodeURIComponent(destinationCity)}`} target="_blank" rel="noopener noreferrer" className="block group mb-4">
+                                    <a href={`https://www.tripadvisor.com/Search?q=${encodeURIComponent(deal.destination)}`} target="_blank" rel="noopener noreferrer" className="block group mb-4">
                                         <div className="p-4 rounded-xl bg-green-50 border border-green-100 hover:bg-green-100 transition-colors flex items-start gap-4">
                                             <div className="p-3 bg-green-600 rounded-lg text-white">
                                                 <MapPin className="h-6 w-6" />
