@@ -8,7 +8,16 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // --- Auth Actions ---
 
+import { getDestinationImage } from '@/lib/images';
+
 // --- AI Actions ---
+
+export async function findImageAction(destination: string) {
+    const url = getDestinationImage(destination, '');
+    // If it returns empty string (meaning no match and no fallback provided), we return error or generic
+    if (!url) return { error: 'Nenašel jsem obrázek pro tuto destinaci.' };
+    return { url };
+}
 
 export async function generateDescriptionAction(destination: string) {
     if (!process.env.GEMINI_API_KEY) return { error: 'Chybí API klíč' };
