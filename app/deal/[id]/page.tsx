@@ -109,39 +109,63 @@ export default async function DealPage({ params }: DealPageProps) {
 
                         {/* Affiliate Cards */}
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 sticky top-24">
-                            <h3 className="text-lg font-bold text-slate-900 mb-4">Najdi super ubytko</h3>
 
-                            {/* Booking */}
-                            <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group mb-4">
-                                <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors flex items-start gap-4">
-                                    <div className="p-3 bg-blue-600 rounded-lg text-white">
-                                        <Bed className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-blue-900 group-hover:underline">{AFFILIATE_LINKS.booking.name}</h4>
-                                        <p className="text-sm text-blue-700 mb-2">{AFFILIATE_LINKS.booking.description}</p>
-                                        <span className="text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            {AFFILIATE_LINKS.booking.cta} <ArrowRight className="h-3 w-3" />
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
+                            {deal.type === 'package' ? (
+                                <>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-4">Kam na výlet</h3>
+                                    {/* TripAdvisor */}
+                                    <a href={`https://www.tripadvisor.cz/Search?q=${encodeURIComponent(destinationCity)}`} target="_blank" rel="noopener noreferrer" className="block group mb-4">
+                                        <div className="p-4 rounded-xl bg-green-50 border border-green-100 hover:bg-green-100 transition-colors flex items-start gap-4">
+                                            <div className="p-3 bg-green-600 rounded-lg text-white">
+                                                <MapPin className="h-6 w-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-green-900 group-hover:underline">Co vidět a zažít</h4>
+                                                <p className="text-sm text-green-700 mb-2">Podívej se na nejlepší atrakce a restaurace v okolí na TripAdvisoru.</p>
+                                                <span className="text-xs font-bold text-green-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                    Prozkoumat okolí <ArrowRight className="h-3 w-3" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </>
+                            ) : (
+                                <>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-4">Najdi super ubytko</h3>
 
-                            {/* Airbnb */}
-                            <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group mb-4">
-                                <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 hover:bg-rose-100 transition-colors flex items-start gap-4">
-                                    <div className="p-3 bg-rose-500 rounded-lg text-white">
-                                        <Home className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-rose-900 group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
-                                        <p className="text-sm text-rose-700 mb-2">{AFFILIATE_LINKS.airbnb.description}</p>
-                                        <span className="text-xs font-bold text-rose-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            {AFFILIATE_LINKS.airbnb.cta} <ArrowRight className="h-3 w-3" />
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
+                                    {/* Booking */}
+                                    <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group mb-4">
+                                        <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors flex items-start gap-4">
+                                            <div className="p-3 bg-blue-600 rounded-lg text-white">
+                                                <Bed className="h-6 w-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-blue-900 group-hover:underline">{AFFILIATE_LINKS.booking.name}</h4>
+                                                <p className="text-sm text-blue-700 mb-2">{AFFILIATE_LINKS.booking.description}</p>
+                                                <span className="text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                    {AFFILIATE_LINKS.booking.cta} <ArrowRight className="h-3 w-3" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    {/* Airbnb */}
+                                    <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group mb-4">
+                                        <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 hover:bg-rose-100 transition-colors flex items-start gap-4">
+                                            <div className="p-3 bg-rose-500 rounded-lg text-white">
+                                                <Home className="h-6 w-6" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-rose-900 group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
+                                                <p className="text-sm text-rose-700 mb-2">{AFFILIATE_LINKS.airbnb.description}</p>
+                                                <span className="text-xs font-bold text-rose-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                                                    {AFFILIATE_LINKS.airbnb.cta} <ArrowRight className="h-3 w-3" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </>
+                            )}
 
                             <div className="h-px bg-slate-200 my-6" />
 

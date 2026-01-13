@@ -1,6 +1,6 @@
 
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import prisma from "@/lib/db";
 import Link from "next/link";
 import { MapPin, Calendar, ArrowRight, Sun, Umbrella } from "lucide-react";
