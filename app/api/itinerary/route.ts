@@ -15,7 +15,7 @@ export async function POST(req: Request) {
         }
 
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
         const prompt = `
         Jsi zkušený cestovní průvodce. Vytvoř detailní itinerář na ${days || 3} dní pro destinaci: ${destination}.
