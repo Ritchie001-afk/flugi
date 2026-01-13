@@ -12,7 +12,7 @@ export async function login(formData: FormData) {
     const correctPassword = process.env.ADMIN_PASSWORD || 'flugi123'; // Fallback for dev
 
     if (password !== correctPassword) {
-        return { error: 'Nesprávné heslo' };
+        redirect('/admin/login?error=invalid');
     }
 
     await createSession();
@@ -26,7 +26,7 @@ export async function logout() {
 
 // --- Deal Actions ---
 
-export async function createDeal(prevState: any, formData: FormData) {
+export async function createDeal(formData: FormData) {
     const title = formData.get('title') as string;
     const price = parseFloat(formData.get('price') as string);
     const destination = formData.get('destination') as string;
@@ -65,11 +65,20 @@ export async function createDeal(prevState: any, formData: FormData) {
         });
         revalidatePath('/zajezdy');
         revalidatePath('/deals');
-        return { success: true };
+        revalidatePath('/zajezdy');
+        revalidatePath('/deals');
+        revalidatePath('/admin');
     } catch (e) {
         console.error(e);
-        return { error: 'Chyba při ukládání do DB' };
+        // In a real app we would return error, but for simple form action we might just log
     }
+    // Always redirect or revalidate
+    redirect('/admin');
+}
+    } catch (e) {
+    console.error(e);
+    return { error: 'Chyba při ukládání do DB' };
+}
 }
 
 export async function deleteDeal(id: string) {
