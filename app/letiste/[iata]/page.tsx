@@ -109,13 +109,3 @@ export default async function AirportPage({ params }: { params: { iata: string }
         </div>
     );
 }
-
-                            ))}
-                        </div >
-    <Button variant="premium" className="w-full mt-6">Zobrazit vše</Button>
-                    </div >
-                </div >
-            </div >
-        </div >
-    );
-}
