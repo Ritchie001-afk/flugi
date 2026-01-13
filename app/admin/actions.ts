@@ -110,6 +110,39 @@ export async function createDeal(formData: FormData) {
 }
 
 
+export async function updateDeal(id: string, formData: FormData) {
+    const session = await createSession(process.env.ADMIN_PASSWORD || 'flugi123');
+
+    const title = formData.get('title') as string;
+    const price = parseFloat(formData.get('price') as string);
+    const destination = formData.get('destination') as string;
+    const image = formData.get('image') as string;
+    const url = formData.get('url') as string;
+    const type = formData.get('type') as string;
+    const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
+    const description = formData.get('description') as string;
+
+    await prisma.deal.update({
+        where: { id },
+        data: {
+            title,
+            price,
+            destination,
+            image,
+            url,
+            type,
+            tags,
+            description
+        }
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/zajezdy');
+    revalidatePath('/');
+    redirect('/admin');
+}
+
+
 export async function deleteDeal(id: string) {
     try {
         await prisma.deal.delete({ where: { id } });
