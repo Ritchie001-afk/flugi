@@ -82,9 +82,6 @@ export default async function Home() {
             ) : (
               featuredDeals.map((deal: any) => (
                 <Link href={deal.url} key={deal.id} target="_blank" className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
-                  import {getDestinationImage} from "@/lib/images";
-
-                  // ... inside map ...
                   {/* Image */}
                   <div className="absolute inset-0">
                     <Image

@@ -76,9 +76,7 @@ export default async function DealsPage() {
                             ) : (
                                 deals.map((deal: any) => (
                                     <div key={deal.id} className="group flex flex-col rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300">
-                                        import {getDestinationImage} from "@/lib/images";
 
-                                        // ... inside map ...
                                         {/* Image */}
                                         <div className="relative aspect-video bg-slate-200 overflow-hidden">
                                             {/* Smart Image Selection */}
