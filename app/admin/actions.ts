@@ -111,7 +111,9 @@ export async function createDeal(formData: FormData) {
 
 
 export async function updateDeal(id: string, formData: FormData) {
-    const session = await createSession(process.env.ADMIN_PASSWORD || 'flugi123');
+    // Session is handled by middleware, or we could verify it here with getSession()
+    // but definitely DO NOT create a new one with hardcoded password!
+
 
     const title = formData.get('title') as string;
     const price = parseFloat(formData.get('price') as string);
