@@ -34,9 +34,9 @@ export async function generateDescriptionAction(destination: string) {
         const result = await model.generateContent(prompt);
         const text = result.response.text();
         return { text };
-    } catch (e) {
-        console.error(e);
-        return { error: 'Nepodařilo se vygenerovat popis.' };
+    } catch (e: any) {
+        console.error("Gemini Error:", e);
+        return { error: `Chyba AI: ${e.message || 'Neznámá chyba'}` };
     }
 }
 

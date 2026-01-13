@@ -6,7 +6,7 @@ import Link from "next/link";
 import { MapPin, Calendar, ArrowRight, Sun, Umbrella } from "lucide-react";
 import { getDestinationImage } from "@/lib/images";
 
-export const revalidate = 3600; // Revalidate every hour
+export const dynamic = 'force-dynamic';
 
 export default async function ToursPage() {
     // Fetch only packages (Invia etc.)
