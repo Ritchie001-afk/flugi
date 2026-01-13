@@ -123,7 +123,7 @@ export default async function DealsPage() {
 
                                             <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                                                 <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
-                                                    Invia.cz
+                                                    {deal.type === 'flight' ? 'Pelikan.cz' : 'Invia.cz'}
                                                 </div>
                                                 <a href={deal.url} target="_blank" rel="noopener noreferrer">
                                                     <Button size="sm" variant="outline" className="h-8 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600">
