@@ -2,16 +2,29 @@
 import { createDeal, deleteDeal, logout } from './actions';
 import { Button } from '@/components/ui/Button';
 import prisma from '@/lib/db';
-import { Trash2, ExternalLink, LogOut, Plus, Image as ImageIcon } from 'lucide-react';
+import { Trash2, ExternalLink, LogOut, Plus, Image as ImageIcon, Pencil } from 'lucide-react';
 import DealForm from '@/components/admin/DealForm';
+import Link from 'next/link';
 
 export const revalidate = 0; // Always fresh data for admin
 
-export default async function AdminPage() {
+interface AdminPageProps {
+    searchParams: Promise<{ edit?: string }>;
+}
+
+export default async function AdminPage({ searchParams }: AdminPageProps) {
+    const params = await searchParams;
     const deals = await prisma.deal.findMany({
         orderBy: { createdAt: 'desc' },
         take: 50
     });
+
+    let editDeal = null;
+    if (params.edit) {
+        editDeal = await prisma.deal.findUnique({
+            where: { id: params.edit }
+        });
+    }
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -34,13 +47,15 @@ export default async function AdminPage() {
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-24">
                         <div className="flex items-center gap-2 mb-6">
                             <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
-                                <Plus className="h-5 w-5" />
+                                {editDeal ? <Pencil className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
                             </div>
-                            <h2 className="text-lg font-bold text-slate-900">Přidat nový deal</h2>
+                            <h2 className="text-lg font-bold text-slate-900">
+                                {editDeal ? 'Upravit deal' : 'Přidat nový deal'}
+                            </h2>
                         </div>
 
                         {/* Interactive Client Component Form */}
-                        <DealForm />
+                        <DealForm initialData={editDeal} />
                     </div>
                 </div>
 
@@ -64,7 +79,7 @@ export default async function AdminPage() {
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
                                     {deals.map(deal => (
-                                        <tr key={deal.id} className="hover:bg-slate-50 transition-colors group">
+                                        <tr key={deal.id} className={`hover:bg-slate-50 transition-colors group ${params.edit === deal.id ? 'bg-blue-50' : ''}`}>
                                             <td className="px-4 py-3">
                                                 <div className="font-medium text-slate-900 truncate max-w-[200px] sm:max-w-[300px]" title={deal.title}>
                                                     {deal.title}
@@ -85,11 +100,20 @@ export default async function AdminPage() {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3 text-right">
-                                                <form action={deleteDeal.bind(null, deal.id)}>
-                                                    <button className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-all" title="Smazat">
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </button>
-                                                </form>
+                                                <div className="flex justify-end items-center gap-1">
+                                                    <Link
+                                                        href={`/admin?edit=${deal.id}`}
+                                                        className="text-slate-400 hover:text-blue-600 p-1 rounded hover:bg-blue-50 transition-all"
+                                                        title="Upravit"
+                                                    >
+                                                        <Pencil className="h-4 w-4" />
+                                                    </Link>
+                                                    <form action={deleteDeal.bind(null, deal.id)} className="inline">
+                                                        <button className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-all" title="Smazat">
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
