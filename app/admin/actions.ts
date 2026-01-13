@@ -75,11 +75,7 @@ export async function createDeal(formData: FormData) {
     // Always redirect or revalidate
     redirect('/admin');
 }
-    } catch (e) {
-    console.error(e);
-    return { error: 'Chyba při ukládání do DB' };
-}
-}
+
 
 export async function deleteDeal(id: string) {
     try {
