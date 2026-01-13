@@ -109,10 +109,7 @@ export default async function AirportPage({ params }: { params: { iata: string }
         </div>
     );
 }
-                                        <span>Ryanair</span>
-                                        <span>12. Listopad</span>
-                                    </div >
-                                </div >
+
                             ))}
                         </div >
     <Button variant="premium" className="w-full mt-6">Zobrazit vše</Button>
