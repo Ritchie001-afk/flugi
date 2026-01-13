@@ -4,12 +4,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { ExternalLink, Image as ImageIcon, Sparkles } from 'lucide-react';
-import { createDeal, generateDescriptionAction } from '@/app/admin/actions';
+import { createDeal, generateDescriptionAction, findImageAction } from '../../../app/admin/actions';
 
 export default function DealForm() {
     const [destination, setDestination] = useState('');
     const [description, setDescription] = useState('');
+    const [image, setImage] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isSearchingImage, setIsSearchingImage] = useState(false);
 
     const handleGenerate = async () => {
         if (!destination) return alert('Nejdříve vyplňte destinaci!');
@@ -21,6 +23,19 @@ export default function DealForm() {
             alert(result.error);
         } else if (result.text) {
             setDescription(result.text);
+        }
+    };
+
+    const handleImageSearch = async () => {
+        if (!destination) return alert('Nejdříve vyplňte destinaci!');
+        setIsSearchingImage(true);
+        const result = await findImageAction(destination);
+        setIsSearchingImage(false);
+
+        if (result.error || !result.url) {
+            alert('Bohužel jsem nenašel vhodný obrázek v databázi.');
+        } else if (result.url) {
+            setImage(result.url);
         }
     };
 
@@ -73,11 +88,35 @@ export default function DealForm() {
             </div>
 
             <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">URL Obrázku</label>
+                <div className="flex justify-between items-center mb-1">
+                    <label className="block text-xs font-bold text-slate-500 uppercase">URL Obrázku</label>
+                    <button
+                        type="button"
+                        onClick={handleImageSearch}
+                        disabled={!destination || isSearchingImage}
+                        className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <ImageIcon className="h-3 w-3" />
+                        {isSearchingImage ? 'Hledám...' : 'Najít fotku v DB'}
+                    </button>
+                </div>
                 <div className="relative">
                     <ImageIcon className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                    <input name="image" required placeholder="https://images.unsplash.com..." className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-mono text-slate-600" />
+                    <input
+                        name="image"
+                        required
+                        placeholder="https://images.unsplash.com..."
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-mono text-slate-600"
+                    />
                 </div>
+                {image && (
+                    <div className="mt-2 text-xs text-slate-500 flex items-center gap-2">
+                        <img src={image} alt="Preview" className="h-8 w-12 object-cover rounded" />
+                        <span>Náhled vybraného obrázku</span>
+                    </div>
+                )}
             </div>
 
             <div>
