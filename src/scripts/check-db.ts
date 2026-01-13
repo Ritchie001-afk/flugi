@@ -11,7 +11,11 @@ async function checkDb() {
 
         if (count > 0) {
             const first = await prisma.deal.findFirst();
-            console.log("Sample Deal:", first?.title, first?.expiresAt);
+            console.log("Sample Deal Title:", first?.title);
+            console.log("Sample Deal Image URL:", first?.image);
+
+            const allImages = await prisma.deal.findMany({ select: { image: true, provider: true }, take: 5 });
+            console.log("First 5 Images:", allImages);
         } else {
             console.log("Database is empty!");
         }

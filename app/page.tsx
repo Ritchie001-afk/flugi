@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Search, ArrowRight, CheckCircle2, Globe, ShieldCheck } from "lucide-react";
 import prisma from "@/lib/db";
+import { getDestinationImage } from "@/lib/images";
 
 import { Deal } from "@prisma/client";
 
@@ -81,15 +82,19 @@ export default async function Home() {
             ) : (
               featuredDeals.map((deal: any) => (
                 <Link href={deal.url} key={deal.id} target="_blank" className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
+                  import {getDestinationImage} from "@/lib/images";
+
+                  // ... inside map ...
                   {/* Image */}
-                  {deal.image ? (
-                    <div className="absolute inset-0">
-                      <Image src={deal.image} alt={deal.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent" />
-                    </div>
-                  ) : (
-                    <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:animate-none group-hover:bg-slate-300 transition-colors" />
-                  )}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={getDestinationImage(deal.destination, deal.image)}
+                      alt={deal.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent" />
+                  </div>
 
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">

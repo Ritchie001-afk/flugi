@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/Button";
 import { Search, Filter, Plane, Calendar, MapPin } from "lucide-react";
 import prisma from "@/lib/db";
+import { getDestinationImage } from "@/lib/images";
 
 export const dynamic = 'force-dynamic';
 
@@ -75,13 +76,18 @@ export default async function DealsPage() {
                             ) : (
                                 deals.map((deal: any) => (
                                     <div key={deal.id} className="group flex flex-col rounded-2xl bg-white border border-slate-200 overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300">
+                                        import {getDestinationImage} from "@/lib/images";
+
+                                        // ... inside map ...
                                         {/* Image */}
                                         <div className="relative aspect-video bg-slate-200 overflow-hidden">
-                                            {deal.image ? (
-                                                <img src={deal.image} alt={deal.title} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
-                                            ) : (
-                                                <div className="absolute inset-0 bg-slate-200 animate-pulse group-hover:animate-none group-hover:bg-slate-300 transition-colors" />
-                                            )}
+                                            {/* Smart Image Selection */}
+                                            <img
+                                                src={getDestinationImage(deal.destination, deal.image)}
+                                                alt={deal.title}
+                                                className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
+                                                loading="lazy"
+                                            />
 
                                             <div className="absolute top-3 left-3 flex gap-2">
                                                 <span className="px-2 py-1 bg-white/80 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
