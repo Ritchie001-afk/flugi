@@ -39,67 +39,8 @@ export default async function AdminPage() {
                             <h2 className="text-lg font-bold text-slate-900">Přidat nový deal</h2>
                         </div>
 
-                        <form action={createDeal} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Název</label>
-                                <input name="title" required placeholder="např. Luxusní Dubaj 5*" className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm" />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Cena (Kč)</label>
-                                    <input name="price" type="number" required placeholder="15990" className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Destinace</label>
-                                    <input name="destination" required placeholder="Maledivy" className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">URL Obrázku</label>
-                                <div className="relative">
-                                    <ImageIcon className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                                    <input name="image" required placeholder="https://images.unsplash.com..." className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-mono text-slate-600" />
-                                </div>
-                                <p className="text-[10px] text-slate-400 mt-1">Tip: Použijte Unsplash.com pro hezké fotky.</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Affiliate Odkaz</label>
-                                <div className="relative">
-                                    <ExternalLink className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                                    <input name="url" required placeholder="https://www.fischer.cz/..." className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-mono text-slate-600" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Typ nabídky</label>
-                                <div className="flex bg-slate-100 p-1 rounded-lg">
-                                    <label className="flex-1 cursor-pointer">
-                                        <input type="radio" name="type" value="package" defaultChecked className="peer sr-only" />
-                                        <div className="text-center py-1.5 text-xs font-medium text-slate-500 rounded-md peer-checked:bg-white peer-checked:text-blue-600 peer-checked:shadow-sm transition-all">
-                                            Zájezd
-                                        </div>
-                                    </label>
-                                    <label className="flex-1 cursor-pointer">
-                                        <input type="radio" name="type" value="flight" className="peer sr-only" />
-                                        <div className="text-center py-1.5 text-xs font-medium text-slate-500 rounded-md peer-checked:bg-white peer-checked:text-blue-600 peer-checked:shadow-sm transition-all">
-                                            Letenka
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tagy (oddělené čárkou)</label>
-                                <input name="tags" placeholder="All Inclusive, Pláž, Rodina" className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm" />
-                            </div>
-
-                            <Button variant="premium" className="w-full mt-2">
-                                Uložit do databáze
-                            </Button>
-                        </form>
+                        {/* Interactive Client Component Form */}
+                        <DealForm />
                     </div>
                 </div>
 
@@ -137,8 +78,8 @@ export default async function AdminPage() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${deal.type === 'package'
-                                                    ? 'bg-orange-100 text-orange-700'
-                                                    : 'bg-blue-100 text-blue-700'
+                                                        ? 'bg-orange-100 text-orange-700'
+                                                        : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {deal.type === 'package' ? 'Zájezd' : 'Letenka'}
                                                 </span>
