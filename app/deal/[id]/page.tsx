@@ -7,7 +7,7 @@ import prisma from '@/lib/db';
 import { Button } from '@/components/ui/Button';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
-import { ArrowLeft, MapPin, Calendar, ExternalLink, Bed, Car, Home } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;

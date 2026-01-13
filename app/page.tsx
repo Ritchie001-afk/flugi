@@ -81,7 +81,7 @@ export default async function Home() {
               </div>
             ) : (
               featuredDeals.map((deal: any) => (
-                <Link href={deal.url} key={deal.id} target="_blank" className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
+                <Link href={`/deal/${deal.id}`} key={deal.id} className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
                   {/* Image */}
                   <div className="absolute inset-0">
                     <Image

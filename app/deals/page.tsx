@@ -1,4 +1,5 @@
 
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Search, Filter, Plane, Calendar, MapPin } from "lucide-react";
 import prisma from "@/lib/db";
@@ -129,11 +130,11 @@ export default async function DealsPage() {
                                                 <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
                                                     {deal.type === 'flight' ? 'Pelikan.cz' : 'Invia.cz'}
                                                 </div>
-                                                <a href={deal.url} target="_blank" rel="noopener noreferrer">
+                                                <Link href={`/deal/${deal.id}`}>
                                                     <Button size="sm" variant="outline" className="h-8 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600">
                                                         Zobrazit
                                                     </Button>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
