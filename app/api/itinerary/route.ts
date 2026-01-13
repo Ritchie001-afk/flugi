@@ -14,9 +14,11 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Chybí destinace" }, { status: 400 });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    }
 
-        const prompt = `
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+    const prompt = `
         Jsi zkušený cestovní průvodce. Vytvoř detailní itinerář na ${days || 3} dní pro destinaci: ${destination}.
         
         Struktura odpovědi (v Markdown):
@@ -30,17 +32,17 @@ export async function POST(req: Request) {
         Buď stručný, ale informačně hodnotný. Používej emotikony. Piš česky.
         `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
-        return NextResponse.json({ itinerary: text });
+    return NextResponse.json({ itinerary: text });
 
-    } catch (error: any) {
-        console.error("Gemini API Error Detail:", error?.message || error);
-        return NextResponse.json({
-            error: "Nepodařilo se vygenerovat itinerář.",
-            details: error?.message
-        }, { status: 500 });
-    }
+} catch (error: any) {
+    console.error("Gemini API Error Detail:", error?.message || error);
+    return NextResponse.json({
+        error: "Nepodařilo se vygenerovat itinerář.",
+        details: error?.message
+    }, { status: 500 });
+}
 }
