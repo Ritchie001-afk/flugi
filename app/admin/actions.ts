@@ -36,7 +36,7 @@ export async function createDeal(formData: FormData) {
     const tagsStr = formData.get('tags') as string; // "Tag1, Tag2"
 
     if (!title || !price || !destination || !url) {
-        return { error: 'Vyplňte všechna povinná pole' };
+        redirect('/admin?error=missing_fields');
     }
 
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()) : [];
