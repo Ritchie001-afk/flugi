@@ -24,7 +24,7 @@ export async function generateDescriptionAction(destination: string) {
 
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Fast & cheap
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" }); // Stable model
 
         const prompt = `Napiš lákavý marketingový popis pro dovolenou v destinaci "${destination}". 
         Délka cca 2-3 krátké odstavce (do 100 slov). 
