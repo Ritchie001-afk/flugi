@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
 import { Button } from '@/components/ui/Button';
+import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
-import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -87,22 +88,19 @@ export default async function DealPage({ params }: DealPageProps) {
                                         Rezervovat u prodejce <ExternalLink className="h-5 w-5" />
                                     </Button>
                                 </a>
+                                <Link href="/letiste/PRG" className="w-full sm:w-auto">
+                                    <Button variant="outline" size="lg" className="w-full gap-2 text-lg px-8 border-slate-200 text-slate-600 hover:bg-slate-50">
+                                        <Plane className="h-5 w-5" /> Průvodce letištěm
+                                    </Button>
+                                </Link>
                             </div>
                             <p className="text-xs text-slate-400 mt-4 text-center sm:text-left">
                                 Budete přesměrováni na stránky {deal.type === 'flight' ? 'Pelikan.cz' : 'Invia.cz'} pro dokončení rezervace.
                             </p>
                         </div>
 
-                        {/* Interesting Places Placeholder */}
-                        <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 opacity-70">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-2xl font-bold text-slate-900">Zajímavá místa v okolí</h2>
-                                <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">Připravujeme</span>
-                            </div>
-                            <p className="text-slate-500">
-                                Pracujeme na průvodci pro destinaci {destinationCity}. Brzy se zde dozvíte ty nejlepší tipy na výlety, pláže a památky.
-                            </p>
-                        </div>
+                        {/* AI Itinerary Generator */}
+                        <ItineraryGenerator destination={destinationCity} />
 
                     </div>
 
@@ -111,7 +109,7 @@ export default async function DealPage({ params }: DealPageProps) {
 
                         {/* Affiliate Cards */}
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 sticky top-24">
-                            <h3 className="text-lg font-bold text-slate-900 mb-4">Nevyhazujte za hotel</h3>
+                            <h3 className="text-lg font-bold text-slate-900 mb-4">Najdi super ubytko</h3>
 
                             {/* Booking */}
                             <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group mb-4">
