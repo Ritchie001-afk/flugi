@@ -4,8 +4,32 @@ import { createSession, deleteSession } from '@/lib/session';
 import prisma from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // --- Auth Actions ---
+
+// --- AI Actions ---
+
+export async function generateDescriptionAction(destination: string) {
+    if (!process.env.GEMINI_API_KEY) return { error: 'Chybí API klíč' };
+
+    try {
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Fast & cheap
+
+        const prompt = `Napiš lákavý marketingový popis pro dovolenou v destinaci "${destination}". 
+        Délka cca 2-3 krátké odstavce (do 100 slov). 
+        Zaměř se na pláže, moře, relax, jídlo nebo památky (podle destinace).
+        Česky. Nepoužívej markdown nadpisy, jen čistý text.`;
+
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+        return { text };
+    } catch (e) {
+        console.error(e);
+        return { error: 'Nepodařilo se vygenerovat popis.' };
+    }
+}
 
 export async function login(formData: FormData) {
     const password = formData.get('password') as string;

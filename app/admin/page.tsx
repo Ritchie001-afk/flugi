@@ -3,6 +3,7 @@ import { createDeal, deleteDeal, logout } from './actions';
 import { Button } from '@/components/ui/Button';
 import prisma from '@/lib/db';
 import { Trash2, ExternalLink, LogOut, Plus, Image as ImageIcon } from 'lucide-react';
+import DealForm from '@/components/admin/DealForm';
 
 export const revalidate = 0; // Always fresh data for admin
 
@@ -136,8 +137,8 @@ export default async function AdminPage() {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${deal.type === 'package'
-                                                        ? 'bg-orange-100 text-orange-700'
-                                                        : 'bg-blue-100 text-blue-700'
+                                                    ? 'bg-orange-100 text-orange-700'
+                                                    : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {deal.type === 'package' ? 'Zájezd' : 'Letenka'}
                                                 </span>
