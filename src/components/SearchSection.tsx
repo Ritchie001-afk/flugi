@@ -95,7 +95,7 @@ export function SearchSection() {
                         </div>
                     </form>
                 ) : (
-                    <form onSubmit={handleClassicSearch} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <form onSubmit={handleClassicSearch} className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="space-y-1">
                             <label className="text-xs font-bold text-slate-500 uppercase">Kam?</label>
                             <div className="relative">
@@ -104,13 +104,25 @@ export function SearchSection() {
                                     type="text"
                                     value={destination}
                                     onChange={(e) => setDestination(e.target.value)}
-                                    placeholder="Turecko, Řecko..."
+                                    placeholder="Egypt, Turecko..."
                                     className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none"
                                 />
                             </div>
                         </div>
+
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-slate-500 uppercase">Do kolika?</label>
+                            <label className="text-xs font-bold text-slate-500 uppercase">Kdy?</label>
+                            <div className="relative">
+                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                                <input
+                                    type="date"
+                                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 outline-none text-slate-600"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-slate-500 uppercase">Cena do</label>
                             <div className="relative">
                                 <Banknote className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                                 <input
