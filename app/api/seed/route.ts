@@ -67,16 +67,29 @@ export async function GET(req: Request) {
             });
         }
 
-        // Use transaction or createMany if supported (sqlite/postgres)
-        // createMany is supported in Postgres
-        await prisma.deal.createMany({
-            data: deals,
-            skipDuplicates: true
-        });
+        // Insert one by one to avoid batch issues and ensure feedback
+        let createdCount = 0;
+        const errors = [];
 
-        return NextResponse.json({ success: true, count: deals.length });
+        for (const deal of deals) {
+            try {
+                await prisma.deal.create({
+                    data: deal
+                });
+                createdCount++;
+            } catch (err: any) {
+                console.error("Seed error for deal:", deal.title, err);
+                errors.push(err.message);
+            }
+        }
+
+        return NextResponse.json({
+            success: true,
+            count: createdCount,
+            errors: errors.length > 0 ? errors : undefined
+        });
     } catch (e: any) {
-        console.error(e);
+        console.error("Global seed error:", e);
         return NextResponse.json({ error: e.message }, { status: 500 });
     }
 }
