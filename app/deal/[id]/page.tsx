@@ -5,6 +5,9 @@ import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
 import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket } from 'lucide-react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import prisma from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
