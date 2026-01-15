@@ -50,29 +50,30 @@ export default function GuidePage() {
 
                 {/* Guides Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <article key={i} className="flex flex-col group cursor-pointer">
-                            <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
-                                <div className="absolute inset-0 bg-slate-300 animate-pulse group-hover:animate-none group-hover:bg-slate-400 transition-colors" />
-                                <div className="absolute top-3 left-3">
-                                    <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
-                                        Letiště
-                                    </span>
-                                </div>
+                    <Link href="/pruvodce/letiste-vaclava-havla-praha" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            {/* You might want a specific image here if available, or keep the placeholder/generic */}
+                            <div className="absolute inset-0 bg-slate-300 group-hover:bg-slate-400 transition-colors">
+                                {/* Ideally use Image component here */}
                             </div>
-                            <div className="flex-1">
-                                <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
-                                    Kompletní průvodce Letištěm Václava Havla (PRG)
-                                </h3>
-                                <p className="text-slate-500 text-sm line-clamp-2 mb-4">
-                                    Vše, co potřebujete vědět o terminálech, saloncích a dopravě do centra města.
-                                </p>
-                                <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
-                                    Číst více <ArrowRight className="h-4 w-4" />
-                                </div>
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
                             </div>
-                        </article>
-                    ))}
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Kompletní průvodce Letištěm Václava Havla (PRG)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Vše, co potřebujete vědět o terminálech, saloncích, levném parkování a nejrychlejší dopravě do centra Prahy.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
