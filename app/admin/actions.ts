@@ -105,77 +105,83 @@ export async function createDeal(formData: FormData) {
                 rating,
                 reviewCount,
                 reviewSource,
-                reviewUrl
-            }
-        });
+                url,
+                type,
+                slug,
+                tags,
+                rating,
+                reviewCount,
+                reviewSource,
+                reviewUrl,
+                expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // Default 30 days validity
         revalidatePath('/zajezdy');
         revalidatePath('/deals');
         revalidatePath('/zajezdy');
         revalidatePath('/deals');
         revalidatePath('/admin');
-    } catch (e) {
-        console.error(e);
-        // In a real app we would return error, but for simple form action we might just log
-    }
+            } catch(e) {
+                console.error(e);
+                // In a real app we would return error, but for simple form action we might just log
+            }
     // Always redirect or revalidate
     redirect('/admin');
-}
+        }
 
 
 export async function updateDeal(id: string, formData: FormData) {
-    // Session is handled by middleware, or we could verify it here with getSession()
-    // but definitely DO NOT create a new one with hardcoded password!
+            // Session is handled by middleware, or we could verify it here with getSession()
+            // but definitely DO NOT create a new one with hardcoded password!
 
 
-    const title = formData.get('title') as string;
-    const price = parseFloat(formData.get('price') as string);
-    const destination = formData.get('destination') as string;
-    const image = formData.get('image') as string;
-    const url = formData.get('url') as string;
-    const type = formData.get('type') as string;
-    const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
-    const description = formData.get('description') as string;
+            const title = formData.get('title') as string;
+            const price = parseFloat(formData.get('price') as string);
+            const destination = formData.get('destination') as string;
+            const image = formData.get('image') as string;
+            const url = formData.get('url') as string;
+            const type = formData.get('type') as string;
+            const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
+            const description = formData.get('description') as string;
 
-    // Parse reviews
-    const ratingStr = formData.get('rating') as string;
-    const rating = ratingStr ? parseFloat(ratingStr) : null;
-    const reviewCountStr = formData.get('reviewCount') as string;
-    const reviewCount = reviewCountStr ? parseInt(reviewCountStr) : null;
-    const reviewSource = formData.get('reviewSource') as string;
-    const reviewUrl = formData.get('reviewUrl') as string;
+            // Parse reviews
+            const ratingStr = formData.get('rating') as string;
+            const rating = ratingStr ? parseFloat(ratingStr) : null;
+            const reviewCountStr = formData.get('reviewCount') as string;
+            const reviewCount = reviewCountStr ? parseInt(reviewCountStr) : null;
+            const reviewSource = formData.get('reviewSource') as string;
+            const reviewUrl = formData.get('reviewUrl') as string;
 
-    await prisma.deal.update({
-        where: { id },
-        data: {
-            title,
-            price,
-            destination,
-            image,
-            url,
-            type,
-            tags,
-            description,
-            rating,
-            reviewCount,
-            reviewSource,
-            reviewUrl
+            await prisma.deal.update({
+                where: { id },
+                data: {
+                    title,
+                    price,
+                    destination,
+                    image,
+                    url,
+                    type,
+                    tags,
+                    description,
+                    rating,
+                    reviewCount,
+                    reviewSource,
+                    reviewUrl
+                }
+            });
+
+            revalidatePath('/admin');
+            revalidatePath('/zajezdy');
+            revalidatePath('/');
+            redirect('/admin');
         }
-    });
-
-    revalidatePath('/admin');
-    revalidatePath('/zajezdy');
-    revalidatePath('/');
-    redirect('/admin');
-}
 
 
-export async function deleteDeal(id: string) {
-    try {
-        await prisma.deal.delete({ where: { id } });
-        revalidatePath('/admin');
-        revalidatePath('/zajezdy');
-        revalidatePath('/deals');
-    } catch (e) {
-        console.error(e);
-    }
-}
+        export async function deleteDeal(id: string) {
+            try {
+                await prisma.deal.delete({ where: { id } });
+                revalidatePath('/admin');
+                revalidatePath('/zajezdy');
+                revalidatePath('/deals');
+            } catch (e) {
+                console.error(e);
+            }
+        }

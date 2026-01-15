@@ -1,9 +1,8 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X } from 'lucide-react';
+import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload } from 'lucide-react';
 import { createDeal, updateDeal, generateDescriptionAction, findImageAction } from '../../../app/admin/actions';
 import Link from 'next/link';
 
@@ -62,6 +61,33 @@ export default function DealForm({ initialData }: DealFormProps) {
         if (!destination) return alert('Nejdříve vyplňte destinaci!');
         const query = encodeURIComponent(destination + ' travel info');
         window.open(`https://unsplash.com/s/photos/${query}`, '_blank');
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', e.target.files[0]);
+
+        try {
+            // Dynamically import to avoid server-action serialization issues in client component if not careful, 
+            // but we can import the action directly at the top if it's 'use server'
+            const { uploadImageAction } = await import('../../../app/admin/upload-action'); // Adjusted path
+            const res = await uploadImageAction(formData);
+
+            if (res.error) {
+                alert(res.error); // Using alert as toast is not defined
+            } else if (res.url) {
+                setImage(res.url); // Using setImage as form.setValue is not defined
+                alert('Obrázek nahrán!'); // Using alert as toast is not defined
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Chyba při nahrávání.'); // Using alert as toast is not defined
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleSubmit = async (formData: FormData) => {
