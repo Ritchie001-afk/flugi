@@ -8,10 +8,11 @@ import { Sparkles, Calendar, Loader2 } from "lucide-react";
 
 interface ItineraryGeneratorProps {
     destination: string;
+    length?: number;
 }
 
-export function ItineraryGenerator({ destination }: ItineraryGeneratorProps) {
-    const [days, setDays] = useState(3);
+export function ItineraryGenerator({ destination, length = 7 }: ItineraryGeneratorProps) {
+    const [days, setDays] = useState(length);
     const [loading, setLoading] = useState(false);
     const [itinerary, setItinerary] = useState<string | null>(null);
 
