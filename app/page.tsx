@@ -21,7 +21,7 @@ export default async function Home() {
         expiresAt: { gt: new Date() }
       },
       orderBy: { createdAt: 'desc' }, // Latest deals first
-      take: 3
+      take: 6
     });
   } catch (e) {
     console.error("Failed to fetch featured deals:", e);

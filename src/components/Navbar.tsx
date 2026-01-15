@@ -24,10 +24,10 @@ export default function Navbar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-8">
-                    <Link href="/deals" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
-                        Akční letenky
+                    <Link href="/deals?type=flight" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
+                        Letenky
                     </Link>
-                    <Link href="/zajezdy" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
+                    <Link href="/deals?type=package" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
                         Zájezdy
                     </Link>
                     <Link href="/pruvodce" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
@@ -60,8 +60,11 @@ export default function Navbar() {
             {/* Mobile Nav */}
             {isMenuOpen && (
                 <div className="md:hidden border-t border-border/40 bg-white absolute w-full left-0 top-16 p-4 flex flex-col gap-4 shadow-xl">
-                    <Link href="/deals" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
-                        Akční letenky
+                    <Link href="/deals?type=flight" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+                        Letenky
+                    </Link>
+                    <Link href="/deals?type=package" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+                        Zájezdy
                     </Link>
                     <Link href="/pruvodce" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
                         Průvodce

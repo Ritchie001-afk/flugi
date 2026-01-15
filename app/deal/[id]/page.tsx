@@ -5,6 +5,7 @@ import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
 import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket } from 'lucide-react';
+import { ShareButtons } from '@/components/ShareButtons';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
@@ -42,11 +43,11 @@ export default async function DealPage({ params }: DealPageProps) {
                     <Link href="/" className="inline-flex items-center text-slate-600 hover:text-blue-600 transition-colors font-medium">
                         <ArrowLeft className="h-4 w-4 mr-2" /> Zpět na nabídky
                     </Link>
-                    <div className="font-bold text-slate-900 truncate max-w-[200px] md:max-w-none ml-4">
+                    <div className="font-bold text-slate-900 truncate max-w-[200px] md:max-w-none ml-4 hidden md:block">
                         {deal.title}
                     </div>
                     <div className="ml-auto flex gap-2">
-                        {/* Mobile Share/Save buttons could go here */}
+                        <ShareButtons title={deal.title} />
                     </div>
                 </div>
             </div>
