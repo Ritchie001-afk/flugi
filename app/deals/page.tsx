@@ -8,11 +8,38 @@ import { getDestinationImage } from "@/lib/images";
 export const dynamic = 'force-dynamic';
 
 // This is a Server Component
-export default async function DealsPage() {
+export default async function DealsPage({
+    searchParams,
+}: {
+    searchParams: { [key: string]: string | string[] | undefined };
+}) {
+    // Parse filters
+    const destination = typeof searchParams.destination === 'string' ? searchParams.destination : undefined;
+    const minPrice = typeof searchParams.minPrice === 'string' ? parseFloat(searchParams.minPrice) : undefined;
+    const maxPrice = typeof searchParams.maxPrice === 'string' ? parseFloat(searchParams.maxPrice) : undefined;
+    const tags = typeof searchParams.tags === 'string' ? searchParams.tags.split(',') : undefined;
+
+    // Build Prisma Query
+    const where: any = {
+        expiresAt: { gt: new Date() }
+    };
+
+    if (destination) {
+        where.destination = { contains: destination, mode: 'insensitive' };
+    }
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
+        where.price = {};
+        if (minPrice !== undefined) where.price.gte = minPrice;
+        if (maxPrice !== undefined) where.price.lte = maxPrice;
+    }
+
+    if (tags && tags.length > 0) {
+        where.tags = { hasSome: tags };
+    }
+
     const deals = await prisma.deal.findMany({
-        where: {
-            expiresAt: { gt: new Date() }
-        },
+        where,
         orderBy: [
             { isFlashDeal: 'desc' },
             { createdAt: 'desc' }

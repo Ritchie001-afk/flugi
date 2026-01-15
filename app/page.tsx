@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { SearchSection } from "@/components/SearchSection";
 import { Search, ArrowRight, CheckCircle2, Globe, ShieldCheck } from "lucide-react";
 import prisma from "@/lib/db";
 import { getDestinationImage } from "@/lib/images";
@@ -45,19 +46,9 @@ export default async function Home() {
             Objevte exkluzivní letenky a luxusní dovolené vybrané pro moderní cestovatele. Poznávejte svět bez zbytečných výdajů.
           </p>
 
-          {/* Search Box Mockup */}
-          <div className="w-full max-w-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-2 rounded-2xl flex flex-col md:flex-row gap-2 animate-fade-in-up delay-200 shadow-2xl shadow-blue-900/20">
-            <div className="flex-1 px-4 py-3 flex items-center gap-3 border-b md:border-b-0 md:border-r border-white/10">
-              <Search className="h-5 w-5 text-blue-200" />
-              <input
-                type="text"
-                placeholder="Kam se chcete vydat?"
-                className="bg-transparent border-none outline-none text-white placeholder:text-blue-200 w-full"
-              />
-            </div>
-            <Button variant="premium" size="lg" className="rounded-xl">
-              Hledat nabídky
-            </Button>
+          {/* Search Section */}
+          <div className="w-full animate-fade-in-up delay-200">
+            <SearchSection />
           </div>
         </div>
       </section>
