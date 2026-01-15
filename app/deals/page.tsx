@@ -170,6 +170,10 @@ export default async function DealsPage(props: {
                                                 </div>
                                             </div>
 
+                                            <div className="mt-4 pt-4 border-t border-slate-100">
+                                                <Amenities text={deal.description || ''} tags={deal.tags} type={deal.type} />
+                                            </div>
+
                                             <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                                                 <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
                                                     {deal.type === 'flight' ? 'Pelikan.cz' : 'Invia.cz'}

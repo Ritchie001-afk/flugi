@@ -3,27 +3,31 @@ import { Wifi, Waves, Snowflake, Utensils, Baby, Car, Plane, Coffee, Dumbbell, F
 interface AmenitiesProps {
     text: string;    // Description text to search in
     tags: string[];  // Tags array
+    type?: string;   // Deal type (flight/package)
 }
 
-export function Amenities({ text, tags }: AmenitiesProps) {
+export function Amenities({ text, tags, type }: AmenitiesProps) {
     const fullText = (text + ' ' + tags.join(' ')).toLowerCase();
 
     // Configuration of possible amenities
     const config = [
-        { icon: Utensils, label: 'All Inclusive', keys: ['all inclusive', 'plná penze', 'snídaně', 'polopenze'] },
-        { icon: Wifi, label: 'Wi-Fi Zdarma', keys: ['wifi', 'wi-fi', 'internet'] },
-        { icon: Waves, label: 'Bazén', keys: ['bazén', 'koupaliště'] },
-        { icon: Snowflake, label: 'Klimatizace', keys: ['klimatizace', 'ac'] },
-        { icon: Baby, label: 'Pro rodiny', keys: ['rodina', 'děti', 'hřiště', 'dětský'] },
-        { icon: Flower2, label: 'Wellness', keys: ['wellness', 'sauna', 'masáže'] },
-        { icon: Dumbbell, label: 'Fitness', keys: ['fitness', 'posilovna'] },
-        { icon: Car, label: 'Parkování', keys: ['parkování', 'garáž'] },
+        { icon: Utensils, label: 'All Inclusive', keys: ['all inclusive', 'plná penze', 'snídaně', 'polopenze'], types: ['package', 'hotel'] },
+        { icon: Wifi, label: 'Wi-Fi Zdarma', keys: ['wifi', 'wi-fi', 'internet'], types: ['package', 'hotel', 'flight'] },
+        { icon: Waves, label: 'Bazén', keys: ['bazén', 'koupaliště'], types: ['package', 'hotel'] },
+        { icon: Snowflake, label: 'Klimatizace', keys: ['klimatizace', 'ac'], types: ['package', 'hotel'] },
+        { icon: Baby, label: 'Pro rodiny', keys: ['rodina', 'děti', 'hřiště', 'dětský'], types: ['package', 'hotel'] },
+        { icon: Flower2, label: 'Wellness', keys: ['wellness', 'sauna', 'masáže'], types: ['package', 'hotel'] },
+        { icon: Dumbbell, label: 'Fitness', keys: ['fitness', 'posilovna'], types: ['package', 'hotel'] },
+        { icon: Car, label: 'Parkování', keys: ['parkování', 'garáž'], types: ['package', 'hotel'] },
     ];
 
     // Filter active amenities
-    const active = config.filter(item =>
-        item.keys.some(key => fullText.includes(key))
-    );
+    const active = config.filter(item => {
+        // If specific types are defined for amenity, check if deal type matches
+        if (type && item.types && !item.types.includes(type)) return false;
+
+        return item.keys.some(key => fullText.includes(key));
+    });
 
     if (active.length === 0) return null;
 

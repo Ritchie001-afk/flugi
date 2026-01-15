@@ -62,6 +62,8 @@ export async function logout() {
 export async function createDeal(formData: FormData) {
     const title = formData.get('title') as string;
     const price = parseFloat(formData.get('price') as string);
+    const originalPriceStr = formData.get('originalPrice') as string;
+    const originalPrice = originalPriceStr ? parseFloat(originalPriceStr) : null;
     const destination = formData.get('destination') as string;
     const image = formData.get('image') as string;
     const url = formData.get('url') as string;
@@ -94,7 +96,7 @@ export async function createDeal(formData: FormData) {
                 title,
                 description: "Manuálně přidáno", // Manual deals usually have description in title or separate field
                 price,
-                originalPrice: price * 1.2, // Mock original price
+                originalPrice,
                 currency: 'CZK',
                 destination,
                 image,
@@ -130,6 +132,8 @@ export async function updateDeal(id: string, formData: FormData) {
 
     const title = formData.get('title') as string;
     const price = parseFloat(formData.get('price') as string);
+    const originalPriceStr = formData.get('originalPrice') as string;
+    const originalPrice = originalPriceStr ? parseFloat(originalPriceStr) : null;
     const destination = formData.get('destination') as string;
     const image = formData.get('image') as string;
     const url = formData.get('url') as string;
@@ -145,11 +149,33 @@ export async function updateDeal(id: string, formData: FormData) {
     const reviewSource = formData.get('reviewSource') as string;
     const reviewUrl = formData.get('reviewUrl') as string;
 
+    // Determine create or update based on id presence (but we have separate functions)
+    // Wait, this is updateDeal, let's fix createDeal below or above?
+    // This tool call is modifying updateDeal or createDeal?
+    // StartLine 132 matches updateDeal in previous view.
+    // I need to modify BOTH createDeal and updateDeal.
+    // This replacement is for updateDeal logic.
+    // For createDeal I need another call or MultiReplace.
+    // Let's assume I strictly follow "single contiguous block". I will use MultiReplace for both in next step or now if allowed.
+    // I am supposed to use MultiReplace if non-contiguous.
+    // createDeal is lines 90-110 approx. updateDeal is 130+.
+    // I will use Replace for this chunk (updateDeal vars) and then another for createDeal vars + prisma calls.
+    // Actually, let's look at the view_file again.
+    // createDeal lines 96-97: price, originalPrice: price * 1.2
+    // updateDeal lines 132: const price ... 
+    // updateDeal lines 152: price ...
+
+    // I'll stick to replacing the variable extraction in updateDeal first.
+    // Wait, I should do createDeal first as it's earlier in file.
+    // Let's use multi_replace to do it cleaner.
+
+
     await prisma.deal.update({
         where: { id },
         data: {
             title,
             price,
+            originalPrice,
             destination,
             image,
             url,
