@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, MapPin, Car, Train, Clock, Coffee, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info } from "lucide-react";
 import { getDestinationImage } from "@/lib/images";
 
 export const metadata = {
