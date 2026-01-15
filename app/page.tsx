@@ -93,6 +93,19 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent" />
                   </div>
 
+                  {/* Rating Badge */}
+                  {(deal as any).rating && (
+                    <div className="absolute top-4 right-4 z-10 bg-white/10 backdrop-blur-md border border-white/20 px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+                      <span className="text-yellow-400 text-xs text-shadow-sm">★</span>
+                      <span className="text-white text-xs font-bold">{(deal as any).rating}</span>
+                      {(deal as any).reviewSource && (
+                        <span className="text-[10px] text-white/80 border-l border-white/20 pl-1 ml-1">
+                          {(deal as any).reviewSource}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                       <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full mb-3">

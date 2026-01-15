@@ -74,6 +74,14 @@ export async function createDeal(formData: FormData) {
 
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()) : [];
 
+    // Parse reviews
+    const ratingStr = formData.get('rating') as string;
+    const rating = ratingStr ? parseFloat(ratingStr) : null;
+    const reviewCountStr = formData.get('reviewCount') as string;
+    const reviewCount = reviewCountStr ? parseInt(reviewCountStr) : null;
+    const reviewSource = formData.get('reviewSource') as string;
+    const reviewUrl = formData.get('reviewUrl') as string;
+
     // Create slug from title
     const slug = title
         .toLowerCase()
@@ -93,7 +101,11 @@ export async function createDeal(formData: FormData) {
                 url,
                 type,
                 slug,
-                tags
+                tags,
+                rating,
+                reviewCount,
+                reviewSource,
+                reviewUrl
             }
         });
         revalidatePath('/zajezdy');
@@ -124,6 +136,14 @@ export async function updateDeal(id: string, formData: FormData) {
     const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
     const description = formData.get('description') as string;
 
+    // Parse reviews
+    const ratingStr = formData.get('rating') as string;
+    const rating = ratingStr ? parseFloat(ratingStr) : null;
+    const reviewCountStr = formData.get('reviewCount') as string;
+    const reviewCount = reviewCountStr ? parseInt(reviewCountStr) : null;
+    const reviewSource = formData.get('reviewSource') as string;
+    const reviewUrl = formData.get('reviewUrl') as string;
+
     await prisma.deal.update({
         where: { id },
         data: {
@@ -134,7 +154,11 @@ export async function updateDeal(id: string, formData: FormData) {
             url,
             type,
             tags,
-            description
+            description,
+            rating,
+            reviewCount,
+            reviewSource,
+            reviewUrl
         }
     });
 

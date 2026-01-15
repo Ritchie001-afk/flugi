@@ -99,6 +99,34 @@ export default async function DealPage({ params }: DealPageProps) {
                             </p>
                         </div>
 
+                        {/* Review Section */}
+                        {(deal as any).rating && (
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col sm:flex-row items-center gap-6">
+                                <div className="text-center sm:text-left min-w-[120px]">
+                                    <div className="text-4xl font-bold text-slate-900">{(deal as any).rating}<span className="text-slate-400 text-2xl">/10</span></div>
+                                    <div className="flex justify-center sm:justify-start text-yellow-500 my-1">
+                                        {'★'.repeat(Math.round((deal as any).rating / 2))}
+                                        <span className="text-slate-200">{'★'.repeat(5 - Math.round((deal as any).rating / 2))}</span>
+                                    </div>
+                                    <div className="text-sm text-slate-500">{(deal as any).reviewCount} hodnocení</div>
+                                </div>
+                                <div className="flex-1 text-center sm:text-left border-t sm:border-t-0 sm:border-l border-slate-100 pt-4 sm:pt-0 sm:pl-6">
+                                    <h3 className="font-bold text-slate-900 mb-1">
+                                        Hodnocení hostů {(deal as any).reviewSource ? `na ${(deal as any).reviewSource}` : ''}
+                                    </h3>
+                                    <p className="text-slate-600 text-sm mb-3">
+                                        Tento hotel je vysoce hodnocen pro svou polohu, čistotu a služby.
+                                        {/* Placeholder text, could be AI generated in future */}
+                                    </p>
+                                    {(deal as any).reviewUrl && (
+                                        <a href={(deal as any).reviewUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm font-bold inline-flex items-center gap-1">
+                                            Číst recenze <ExternalLink className="h-3 w-3" />
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {/* AI Itinerary Generator */}
                         <ItineraryGenerator destination={destinationCity} />
 

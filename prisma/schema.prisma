@@ -33,6 +33,17 @@ model Deal {
   
   isFlashDeal     Boolean   @default(false)
   expiresAt       DateTime?
+
+  // Review & Rating Data
+  rating          Float?    // e.g. 4.8
+  reviewCount     Int?      // e.g. 150
+  reviewSource    String?   // e.g. "Google", "TripAdvisor"
+  reviewUrl       String?   // e.g. "https://..."
+  
+  // Aggregator Fields (Future proofing)
+  provider        String?   // c.g. "Invia", "Fischer" (for XML feeds)
+  externalId      String?   // ID from the XML feed
+
   
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
