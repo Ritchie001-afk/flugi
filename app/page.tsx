@@ -54,7 +54,7 @@ export default async function Home() {
       </section>
 
       {/* Featured Deals Section */}
-      <section className="w-full py-24 bg-slate-50">
+      <section className="w-full pt-32 pb-24 bg-slate-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-slate-900">Oblíbené destinace</h2>
