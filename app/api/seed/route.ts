@@ -14,12 +14,13 @@ const LOCATIONS = [
 const FLIGHT_TAGS = ['All Inclusive', 'Rodina', 'Pláž', 'Wellness', 'Luxusní', 'Last Minute'];
 
 export async function GET(req: Request) {
-    if (process.env.NODE_ENV === 'production') {
-        const url = new URL(req.url);
-        const secret = url.searchParams.get('secret');
-        if (secret !== process.env.SESSION_SECRET) { // Simple protection
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+    // Simple protection for production
+    const url = new URL(req.url);
+    const secret = url.searchParams.get('secret');
+
+    // Allow if secret matches OR if we are in development
+    if (process.env.NODE_ENV === 'production' && secret !== 'flugi-seed-master') {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     try {
