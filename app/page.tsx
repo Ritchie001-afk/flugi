@@ -29,27 +29,36 @@ export default async function Home() {
   return (
     <main className="flex flex-col items-center w-full pt-20">
       {/* Hero Section */}
-      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center overflow-hidden pb-32">
         {/* Background Image/Video Placeholder - Blue gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-950 to-slate-900 z-0" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20 z-0"></div>
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center space-y-8">
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-white tracking-tight animate-fade-in-up">
-            Létejte chytře. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-              Plaťte méně.
-            </span>
-          </h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-2xl animate-fade-in-up delay-100">
-            Objevte exkluzivní letenky a luxusní dovolené vybrané pro moderní cestovatele. Poznávejte svět bez zbytečných výdajů.
-          </p>
+        <div className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center space-y-8 pt-20">
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-7xl font-display font-bold text-white tracking-tight animate-fade-in-up drop-shadow-2xl">
+              Létejte chytře. <br />
+              <span className="text-blue-400">
+                Plaťte méně.
+              </span>
+            </h1>
+            <p className="text-lg md:text-2xl text-blue-100 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up delay-100">
+              Objevte exkluzivní letenky a luxusní dovolené vybrané pro moderní cestovatele.
+            </p>
+          </div>
 
           {/* Search Section */}
-          <div className="w-full animate-fade-in-up delay-200">
+          <div className="w-full max-w-4xl animate-fade-in-up delay-200 shadow-2xl rounded-2xl">
             <SearchSection />
           </div>
+        </div>
+
+        {/* Wave Separator */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-1">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block width-[calc(100%+1.3px)] h-[60px] md:h-[120px]">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-slate-50"></path>
+          </svg>
         </div>
       </section>
 
