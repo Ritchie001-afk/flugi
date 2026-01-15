@@ -125,6 +125,29 @@ export default function DealForm({ initialData }: DealFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Typ nabídky</label>
+                    <select
+                        name="type"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
+                        defaultValue={initialData?.type || 'flight'}
+                    >
+                        <option value="flight">Letenka</option>
+                        <option value="package">Zájezd</option>
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tagy (oddělené čárkou)</label>
+                    <input
+                        name="tags"
+                        placeholder="All Inclusive, Pláž, Relax"
+                        defaultValue={initialData?.tags?.join(', ')}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Cena (Kč)</label>
                     <input
                         name="price"
