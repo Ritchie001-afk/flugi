@@ -21,7 +21,10 @@ export default async function DealsPage({
 
     // Build Prisma Query
     const where: any = {
-        expiresAt: { gt: new Date() }
+        OR: [
+            { expiresAt: { gt: new Date() } },
+            { expiresAt: null }
+        ]
     };
 
     if (destination) {
