@@ -105,15 +105,8 @@ export async function createDeal(formData: FormData) {
                 rating,
                 reviewCount,
                 reviewSource,
-                url,
-                type,
-                slug,
-                tags,
-                rating,
-                reviewCount,
-                reviewSource,
-                reviewUrl
-                // expiresAt is optional/null by default, meaning "forever"
+                reviewUrl,
+                expiresAt: null
             }
         });
         revalidatePath('/zajezdy');
