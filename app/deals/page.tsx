@@ -8,11 +8,11 @@ import { getDestinationImage } from "@/lib/images";
 export const dynamic = 'force-dynamic';
 
 // This is a Server Component
-export default async function DealsPage({
-    searchParams,
-}: {
-    searchParams: { [key: string]: string | string[] | undefined };
+export default async function DealsPage(props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+    const searchParams = await props.searchParams;
+
     // Parse filters
     const destination = typeof searchParams.destination === 'string' ? searchParams.destination : undefined;
     const minPrice = typeof searchParams.minPrice === 'string' ? parseFloat(searchParams.minPrice) : undefined;
