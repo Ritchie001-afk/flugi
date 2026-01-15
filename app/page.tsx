@@ -27,7 +27,7 @@ export default async function Home() {
     console.error("Failed to fetch featured deals:", e);
   }
   return (
-    <main className="flex flex-col items-center w-full">
+    <main className="flex flex-col items-center w-full pt-20">
       {/* Hero Section */}
       <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
         {/* Background Image/Video Placeholder - Blue gradient */}
