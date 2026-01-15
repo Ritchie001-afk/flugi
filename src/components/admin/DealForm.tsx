@@ -16,6 +16,7 @@ export default function DealForm({ initialData }: DealFormProps) {
     const [image, setImage] = useState(initialData?.image || '');
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSearchingImage, setIsSearchingImage] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
     // Reset state when initialData changes (e.g. clicking edit on different item)
     useEffect(() => {
