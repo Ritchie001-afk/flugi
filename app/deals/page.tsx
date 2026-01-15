@@ -57,12 +57,21 @@ export default async function DealsPage(props: {
     return (
         <div className="flex flex-col min-h-screen bg-slate-50 pt-24 pb-24">
             <div className="container mx-auto px-4">
-                <h1 className="text-4xl md:text-5xl font-display font-bold text-slate-900 mb-4">
-                    Všechny nabídky
-                </h1>
-                <p className="text-slate-600 mb-12 max-w-2xl">
-                    Projděte si náš ručně vybraný výběr nejlevnějších letenek a nejlepších dovolených dostupných právě teď.
-                </p>
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                    <div>
+                        <h1 className="text-3xl md:text-5xl font-display font-bold text-slate-900 mb-4">
+                            {type === 'flight' ? 'Akční Letenky' : type === 'package' ? 'Zájezdy a Dovolená' : 'Všechny nabídky'}
+                        </h1>
+                        <p className="text-slate-600 max-w-2xl">
+                            {type === 'flight'
+                                ? 'Nejlevnější letenky do celého světa, které jsme pro vás našli.'
+                                : type === 'package'
+                                    ? 'Kompletní balíčky dovolené s ubytováním za nejlepší ceny.'
+                                    : 'To nejlepší z letenek a zájezdů na jednom místě.'}
+                        </p>
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Sidebar Filters - Keeping static for now, functional enhancement later */}

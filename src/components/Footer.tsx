@@ -25,8 +25,8 @@ export default function Footer() {
                     <div className="space-y-4">
                         <h3 className="font-display font-bold text-slate-900">Prozkoumat</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/deals" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Levné letenky</Link></li>
-                            <li><Link href="/hotels" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Luxusní hotely</Link></li>
+                            <li><Link href="/deals?type=flight" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Levné letenky</Link></li>
+                            <li><Link href="/deals?type=package" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Dovolená a zájezdy</Link></li>
                             <li><Link href="/pruvodce" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Průvodce letišti</Link></li>
                         </ul>
                     </div>
@@ -34,9 +34,9 @@ export default function Footer() {
                     <div className="space-y-4">
                         <h3 className="font-display font-bold text-slate-900">Společnost</h3>
                         <ul className="space-y-2">
+                            <li><Link href="/blog" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Magazín</Link></li>
                             <li><Link href="/about" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">O nás</Link></li>
                             <li><Link href="/contact" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Kontakt</Link></li>
-                            <li><Link href="/privacy" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Ochrana soukromí</Link></li>
                         </ul>
                     </div>
 
