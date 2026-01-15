@@ -49,7 +49,7 @@ export async function GET(req: Request) {
                 destinationCity: location.city,
                 destinationCountry: location.country,
                 image: location.image,
-                url: 'https://www.invia.cz/',
+                url: 'https://www.invia.cz/hotel/mock-' + Math.random().toString(36).substring(7),
                 type: 'package',
                 tags: [
                     FLIGHT_TAGS[Math.floor(Math.random() * FLIGHT_TAGS.length)],
