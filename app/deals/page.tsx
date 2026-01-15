@@ -18,6 +18,7 @@ export default async function DealsPage({
     const minPrice = typeof searchParams.minPrice === 'string' ? parseFloat(searchParams.minPrice) : undefined;
     const maxPrice = typeof searchParams.maxPrice === 'string' ? parseFloat(searchParams.maxPrice) : undefined;
     const tags = typeof searchParams.tags === 'string' ? searchParams.tags.split(',') : undefined;
+    const type = typeof searchParams.type === 'string' ? searchParams.type : undefined;
 
     // Build Prisma Query
     const where: any = {
@@ -26,6 +27,10 @@ export default async function DealsPage({
             { expiresAt: null }
         ]
     };
+
+    if (type) {
+        where.type = type;
+    }
 
     if (destination) {
         where.destination = { contains: destination, mode: 'insensitive' };
