@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Search, Filter, Plane, Calendar, MapPin } from "lucide-react";
 import prisma from "@/lib/db";
 import { getDestinationImage } from "@/lib/images";
+import { Amenities } from "@/components/Amenities";
 
 export const dynamic = 'force-dynamic';
 
