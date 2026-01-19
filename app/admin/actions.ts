@@ -68,6 +68,11 @@ export async function createDeal(formData: FormData) {
     const image = formData.get('image') as string;
     const url = formData.get('url') as string;
     const type = formData.get('type') as string;
+    const transferCountStr = formData.get('transferCount') as string;
+    const transferCount = transferCountStr ? parseInt(transferCountStr) : null;
+    const baggageInfo = formData.get('baggageInfo') as string;
+    const entryRequirements = formData.get('entryRequirements') as string;
+    const airline = formData.get('airline') as string;
     const tagsStr = formData.get('tags') as string; // "Tag1, Tag2"
 
     if (!title || !price || !destination || !url) {
@@ -97,6 +102,10 @@ export async function createDeal(formData: FormData) {
                 description: "Manuálně přidáno", // Manual deals usually have description in title or separate field
                 price,
                 originalPrice,
+                transferCount,
+                baggageInfo,
+                entryRequirements,
+                airline,
                 currency: 'CZK',
                 destination,
                 image,
@@ -138,6 +147,11 @@ export async function updateDeal(id: string, formData: FormData) {
     const image = formData.get('image') as string;
     const url = formData.get('url') as string;
     const type = formData.get('type') as string;
+    const transferCountStr = formData.get('transferCount') as string;
+    const transferCount = transferCountStr ? parseInt(transferCountStr) : null;
+    const baggageInfo = formData.get('baggageInfo') as string;
+    const entryRequirements = formData.get('entryRequirements') as string;
+    const airline = formData.get('airline') as string;
     const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
     const description = formData.get('description') as string;
 
@@ -176,6 +190,10 @@ export async function updateDeal(id: string, formData: FormData) {
             title,
             price,
             originalPrice,
+            transferCount,
+            baggageInfo,
+            entryRequirements,
+            airline,
             destination,
             image,
             url,

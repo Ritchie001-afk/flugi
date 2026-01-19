@@ -40,6 +40,12 @@ model Deal {
   reviewSource    String?   // e.g. "Google", "TripAdvisor"
   reviewUrl       String?   // e.g. "https://..."
   
+  // Flight Specifics
+  transferCount   Int?      // 0 = Direct, 1 = 1 stop
+  baggageInfo     String?   // "20kg check-in"
+  entryRequirements String? // "Visa required"
+  airline         String?   // "Emirates"
+
   // Aggregator Fields (Future proofing)
   provider        String?   // c.g. "Invia", "Fischer" (for XML feeds)
   externalId      String?   // ID from the XML feed
