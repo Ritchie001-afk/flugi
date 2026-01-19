@@ -76,16 +76,19 @@ export default function DealForm({ initialData }: DealFormProps) {
         if (!destination) return alert('Vyplňte destinaci');
         setUploading(true);
         try {
-            // Pollinations.ai with Flux model for high quality results
-            const seed = Math.floor(Math.random() * 1000);
-            const prompt = `hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting`;
-            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&n=${seed}`;
+            const { generateImageWithGeminiAction } = await import('../../../app/admin/actions');
+            const res = await generateImageWithGeminiAction(destination);
 
-            setImages(prev => [...prev, url]);
-            if (!image) setImage(url);
+            if (res.error) {
+                console.error(res.error);
+                alert(res.error); // Show explicit error from server
+            } else if (res.url) {
+                setImages(prev => [...prev, res.url!]);
+                if (!image) setImage(res.url!);
+            }
         } catch (error) {
             console.error(error);
-            alert('Chyba při generování');
+            alert('Chyba při komunikaci se serverem');
         } finally {
             setUploading(false);
         }

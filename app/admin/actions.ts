@@ -109,6 +109,61 @@ export async function uploadImageAction(formData: FormData): Promise<{ url?: str
     }
 }
 
+export async function generateImageWithGeminiAction(destination: string) {
+    if (!process.env.GEMINI_API_KEY) return { error: 'Chybí API klíč (GEMINI_API_KEY)' };
+
+    try {
+        const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography`;
+
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${process.env.GEMINI_API_KEY}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    instances: [{ prompt }],
+                    parameters: { sampleCount: 1, aspectRatio: "16:9" }
+                }),
+            }
+        );
+
+        if (!response.ok) {
+            const errBody = await response.text();
+            console.error('Gemini Image API Error:', errBody);
+            return { error: `Chyba API Gemini: ${response.statusText}` };
+        }
+
+        const data = await response.json();
+        const base64Image = data.predictions?.[0]?.bytesBase64Encoded;
+
+        if (!base64Image) {
+            return { error: 'Gemini nevygeneroval žádný obrázek.' };
+        }
+
+        // Upload to Cloudinary
+        const buffer = Buffer.from(base64Image, 'base64');
+        return new Promise<{ url?: string; error?: string }>((resolve) => {
+            cloudinary.uploader.upload_stream(
+                { resource_type: 'image', folder: 'flugi_ai_gen' },
+                (error, result) => {
+                    if (error) {
+                        console.error('Cloudinary AI upload error:', error);
+                        resolve({ error: 'Chyba při ukládání AI obrázku.' });
+                    } else {
+                        resolve({ url: result?.secure_url });
+                    }
+                }
+            ).end(buffer);
+        });
+
+    } catch (e: any) {
+        console.error("AI Generation Error:", e);
+        return { error: `Chyba při generování: ${e.message}` };
+    }
+}
+
 // --- Deal Actions ---
 
 export async function createDeal(formData: FormData) {
