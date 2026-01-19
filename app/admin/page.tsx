@@ -56,6 +56,18 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
                         {/* Interactive Client Component Form */}
                         <DealForm initialData={editDeal} />
+
+                        <div className="mt-8 border-t border-slate-100 pt-4">
+                            <form action={async () => {
+                                'use server';
+                                const { cleanupImagesAction } = await import('./cleanup-action');
+                                await cleanupImagesAction();
+                            }}>
+                                <button className="text-xs text-red-400 hover:text-red-600 underline">
+                                    Nouzová oprava DB (Smazat Base64 obrázky)
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -93,8 +105,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                                             </td>
                                             <td className="px-4 py-3">
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${deal.type === 'package'
-                                                        ? 'bg-orange-100 text-orange-700'
-                                                        : 'bg-blue-100 text-blue-700'
+                                                    ? 'bg-orange-100 text-orange-700'
+                                                    : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {deal.type === 'package' ? 'Zájezd' : 'Letenka'}
                                                 </span>

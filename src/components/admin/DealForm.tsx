@@ -70,18 +70,7 @@ export default function DealForm({ initialData }: DealFormProps) {
         window.open(`https://unsplash.com/s/photos/${query}`, '_blank');
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64 = reader.result as string;
-            setImages(prev => [...prev, base64]);
-            if (!image) setImage(base64); // Set as main if empty
-        };
-        reader.readAsDataURL(file);
-    };
 
     const handleAIGenerate = async () => {
         if (!destination) return alert('Vyplňte destinaci');
