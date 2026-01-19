@@ -52,7 +52,7 @@ async function importDeals() {
 
         let savedCount = 0;
         for (const deal of dealsToSave) {
-            const existing = await prisma.deal.findUnique({
+            const existing = await prisma.deal.findFirst({
                 where: { url: deal.url }
             });
 
