@@ -322,12 +322,6 @@ export default function DealForm({ initialData }: DealFormProps) {
                         <Button type="button" onClick={handleAIGenerate} variant="outline" size="icon" className="text-purple-600 border-purple-200 hover:bg-purple-50" title="Vygenerovat AI obrázek">
                             <Sparkles className="h-4 w-4" />
                         </Button>
-                        <label className="cursor-pointer">
-                            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-                            <div className="h-9 w-9 flex items-center justify-center rounded-lg border border-blue-200 bg-white hover:bg-slate-50 text-slate-600 transition-colors">
-                                <Upload className="h-4 w-4" />
-                            </div>
-                        </label>
                     </div>
                 </div>
 
