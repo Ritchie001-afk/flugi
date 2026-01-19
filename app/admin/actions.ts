@@ -162,104 +162,60 @@ export async function createDeal(formData: FormData) {
         revalidatePath('/deals');
         revalidatePath('/admin');
     } catch (e) {
-        console.error(e);
-        // In a real app we would return error, but for simple form action we might just log
+        console.error("Create Deal Error:", e);
+        // If it's a redirect error, rethrow it (though we are outside redirect here, so this catch is for prisma)
     }
-    // Always redirect or revalidate
+    // Always redirect
     redirect('/admin');
 }
 
-
 export async function updateDeal(id: string, formData: FormData) {
-    // Session is handled by middleware, or we could verify it here with getSession()
-    // but definitely DO NOT create a new one with hardcoded password!
-
-
     const title = formData.get('title') as string;
     const price = parseFloat(formData.get('price') as string);
-    const originalPriceStr = formData.get('originalPrice') as string;
-    const originalPrice = originalPriceStr ? parseFloat(originalPriceStr) : null;
+    // ... rest of fields
     const destination = formData.get('destination') as string;
     const image = formData.get('image') as string;
     const url = formData.get('url') as string;
     const type = formData.get('type') as string;
-    const transferCountStr = formData.get('transferCount') as string;
-    const transferCount = transferCountStr ? parseInt(transferCountStr) : null;
-    const baggageInfo = formData.get('baggageInfo') as string;
-    const entryRequirements = formData.get('entryRequirements') as string;
-    const airline = formData.get('airline') as string;
-    const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
-
-    // Parse images array
-    const imagesStr = formData.get('images') as string;
-    let images: string[] = [];
-    try {
-        images = imagesStr ? JSON.parse(imagesStr) : [];
-    } catch (e) {
-        images = [];
-    }
-    // Ensure main image is in the list if not already
-    if (!images.includes(image)) {
-        images.unshift(image);
-    }
     const description = formData.get('description') as string;
+    // ...
 
-    // Parse reviews
-    const ratingStr = formData.get('rating') as string;
-    const rating = ratingStr ? parseFloat(ratingStr) : null;
-    const reviewCountStr = formData.get('reviewCount') as string;
-    const reviewCount = reviewCountStr ? parseInt(reviewCountStr) : null;
-    const reviewSource = formData.get('reviewSource') as string;
-    const reviewUrl = formData.get('reviewUrl') as string;
+    // Simplification: We will just grab all fields safely
+    const data: any = {
+        title, price, destination, image, url, type, description,
+        originalPrice: formData.get('originalPrice') ? parseFloat(formData.get('originalPrice') as string) : null,
+        transferCount: formData.get('transferCount') ? parseInt(formData.get('transferCount') as string) : null,
+        baggageInfo: formData.get('baggageInfo') as string,
+        airline: formData.get('airline') as string,
+        entryRequirements: formData.get('entryRequirements') as string,
+        rating: formData.get('rating') ? parseFloat(formData.get('rating') as string) : null,
+        reviewCount: formData.get('reviewCount') ? parseInt(formData.get('reviewCount') as string) : null,
+        reviewSource: formData.get('reviewSource') as string,
+        reviewUrl: formData.get('reviewUrl') as string,
+        tags: (formData.get('tags') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
+    };
 
-    // Determine create or update based on id presence (but we have separate functions)
-    // Wait, this is updateDeal, let's fix createDeal below or above?
-    // This tool call is modifying updateDeal or createDeal?
-    // StartLine 132 matches updateDeal in previous view.
-    // I need to modify BOTH createDeal and updateDeal.
-    // This replacement is for updateDeal logic.
-    // For createDeal I need another call or MultiReplace.
-    // Let's assume I strictly follow "single contiguous block". I will use MultiReplace for both in next step or now if allowed.
-    // I am supposed to use MultiReplace if non-contiguous.
-    // createDeal is lines 90-110 approx. updateDeal is 130+.
-    // I will use Replace for this chunk (updateDeal vars) and then another for createDeal vars + prisma calls.
-    // Actually, let's look at the view_file again.
-    // createDeal lines 96-97: price, originalPrice: price * 1.2
-    // updateDeal lines 132: const price ... 
-    // updateDeal lines 152: price ...
+    // Images parsing
+    try {
+        const imagesStr = formData.get('images') as string;
+        data.images = imagesStr ? JSON.parse(imagesStr) : [];
+        if (image && !data.images.includes(image)) data.images.unshift(image);
+    } catch (e) {
+        data.images = [];
+    }
 
-    // I'll stick to replacing the variable extraction in updateDeal first.
-    // Wait, I should do createDeal first as it's earlier in file.
-    // Let's use multi_replace to do it cleaner.
-
-
-    await prisma.deal.update({
-        where: { id },
-        data: {
-            title,
-            price,
-            originalPrice,
-            transferCount,
-            baggageInfo,
-            entryRequirements,
-            airline,
-            destination,
-            image,
-            images,
-            url,
-            type,
-            tags,
-            description,
-            rating,
-            reviewCount,
-            reviewSource,
-            reviewUrl
-        }
-    });
-
-    revalidatePath('/admin');
-    revalidatePath('/zajezdy');
-    revalidatePath('/');
+    try {
+        await prisma.deal.update({
+            where: { id },
+            data
+        });
+        revalidatePath('/admin');
+        revalidatePath('/zajezdy');
+        revalidatePath('/deals');
+        revalidatePath('/');
+    } catch (e) {
+        console.error("Update Error:", e);
+    }
     redirect('/admin');
 }
 

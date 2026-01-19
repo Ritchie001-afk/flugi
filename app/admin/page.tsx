@@ -32,6 +32,15 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         editDeal = await prisma.deal.findUnique({
             where: { id: params.edit }
         });
+
+        // SANITIZATION: Check for base64 and strip it if present to prevent crash
+        if (editDeal) {
+            if (editDeal.image.startsWith('data:')) editDeal.image = '';
+            // Fix: properly type map argument
+            if (editDeal.images) {
+                editDeal.images = editDeal.images.filter((img: string) => !img.startsWith('data:'));
+            }
+        }
     }
 
     return (
