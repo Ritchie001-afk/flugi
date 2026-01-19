@@ -47,6 +47,10 @@ export default function DealForm({ initialData }: DealFormProps) {
         }
     };
 
+    const removeImage = (index: number) => {
+        setImages(prev => prev.filter((_, i) => i !== index));
+    };
+
     const handleImageSearch = async () => {
         if (!destination) return alert('Nejdříve vyplňte destinaci!');
         setIsSearchingImage(true);
@@ -66,30 +70,49 @@ export default function DealForm({ initialData }: DealFormProps) {
         window.open(`https://unsplash.com/s/photos/${query}`, '_blank');
     };
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files || e.target.files.length === 0) return;
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
 
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64 = reader.result as string;
+            setImages(prev => [...prev, base64]);
+            if (!image) setImage(base64); // Set as main if empty
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleAIGenerate = async () => {
+        if (!destination) return alert('Vyplňte destinaci');
         setUploading(true);
-        const formData = new FormData();
-        formData.append('file', e.target.files[0]);
-
         try {
-            // Dynamically import to avoid server-action serialization issues in client component if not careful, 
-            // but we can import the action directly at the top if it's 'use server'
-            const { uploadImageAction } = await import('../../../app/admin/upload-action'); // Adjusted path
-            const res = await uploadImageAction(formData);
+            // Pollinations.ai for free AI image generation
+            // Random seed to ensure new image every time
+            const seed = Math.floor(Math.random() * 1000);
+            const prompt = `hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism`;
+            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?n=${seed}`;
 
-            if (res.error) {
-                alert(res.error); // Using alert as toast is not defined
-            } else if (res.url) {
-                setImage(res.url); // Using setImage as form.setValue is not defined
-                alert('Obrázek nahrán!'); // Using alert as toast is not defined
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Chyba při nahrávání.'); // Using alert as toast is not defined
+            setImages(prev => [...prev, url]);
+            if (!image) setImage(url);
+        } catch (error) {
+            console.error(error);
+            alert('Chyba při generování');
         } finally {
             setUploading(false);
+        }
+    };
+
+    const findImage = async () => {
+        if (!destination) return alert('Vyplňte destinaci');
+        setUploading(true);
+        const res = await findImageAction(destination);
+        setUploading(false);
+        if (res.url) {
+            setImages(prev => [...prev, res.url]);
+            if (!image) setImage(res.url); // Set as main if empty
+        } else {
+            alert(res.error);
         }
     };
 
@@ -283,43 +306,61 @@ export default function DealForm({ initialData }: DealFormProps) {
             <div>
                 <div className="flex justify-between items-center mb-1">
                     <label className="block text-xs font-bold text-slate-500 uppercase">URL Obrázku</label>
-                    <div className="flex gap-3">
-                        <button
-                            type="button"
-                            onClick={handleImageSearch}
-                            disabled={isSearchingImage}
-                            className={`text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 font-medium ${isSearchingImage ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                        >
-                            <ImageIcon className="h-3 w-3" />
-                            {isSearchingImage ? 'Hledám...' : 'Autohledání'}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleManualUnsplashSearch}
-                            className="text-xs text-purple-600 hover:text-purple-800 flex items-center gap-1 font-medium cursor-pointer"
-                        >
-                            <Search className="h-3 w-3" />
-                            Najít na Unsplash
-                        </button>
-                    </div>
                 </div>
-                <div className="relative">
-                    <ImageIcon className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <div className="flex gap-2 mb-2">
                     <input
-                        name="image"
-                        required
-                        placeholder="https://images.unsplash.com..."
+                        type="url"
                         value={image}
                         onChange={(e) => setImage(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-mono text-slate-600"
+                        placeholder="URL hlavního obrázku"
+                        className="flex-1 px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
                     />
-                </div>
-                {image && (
-                    <div className="mt-2 text-xs text-slate-500 flex items-center gap-2">
-                        <img src={image} alt="Preview" className="h-8 w-12 object-cover rounded" />
-                        <span>Náhled</span>
+                    <div className="flex gap-1">
+                        <Button type="button" onClick={findImage} variant="outline" size="icon" title="Najít v databázi (Unsplash)">
+                            <Search className="h-4 w-4" />
+                        </Button>
+                        <Button type="button" onClick={handleAIGenerate} variant="outline" size="icon" className="text-purple-600 border-purple-200 hover:bg-purple-50" title="Vygenerovat AI obrázek">
+                            <Sparkles className="h-4 w-4" />
+                        </Button>
+                        <label className="cursor-pointer">
+                            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                            <div className="h-9 w-9 flex items-center justify-center rounded-lg border border-blue-200 bg-white hover:bg-slate-50 text-slate-600 transition-colors">
+                                <Upload className="h-4 w-4" />
+                            </div>
+                        </label>
                     </div>
-                )}
+                </div>
+
+                {/* Image Gallery Preview */}
+                <div className="grid grid-cols-4 gap-2 mb-4">
+                    {images.map((img, idx) => (
+                        <div key={idx} className="relative group aspect-video bg-slate-100 rounded-lg overflow-hidden border border-slate-200">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                            <button
+                                type="button"
+                                onClick={() => removeImage(idx)}
+                                className="absolute top-1 right-1 bg-white/90 text-red-500 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                            {img === image && (
+                                <div className="absolute bottom-1 left-1 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">
+                                    HLAVNÍ
+                                </div>
+                            )}
+                            {img !== image && (
+                                <button
+                                    type="button"
+                                    onClick={() => setImage(img)}
+                                    className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 font-bold text-xs"
+                                >
+                                    Nastavit jako hlavní
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <div>
