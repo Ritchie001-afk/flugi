@@ -24,7 +24,7 @@ model Deal {
   
   image           String
   images          String[]
-  url             String    @unique // Affiliate link
+  url             String    // Affiliate link (removed @unique to allow long URLs)
   
   startDate       DateTime?
   endDate         DateTime?

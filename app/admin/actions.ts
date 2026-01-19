@@ -113,15 +113,17 @@ export async function uploadImageAction(formData: FormData): Promise<{ url?: str
 
 export async function createDeal(formData: FormData) {
     const title = formData.get('title') as string;
-    const price = parseFloat(formData.get('price') as string);
-    const originalPriceStr = formData.get('originalPrice') as string;
-    const originalPrice = originalPriceStr ? parseFloat(originalPriceStr) : null;
-    const destination = formData.get('destination') as string;
-    const image = formData.get('image') as string;
-    const url = formData.get('url') as string;
-    const type = formData.get('type') as string;
-    const transferCountStr = formData.get('transferCount') as string;
-    const transferCount = transferCountStr ? parseInt(transferCountStr) : null;
+    const priceVal = parseFloat(formData.get('price') as string);
+    const price = isNaN(priceVal) ? 0 : priceVal;
+
+    const opStr = formData.get('originalPrice') as string;
+    const opVal = parseFloat(opStr);
+    const originalPrice = (opStr && !isNaN(opVal)) ? opVal : null;
+
+    const tcStr = formData.get('transferCount') as string;
+    const tcVal = parseInt(tcStr);
+    const transferCount = (tcStr && !isNaN(tcVal)) ? tcVal : null;
+
     const baggageInfo = formData.get('baggageInfo') as string;
     const entryRequirements = formData.get('entryRequirements') as string;
     const airline = formData.get('airline') as string;
@@ -147,10 +149,14 @@ export async function createDeal(formData: FormData) {
     }
 
     // Parse reviews
-    const ratingStr = formData.get('rating') as string;
-    const rating = ratingStr ? parseFloat(ratingStr) : null;
-    const reviewCountStr = formData.get('reviewCount') as string;
-    const reviewCount = reviewCountStr ? parseInt(reviewCountStr) : null;
+    const rStr = formData.get('rating') as string;
+    const rVal = parseFloat(rStr);
+    const rating = (rStr && !isNaN(rVal)) ? rVal : null;
+
+    const rcStr = formData.get('reviewCount') as string;
+    const rcVal = parseInt(rcStr);
+    const reviewCount = (rcStr && !isNaN(rcVal)) ? rcVal : null;
+
     const reviewSource = formData.get('reviewSource') as string;
     const reviewUrl = formData.get('reviewUrl') as string;
 
@@ -200,25 +206,35 @@ export async function createDeal(formData: FormData) {
 
 export async function updateDeal(id: string, formData: FormData) {
     const title = formData.get('title') as string;
-    const price = parseFloat(formData.get('price') as string);
-    // ... rest of fields
-    const destination = formData.get('destination') as string;
-    const image = formData.get('image') as string;
-    const url = formData.get('url') as string;
-    const type = formData.get('type') as string;
-    const description = formData.get('description') as string;
-    // ...
+    const priceVal = parseFloat(formData.get('price') as string);
+    const price = isNaN(priceVal) ? 0 : priceVal;
+
+    const opStr = formData.get('originalPrice') as string;
+    const opVal = parseFloat(opStr);
+    const originalPrice = (opStr && !isNaN(opVal)) ? opVal : null;
+
+    const tcStr = formData.get('transferCount') as string;
+    const tcVal = parseInt(tcStr);
+    const transferCount = (tcStr && !isNaN(tcVal)) ? tcVal : null;
+
+    const rStr = formData.get('rating') as string;
+    const rVal = parseFloat(rStr);
+    const rating = (rStr && !isNaN(rVal)) ? rVal : null;
+
+    const rcStr = formData.get('reviewCount') as string;
+    const rcVal = parseInt(rcStr);
+    const reviewCount = (rcStr && !isNaN(rcVal)) ? rcVal : null;
 
     // Simplification: We will just grab all fields safely
     const data: any = {
         title, price, destination, image, url, type, description,
-        originalPrice: formData.get('originalPrice') ? parseFloat(formData.get('originalPrice') as string) : null,
-        transferCount: formData.get('transferCount') ? parseInt(formData.get('transferCount') as string) : null,
+        originalPrice,
+        transferCount,
         baggageInfo: formData.get('baggageInfo') as string,
         airline: formData.get('airline') as string,
         entryRequirements: formData.get('entryRequirements') as string,
-        rating: formData.get('rating') ? parseFloat(formData.get('rating') as string) : null,
-        reviewCount: formData.get('reviewCount') ? parseInt(formData.get('reviewCount') as string) : null,
+        rating,
+        reviewCount,
         reviewSource: formData.get('reviewSource') as string,
         reviewUrl: formData.get('reviewUrl') as string,
         tags: (formData.get('tags') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
