@@ -81,6 +81,19 @@ export async function createDeal(formData: FormData) {
 
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()) : [];
 
+    // Parse images array
+    const imagesStr = formData.get('images') as string;
+    let images: string[] = [];
+    try {
+        images = imagesStr ? JSON.parse(imagesStr) : [];
+    } catch (e) {
+        images = [];
+    }
+    // Ensure main image is in the list if not already
+    if (!images.includes(image)) {
+        images.unshift(image);
+    }
+
     // Parse reviews
     const ratingStr = formData.get('rating') as string;
     const rating = ratingStr ? parseFloat(ratingStr) : null;
@@ -109,6 +122,7 @@ export async function createDeal(formData: FormData) {
                 currency: 'CZK',
                 destination,
                 image,
+                images, // Add this
                 url,
                 type,
                 slug,
@@ -153,6 +167,19 @@ export async function updateDeal(id: string, formData: FormData) {
     const entryRequirements = formData.get('entryRequirements') as string;
     const airline = formData.get('airline') as string;
     const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
+
+    // Parse images array
+    const imagesStr = formData.get('images') as string;
+    let images: string[] = [];
+    try {
+        images = imagesStr ? JSON.parse(imagesStr) : [];
+    } catch (e) {
+        images = [];
+    }
+    // Ensure main image is in the list if not already
+    if (!images.includes(image)) {
+        images.unshift(image);
+    }
     const description = formData.get('description') as string;
 
     // Parse reviews
@@ -196,6 +223,7 @@ export async function updateDeal(id: string, formData: FormData) {
             airline,
             destination,
             image,
+            images,
             url,
             type,
             tags,

@@ -14,6 +14,7 @@ export default function DealForm({ initialData }: DealFormProps) {
     const [destination, setDestination] = useState(initialData?.destination || '');
     const [description, setDescription] = useState(initialData?.description || '');
     const [image, setImage] = useState(initialData?.image || '');
+    const [images, setImages] = useState<string[]>(initialData?.images || []);
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSearchingImage, setIsSearchingImage] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -140,46 +141,52 @@ export default function DealForm({ initialData }: DealFormProps) {
 
                 {/* Flight Specific Fields */}
                 {type === 'flight' && (
-                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
-                        <div>
-                            <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Počet přestupů</label>
-                            <input
-                                name="transferCount"
-                                type="number"
-                                defaultValue={initialData?.transferCount ?? 0}
-                                placeholder="0 = Přímý let"
-                                className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm"
-                            />
+                    <div className="col-span-2 bg-blue-50/50 p-6 rounded-xl border border-blue-100 space-y-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-blue-600 bg-blue-100 p-1.5 rounded-lg"><Plane className="h-4 w-4" /></span>
+                            <h3 className="font-bold text-blue-900 text-sm">Detaily letu</h3>
                         </div>
-                        <div>
-                            <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Zavazadla</label>
-                            <input
-                                name="baggageInfo"
-                                type="text"
-                                defaultValue={initialData?.baggageInfo}
-                                placeholder="např. 20kg odbavené"
-                                className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Vstupní podmínky</label>
-                            <input
-                                name="entryRequirements"
-                                type="text"
-                                defaultValue={initialData?.entryRequirements}
-                                placeholder="např. Vízum online"
-                                className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Letecká společnost</label>
-                            <input
-                                name="airline"
-                                type="text"
-                                defaultValue={initialData?.airline}
-                                placeholder="např. Emirates"
-                                className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm"
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Letecká společnost</label>
+                                <input
+                                    name="airline"
+                                    type="text"
+                                    defaultValue={initialData?.airline}
+                                    placeholder="např. Emirates"
+                                    className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Počet přestupů</label>
+                                <input
+                                    name="transferCount"
+                                    type="number"
+                                    defaultValue={initialData?.transferCount ?? 0}
+                                    placeholder="0 = Přímý let"
+                                    className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Zavazadla</label>
+                                <input
+                                    name="baggageInfo"
+                                    type="text"
+                                    defaultValue={initialData?.baggageInfo}
+                                    placeholder="např. 20kg odbavené"
+                                    className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Vstupní podmínky</label>
+                                <input
+                                    name="entryRequirements"
+                                    type="text"
+                                    defaultValue={initialData?.entryRequirements}
+                                    placeholder="např. Vízum online"
+                                    className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
