@@ -182,7 +182,7 @@ export default async function DealsPage(props: {
 
                                             <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                                                 <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
-                                                    {deal.type === 'flight' ? 'Pelikan.cz' : 'Invia.cz'}
+                                                    {/* Provider text removed */}
                                                 </div>
                                                 <Link href={`/deal/${deal.id}`}>
                                                     <Button size="sm" variant="outline" className="h-8 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600">
