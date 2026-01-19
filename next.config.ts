@@ -2,28 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**.pelikan.cz',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.invia.cz',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.cloudfront.net',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'image.pollinations.ai',
+  protocol: 'https',
+    hostname: '**',
       }
     ],
+dangerouslyAllowSVG: true,
+  contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 
