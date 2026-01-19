@@ -48,8 +48,10 @@ export async function generateEntryRequirementsAction(destination: string) {
         const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
         const prompt = `Jaké jsou aktuální vstupní podmínky a vízová povinnost pro občany ČR do destinace "${destination}"?
-        Odpověz velmi stručně, jednou větou. Například "Vízum nutné (online za 50 USD)" nebo "Bezvízový styk do 90 dnů".
-        Pokud je to v EU, napiš "Občanský průkaz / Bezvízový styk".`;
+        Odpověz stručně (max 2 věty).
+        Na konec PŘIDEJ oficiální odkaz na stránky Ministerstva zahraničních věcí ČR (mzv.cz) s informacemi pro tuto zemi/oblast.
+        Pokud odkaz neznáš přesně, vygeneruj odkaz na vyhledávání na mzv.cz.
+        Formát: "[Podmínky]. Více info: [URL]"`;
 
         const result = await model.generateContent(prompt);
         const text = result.response.text();
