@@ -343,6 +343,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                 <div className="flex gap-2 mb-2">
                     <input
                         type="url"
+                        name="image"
                         value={image}
                         onChange={(e) => setImage(e.target.value)}
                         placeholder="URL hlavního obrázku"
