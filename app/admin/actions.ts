@@ -110,58 +110,79 @@ export async function uploadImageAction(formData: FormData): Promise<{ url?: str
 }
 
 export async function generateImageWithGeminiAction(destination: string) {
-    if (!process.env.GEMINI_API_KEY) return { error: 'Chybí API klíč (GEMINI_API_KEY)' };
+    // 1. Try Gemini (Imagen 3)
+    if (process.env.GEMINI_API_KEY) {
+        try {
+            const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography`;
 
-    try {
-        const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography`;
-
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${process.env.GEMINI_API_KEY}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    instances: [{ prompt }],
-                    parameters: { sampleCount: 1, aspectRatio: "16:9" }
-                }),
-            }
-        );
-
-        if (!response.ok) {
-            const errBody = await response.text();
-            console.error('Gemini Image API Error:', errBody);
-            return { error: `Chyba API Gemini: ${response.statusText}` };
-        }
-
-        const data = await response.json();
-        const base64Image = data.predictions?.[0]?.bytesBase64Encoded;
-
-        if (!base64Image) {
-            return { error: 'Gemini nevygeneroval žádný obrázek.' };
-        }
-
-        // Upload to Cloudinary
-        const buffer = Buffer.from(base64Image, 'base64');
-        return new Promise<{ url?: string; error?: string }>((resolve) => {
-            cloudinary.uploader.upload_stream(
-                { resource_type: 'image', folder: 'flugi_ai_gen' },
-                (error, result) => {
-                    if (error) {
-                        console.error('Cloudinary AI upload error:', error);
-                        resolve({ error: 'Chyba při ukládání AI obrázku.' });
-                    } else {
-                        resolve({ url: result?.secure_url });
-                    }
+            // Try newer model version 002
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${process.env.GEMINI_API_KEY}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        instances: [{ prompt }],
+                        parameters: { sampleCount: 1, aspectRatio: "16:9" }
+                    }),
                 }
-            ).end(buffer);
-        });
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                const base64Image = data.predictions?.[0]?.bytesBase64Encoded;
+
+                if (base64Image) {
+                    // Upload to Cloudinary
+                    const buffer = Buffer.from(base64Image, 'base64');
+                    return await uploadBufferToCloudinary(buffer, 'flugi_ai_gen');
+                }
+            } else {
+                console.warn(`Gemini Imagen 3 Failed (${response.status}), falling back to Flux...`);
+            }
+        } catch (e) {
+            console.error("Gemini AI Error:", e);
+            // Fallthrough to fallback
+        }
+    }
+
+    // 2. Fallback: Flux via Pollinations (High Quality)
+    try {
+        console.log("Using Fallback: Pollinations Flux");
+        const seed = Math.floor(Math.random() * 1000);
+        const prompt = `hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting`;
+        const fluxUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&n=${seed}`;
+
+        // Fetch the image to upload it to our storage
+        const res = await fetch(fluxUrl);
+        if (!res.ok) throw new Error('Pollinations Flux failed');
+
+        const arrayBuffer = await res.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        return await uploadBufferToCloudinary(buffer, 'flugi_ai_flux');
 
     } catch (e: any) {
-        console.error("AI Generation Error:", e);
-        return { error: `Chyba při generování: ${e.message}` };
+        console.error("Fallback AI Error:", e);
+        return { error: `Chyba při generování (AI i Fallback): ${e.message}` };
     }
+}
+
+// Helper to upload buffer to Cloudinary to avoid code duplication
+async function uploadBufferToCloudinary(buffer: Buffer, folder: string): Promise<{ url?: string; error?: string }> {
+    return new Promise<{ url?: string; error?: string }>((resolve) => {
+        cloudinary.uploader.upload_stream(
+            { resource_type: 'image', folder: folder },
+            (error, result) => {
+                if (error) {
+                    console.error('Cloudinary upload error:', error);
+                    resolve({ error: 'Chyba při ukládání obrázku.' });
+                } else {
+                    resolve({ url: result?.secure_url });
+                }
+            }
+        ).end(buffer);
+    });
 }
 
 // --- Deal Actions ---
