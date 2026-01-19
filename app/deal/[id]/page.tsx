@@ -72,10 +72,12 @@ export default async function DealPage({ params }: DealPageProps) {
                             <p className="text-lg leading-relaxed text-slate-600">{deal.description}</p>
                         </div>
 
-                        {/* Amenities Grid */}
-                        <div className="border-t border-slate-100 pt-8">
-                            <Amenities text={deal.description} tags={deal.tags} />
-                        </div>
+                        {/* Amenities Grid - Hide for flights */}
+                        {deal.type !== 'flight' && (
+                            <div className="border-t border-slate-100 pt-8">
+                                <Amenities text={deal.description} tags={deal.tags} type={deal.type} />
+                            </div>
+                        )}
 
                         {/* Reviews (Only for packages/hotels) */}
                         {deal.type !== 'flight' && (
@@ -170,6 +172,10 @@ export default async function DealPage({ params }: DealPageProps) {
                                         <Plane className="h-4 w-4 text-blue-600" /> Detaily letu
                                     </h4>
                                     <div className="space-y-3">
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-slate-500">Letecká společnost</span>
+                                            <span className="font-medium text-slate-900">{deal.airline || '-'}</span>
+                                        </div>
                                         <div className="flex justify-between items-center text-sm">
                                             <span className="text-slate-500">Přestupy</span>
                                             <span className="font-medium text-slate-900">

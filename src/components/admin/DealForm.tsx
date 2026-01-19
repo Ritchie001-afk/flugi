@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload, Plane } from 'lucide-react';
-import { createDeal, updateDeal, generateDescriptionAction, findImageAction } from '../../../app/admin/actions';
+import { createDeal, updateDeal, generateDescriptionAction, findImageAction, generateEntryRequirementsAction } from '../../../app/admin/actions';
 import Link from 'next/link';
 
 interface DealFormProps {
@@ -178,7 +178,26 @@ export default function DealForm({ initialData }: DealFormProps) {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1">Vstupní podmínky</label>
+                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1 flex justify-between">
+                                    Vstupní podmínky
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            if (!destination) return alert('Vyplňte destinaci');
+                                            // You might want to add a separate loader state for this button
+                                            const res = await generateEntryRequirementsAction(destination);
+                                            if (res.text) {
+                                                const input = document.getElementsByName('entryRequirements')[0] as HTMLInputElement;
+                                                if (input) input.value = res.text;
+                                            } else {
+                                                alert(res.error);
+                                            }
+                                        }}
+                                        className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                                    >
+                                        <Sparkles className="h-3 w-3" /> AI
+                                    </button>
+                                </label>
                                 <input
                                     name="entryRequirements"
                                     type="text"

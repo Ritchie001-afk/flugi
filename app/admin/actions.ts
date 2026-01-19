@@ -40,6 +40,26 @@ export async function generateDescriptionAction(destination: string) {
     }
 }
 
+export async function generateEntryRequirementsAction(destination: string) {
+    if (!process.env.GEMINI_API_KEY) return { error: 'Chybí API klíč' };
+
+    try {
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+
+        const prompt = `Jaké jsou aktuální vstupní podmínky a vízová povinnost pro občany ČR do destinace "${destination}"?
+        Odpověz velmi stručně, jednou větou. Například "Vízum nutné (online za 50 USD)" nebo "Bezvízový styk do 90 dnů".
+        Pokud je to v EU, napiš "Občanský průkaz / Bezvízový styk".`;
+
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+        return { text };
+    } catch (e: any) {
+        console.error("Gemini Error:", e);
+        return { error: `Chyba AI: ${e.message || 'Neznámá chyba'}` };
+    }
+}
+
 export async function login(formData: FormData) {
     const password = formData.get('password') as string;
     const correctPassword = process.env.ADMIN_PASSWORD || 'flugi123'; // Fallback for dev
