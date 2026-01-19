@@ -82,7 +82,7 @@ export async function logout() {
 // --- Cloudinary Actions ---
 import cloudinary from '@/lib/cloudinary';
 
-export async function uploadImageAction(formData: FormData) {
+export async function uploadImageAction(formData: FormData): Promise<{ url?: string; error?: string }> {
     const file = formData.get('file') as File;
     if (!file) return { error: 'Žádný soubor nebyl nahrán.' };
 
@@ -90,7 +90,7 @@ export async function uploadImageAction(formData: FormData) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        return new Promise<{ url: string; error?: string }>((resolve, reject) => {
+        return new Promise<{ url?: string; error?: string }>((resolve, reject) => {
             cloudinary.uploader.upload_stream(
                 { resource_type: 'image', folder: 'flugi_deals' },
                 (error: any, result: any) => {
