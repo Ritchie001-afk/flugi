@@ -15,7 +15,7 @@ export default function BratislavaAirportGuide() {
             <header className="relative h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1565426873118-a1fb8da73188?q=80&w=1470&auto=format&fit=crop"
+                        src="/images/airports/bratislava.jpg"
                         alt="Letiště Bratislava Štefánik"
                         fill
                         className="object-cover brightness-50"

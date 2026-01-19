@@ -15,7 +15,7 @@ export default function ViennaAirportGuide() {
             <header className="relative h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=1472&auto=format&fit=crop"
+                        src="/images/airports/vienna.jpg"
                         alt="Letiště Vídeň Schwechat"
                         fill
                         className="object-cover brightness-50"

@@ -83,11 +83,11 @@ export default function GuidePage() {
                         </div>
                     </Link>
 
-                    {/* BRQ - Generic nice airport/travel image */}
+                    {/* BRQ */}
                     <Link href="/pruvodce/letiste-brno-turany" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=1470&auto=format&fit=crop"
+                                src="/images/airports/brno.jpg"
                                 alt="Letiště Brno"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -111,11 +111,11 @@ export default function GuidePage() {
                         </div>
                     </Link>
 
-                    {/* OSR - Train/Travel abstract */}
+                    {/* OSR */}
                     <Link href="/pruvodce/letiste-leose-janacka-ostrava" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop"
+                                src="/images/airports/ostrava.jpg"
                                 alt="Letiště Ostrava"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -139,11 +139,11 @@ export default function GuidePage() {
                         </div>
                     </Link>
 
-                    {/* VIE - Confirmed Vienna Airport ID or generic large hub */}
+                    {/* VIE */}
                     <Link href="/pruvodce/letiste-viden-schwechat" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=1470&auto=format&fit=crop"
+                                src="/images/airports/vienna.jpg"
                                 alt="Letiště Vídeň"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -167,11 +167,11 @@ export default function GuidePage() {
                         </div>
                     </Link>
 
-                    {/* KRK - Generic modern glass terminal */}
+                    {/* KRK */}
                     <Link href="/pruvodce/letiste-krakov-balice" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1556388169-db19adc96088?q=80&w=1470&auto=format&fit=crop"
+                                src="/images/airports/krakow.jpg"
                                 alt="Letiště Krakov"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -195,11 +195,11 @@ export default function GuidePage() {
                         </div>
                     </Link>
 
-                    {/* KTW - Wizz Air style or generic runway */}
+                    {/* KTW */}
                     <Link href="/pruvodce/letiste-katovice-pyrzowice" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1483450389192-3d3a08510eda?q=80&w=1470&auto=format&fit=crop"
+                                src="/images/airports/katowice.jpg"
                                 alt="Letiště Katovice"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -223,11 +223,11 @@ export default function GuidePage() {
                         </div>
                     </Link>
 
-                    {/* BTS - Generic airport apron */}
+                    {/* BTS */}
                     <Link href="/pruvodce/letiste-bratislava-stefanik" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1590214041764-555e090dfcfc?q=80&w=1470&auto=format&fit=crop"
+                                src="/images/airports/bratislava.jpg"
                                 alt="Letiště Bratislava"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"

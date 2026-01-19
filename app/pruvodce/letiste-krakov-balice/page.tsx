@@ -15,7 +15,7 @@ export default function KrakowAirportGuide() {
             <header className="relative h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1596328695027-d0354178a87c?q=80&w=1470&auto=format&fit=crop"
+                        src="/images/airports/krakow.jpg"
                         alt="Letiště Krakov Balice"
                         fill
                         className="object-cover brightness-50"

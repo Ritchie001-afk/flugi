@@ -17,8 +17,8 @@ export default function OstravaAirportGuide() {
             <header className="relative h-[60vh] flex items-end">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1596825205420-72c207f2df23?q=80&w=2070&auto=format&fit=crop"
-                        alt="Letiště Ostrava Mošnov"
+                        src="/images/airports/ostrava.jpg"
+                        alt="Letiště Leoše Janáčka Ostrava"
                         fill
                         className="object-cover brightness-50"
                         priority
