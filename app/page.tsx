@@ -14,7 +14,7 @@ export const revalidate = 0; // Disable cache
 
 export default async function Home() {
   // Fetch featured deals (latest first)
-  let featuredDeals: Deal[] = [];
+  let featuredDeals = [];
   try {
     featuredDeals = await prisma.deal.findMany({
       where: {
@@ -22,6 +22,19 @@ export default async function Home() {
           { expiresAt: { gt: new Date() } },
           { expiresAt: null }
         ]
+      },
+      select: {
+        id: true,
+        title: true,
+        destination: true,
+        image: true,
+        price: true,
+        originalPrice: true,
+        description: true,
+        type: true,
+        rating: true,
+        reviewSource: true,
+        expiresAt: true
       },
       orderBy: { createdAt: 'desc' }, // Latest deals first
       take: 6

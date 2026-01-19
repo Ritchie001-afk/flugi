@@ -15,6 +15,14 @@ interface AdminPageProps {
 export default async function AdminPage({ searchParams }: AdminPageProps) {
     const params = await searchParams;
     const deals = await prisma.deal.findMany({
+        select: {
+            id: true,
+            title: true,
+            price: true,
+            type: true,
+            destination: true,
+            // image: false // Explicitly NOT selecting image
+        },
         orderBy: { createdAt: 'desc' },
         take: 50
     });
