@@ -128,7 +128,7 @@ export async function createDeal(formData: FormData) {
     const tagsStr = formData.get('tags') as string; // "Tag1, Tag2"
 
     if (!title || !price || !destination || !url) {
-        redirect('/admin?error=missing_fields');
+        return { error: 'Chybí povinná pole (Název, Cena, Destinace, URL)' };
     }
 
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()) : [];
@@ -164,7 +164,7 @@ export async function createDeal(formData: FormData) {
         await prisma.deal.create({
             data: {
                 title,
-                description: "Manuálně přidáno", // Manual deals usually have description in title or separate field
+                description: "Manuálně přidáno",
                 price,
                 originalPrice,
                 transferCount,
@@ -174,7 +174,7 @@ export async function createDeal(formData: FormData) {
                 currency: 'CZK',
                 destination,
                 image,
-                images, // Add this
+                images,
                 url,
                 type,
                 slug,
@@ -188,14 +188,13 @@ export async function createDeal(formData: FormData) {
         });
         revalidatePath('/zajezdy');
         revalidatePath('/deals');
-        revalidatePath('/zajezdy');
-        revalidatePath('/deals');
         revalidatePath('/admin');
-    } catch (e) {
+    } catch (e: any) {
         console.error("Create Deal Error:", e);
-        // If it's a redirect error, rethrow it (though we are outside redirect here, so this catch is for prisma)
+        return { error: `Chyba při ukládání: ${e.message}` };
     }
-    // Always redirect
+
+    // Only redirect if successful (code execution reaches here only if no error thrown/returned in catch)
     redirect('/admin');
 }
 
@@ -243,8 +242,9 @@ export async function updateDeal(id: string, formData: FormData) {
         revalidatePath('/zajezdy');
         revalidatePath('/deals');
         revalidatePath('/');
-    } catch (e) {
+    } catch (e: any) {
         console.error("Update Error:", e);
+        return { error: `Chyba při úpravě: ${e.message}` };
     }
     redirect('/admin');
 }
