@@ -115,22 +115,25 @@ export async function generateImageWithGeminiAction(destination: string) {
         try {
             const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography`;
 
-            // Try newer model version 002
+            // Try specific model gemini-2.5-flash-image as requested
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${process.env.GEMINI_API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${process.env.GEMINI_API_KEY}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        instances: [{ prompt }],
-                        parameters: { sampleCount: 1, aspectRatio: "16:9" }
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }]
                     }),
                 }
             );
 
             if (response.ok) {
                 const data = await response.json();
-                const base64Image = data.predictions?.[0]?.bytesBase64Encoded;
+                // Check multiple possible paths for image data in response
+                const base64Image = data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData)?.inline_data?.data
+                    || data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData)?.inlineData?.data;
 
                 if (base64Image) {
                     // Upload to Cloudinary
@@ -138,7 +141,7 @@ export async function generateImageWithGeminiAction(destination: string) {
                     return await uploadBufferToCloudinary(buffer, 'flugi_ai_gen');
                 }
             } else {
-                console.warn(`Gemini Imagen 3 Failed (${response.status}), falling back to Flux...`);
+                console.warn(`Gemini 2.5 Flash Image Failed (${response.status}), falling back to Flux...`);
             }
         } catch (e) {
             console.error("Gemini AI Error:", e);
