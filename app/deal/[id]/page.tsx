@@ -150,20 +150,45 @@ export default async function DealPage({ params }: DealPageProps) {
                                 </a>
 
                                 <div className="text-center text-xs text-slate-400 mb-6">
-                                    Přesměrování na stránku partnera ({deal.provider || 'CK'})
-                                </div>
-
-                                <div className="space-y-4 pt-6 border-t border-slate-100">
+                                    {deal.type === 'flight' && (
+                                        <div className="flex items-center text-slate-600 text-sm">
+                                            <Plane className="h-4 w-4 mr-3 text-slate-400" />
+                                            <span>{deal.airline || 'Letecká společnost'}</span>
+                                        </div>
+                                    )}
                                     <div className="flex items-center text-slate-600 text-sm">
                                         <Calendar className="h-4 w-4 mr-3 text-slate-400" />
                                         <span>Dostupné termíny ověřte u prodejce</span>
                                     </div>
-                                    <div className="flex items-center text-slate-600 text-sm">
-                                        <Plane className="h-4 w-4 mr-3 text-slate-400" />
-                                        <span>Letenky v ceně (pokud je uvedeno)</span>
-                                    </div>
                                 </div>
                             </div>
+
+                            {/* Flight Details Box (Sidebar) */}
+                            {deal.type === 'flight' && (
+                                <div className="bg-white rounded-2xl p-6 shadow-xl shadow-blue-900/5 border border-blue-100 mt-6 mt-6">
+                                    <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                        <Plane className="h-4 w-4 text-blue-600" /> Detaily letu
+                                    </h4>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-slate-500">Přestupy</span>
+                                            <span className="font-medium text-slate-900">
+                                                {deal.transferCount === 0 ? 'Přímý let' : `${deal.transferCount} přestupů`}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-slate-500">Zavazadla</span>
+                                            <span className="font-medium text-slate-900">{deal.baggageInfo || 'Dle tarifu'}</span>
+                                        </div>
+                                        {deal.entryRequirements && (
+                                            <div className="pt-3 border-t border-slate-100">
+                                                <span className="block text-xs font-bold text-slate-500 uppercase mb-1">Vstupní podmínky</span>
+                                                <span className="text-sm text-slate-700">{deal.entryRequirements}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Cross-sell Sidebar Cards */}
                             <div className="space-y-6">

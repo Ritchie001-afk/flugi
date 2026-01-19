@@ -13,10 +13,10 @@ export function Amenities({ text, tags, type }: AmenitiesProps) {
     const config = [
         { icon: Utensils, label: 'All Inclusive', keys: ['all inclusive', 'plná penze', 'snídaně', 'polopenze'], types: ['package', 'hotel'] },
         { icon: Wifi, label: 'Wi-Fi Zdarma', keys: ['wifi', 'wi-fi', 'internet'], types: ['package', 'hotel', 'flight'] },
-        { icon: Waves, label: 'Bazén', keys: ['bazén', 'koupaliště'], types: ['package', 'hotel'] },
-        { icon: Snowflake, label: 'Klimatizace', keys: ['klimatizace', 'ac'], types: ['package', 'hotel'] },
-        { icon: Baby, label: 'Pro rodiny', keys: ['rodina', 'děti', 'hřiště', 'dětský'], types: ['package', 'hotel'] },
-        { icon: Flower2, label: 'Wellness', keys: ['wellness', 'sauna', 'masáže'], types: ['package', 'hotel'] },
+        { icon: Snowflake, label: 'Klimatizace', keys: ['klimatizace', 'ac', 'air condition'], types: ['package', 'hotel'] },
+        { icon: Waves, label: 'Bazén', keys: ['bazén', 'pool'], types: ['package', 'hotel'] },
+        { icon: MapPin, label: 'Centrum', keys: ['centrum', 'center'], types: ['package', 'hotel'] },
+        { icon: Baby, label: 'Pro rodiny', keys: ['rodina', 'děti', 'family', 'hřiště'], types: ['package', 'hotel'] },
         { icon: Dumbbell, label: 'Fitness', keys: ['fitness', 'posilovna'], types: ['package', 'hotel'] },
         { icon: Car, label: 'Parkování', keys: ['parkování', 'garáž'], types: ['package', 'hotel'] },
     ];
