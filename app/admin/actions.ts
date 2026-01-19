@@ -225,6 +225,12 @@ export async function updateDeal(id: string, formData: FormData) {
     const rcVal = parseInt(rcStr);
     const reviewCount = (rcStr && !isNaN(rcVal)) ? rcVal : null;
 
+    const destination = formData.get('destination') as string;
+    const image = formData.get('image') as string;
+    const url = formData.get('url') as string;
+    const type = formData.get('type') as string;
+    const description = formData.get('description') as string;
+
     // Simplification: We will just grab all fields safely
     const data: any = {
         title, price, destination, image, url, type, description,
