@@ -76,11 +76,10 @@ export default function DealForm({ initialData }: DealFormProps) {
         if (!destination) return alert('Vyplňte destinaci');
         setUploading(true);
         try {
-            // Pollinations.ai for free AI image generation
-            // Random seed to ensure new image every time
+            // Pollinations.ai with Flux model for high quality results
             const seed = Math.floor(Math.random() * 1000);
-            const prompt = `hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism`;
-            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?n=${seed}`;
+            const prompt = `hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting`;
+            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&n=${seed}`;
 
             setImages(prev => [...prev, url]);
             if (!image) setImage(url);
@@ -96,27 +95,33 @@ export default function DealForm({ initialData }: DealFormProps) {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Limit file size (e.g. 5MB) to avoid server payload issues before upload
+        // Limit file size (e.g. 5MB)
         if (file.size > 5 * 1024 * 1024) {
             return alert('Soubor je příliš velký (max 5MB).');
         }
 
         setUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
 
-        // Dynamic import to avoid circular dependencies if any, ensuring client calls server action
-        const { uploadImageAction } = await import('../../../app/admin/actions');
+            const { uploadImageAction } = await import('../../../app/admin/actions');
+            const res = await uploadImageAction(formData);
 
-        const res = await uploadImageAction(formData);
-
-        if (res.error) {
-            alert(res.error);
-        } else if (res.url) {
-            setImages(prev => [...prev, res.url!]);
-            if (!image) setImage(res.url!); // Set as main if empty
+            if (res.error) {
+                alert(res.error);
+            } else if (res.url) {
+                setImages(prev => [...prev, res.url!]);
+                if (!image) setImage(res.url!);
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Chyba při nahrávání souboru. Zkuste to znovu.');
+        } finally {
+            setUploading(false);
+            // Reset input value to allow selecting same file again if needed
+            e.target.value = '';
         }
-        setUploading(false);
     };
 
     const findImage = async () => {
