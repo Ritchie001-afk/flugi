@@ -474,6 +474,9 @@ export default function DealForm({ initialData }: DealFormProps) {
                 </div>
             </div>
 
+            {/* Hidden Input for Images Array */}
+            <input type="hidden" name="images" value={JSON.stringify(images)} />
+
             <Button variant="premium" className="w-full mt-2">
                 <Save className="h-4 w-4 mr-2" />
                 {initialData ? 'Uložit změny' : 'Vytvořit deal'}

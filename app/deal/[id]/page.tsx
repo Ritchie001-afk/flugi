@@ -33,7 +33,8 @@ export default async function DealPage({ params }: DealPageProps) {
     const destinationCity = deal.destinationCity || deal.destination.split(',')[0];
     // Create an array of images. If deal.image is a single string, make it an array. 
     // If we had a gallery field in DB we would use it here.
-    const images = [deal.image];
+    // Use deal.images if available, otherwise fallback to single image
+    const images = deal.images && deal.images.length > 0 ? deal.images : [deal.image];
 
     return (
         <main className="min-h-screen bg-white pb-20">
