@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload } from 'lucide-react';
+import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload, Plane } from 'lucide-react';
 import { createDeal, updateDeal, generateDescriptionAction, findImageAction } from '../../../app/admin/actions';
 import Link from 'next/link';
 
