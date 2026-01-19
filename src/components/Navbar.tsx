@@ -33,7 +33,7 @@ export default function Navbar() {
                     <Link href="/pruvodce" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
                         Průvodce
                     </Link>
-                    <Link href="/blog" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
+                    <Link href="/magazin" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">
                         Magazín
                     </Link>
                 </div>
@@ -69,7 +69,7 @@ export default function Navbar() {
                     <Link href="/pruvodce" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
                         Průvodce
                     </Link>
-                    <Link href="/blog" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
+                    <Link href="/magazin" className="text-lg font-medium text-slate-600 hover:text-blue-600" onClick={() => setIsMenuOpen(false)}>
                         Magazín
                     </Link>
                     <Button variant="premium" className="w-full">Hlídat letenky</Button>

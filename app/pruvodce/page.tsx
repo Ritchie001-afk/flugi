@@ -138,8 +138,120 @@ export default function GuidePage() {
                             </div>
                         </div>
                     </Link>
+
+                    {/* VIE */}
+                    <Link href="/pruvodce/letiste-viden-schwechat" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            <Image
+                                src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=1472&auto=format&fit=crop"
+                                alt="Letiště Vídeň"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Letiště Vídeň (VIE)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Největší hub v okolí. Přímé vlaky z Brna, obrovská nabídka dálkových letů.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* KRK */}
+                    <Link href="/pruvodce/letiste-krakov-balice" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            <Image
+                                src="https://images.unsplash.com/photo-1596328695027-d0354178a87c?q=80&w=1470&auto=format&fit=crop"
+                                alt="Letiště Krakov"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Letiště Krakov (KRK)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Skvělá alternativa pro cestující z Ostravska. Moderní terminál a spousta nízkonákladovek.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* KTW */}
+                    <Link href="/pruvodce/letiste-katovice-pyrzowice" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            <Image
+                                src="https://images.unsplash.com/photo-1542296332-2e44a991849a?q=80&w=1470&auto=format&fit=crop"
+                                alt="Letiště Katovice"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Letiště Katovice (KTW)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Ráj pro charterové lety a Wizz Air. Levné parkování a snadná dostupnost po dálnici.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* BTS */}
+                    <Link href="/pruvodce/letiste-bratislava-stefanik" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            <Image
+                                src="https://images.unsplash.com/photo-1565426873118-a1fb8da73188?q=80&w=1470&auto=format&fit=crop"
+                                alt="Letiště Bratislava"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Letiště Bratislava (BTS)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Menší, klidné letiště ideální pro lety Smartwings k moři. Z Brna co by kamenem dohodil.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
