@@ -1,6 +1,6 @@
-
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
+import Image from "next/image"; // Added import
 import { ArrowRight, BookOpen } from "lucide-react";
 
 export default function GuidePage() {
@@ -27,10 +27,15 @@ export default function GuidePage() {
                 </div>
 
                 {/* Featured Guide */}
-                <div className="mb-16 relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 aspect-[21/9] flex items-end group cursor-pointer shadow-xl">
+                <Link href="/pruvodce/skryte-letenky-hidden-city-ticketing" className="block mb-16 relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 aspect-[21/9] flex items-end group cursor-pointer shadow-xl">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
-                    {/* Image Placeholder */}
-                    <div className="absolute inset-0 bg-slate-800 animate-pulse transition-colors" />
+                    {/* Image Placeholder - would be better with real image */}
+                    <Image
+                        src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop"
+                        alt="Hidden City Ticketing"
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
 
                     <div className="relative z-20 p-8 md:p-12 w-full">
                         <span className="inline-block px-3 py-1 bg-blue-600/20 text-blue-300 border border-blue-500/30 text-xs font-bold rounded-full mb-4">
@@ -42,20 +47,23 @@ export default function GuidePage() {
                         <p className="text-slate-300 max-w-2xl text-lg mb-6 line-clamp-2">
                             Objevte tajnou strategii, kterou experti používají k ušetření až 70 % na mezinárodních letech.
                         </p>
-                        <Button variant="premium" className="rounded-full">
+                        <Button variant="premium" className="rounded-full pointer-events-none">
                             Číst článek
                         </Button>
                     </div>
-                </div>
+                </Link>
 
                 {/* Guides Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {/* PRG */}
                     <Link href="/pruvodce/letiste-vaclava-havla-praha" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
-                            {/* You might want a specific image here if available, or keep the placeholder/generic */}
-                            <div className="absolute inset-0 bg-slate-300 group-hover:bg-slate-400 transition-colors">
-                                {/* Ideally use Image component here */}
-                            </div>
+                            <Image
+                                src="https://images.unsplash.com/photo-1541849546-216549ae216d?q=80&w=1470&auto=format&fit=crop"
+                                alt="Letiště Praha"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
                             <div className="absolute top-3 left-3">
                                 <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
                                     Letiště
@@ -64,10 +72,66 @@ export default function GuidePage() {
                         </div>
                         <div className="flex-1">
                             <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
-                                Kompletní průvodce Letištěm Václava Havla (PRG)
+                                Letiště Václava Havla Praha (PRG)
                             </h3>
                             <p className="text-slate-500 text-sm line-clamp-2 mb-4">
                                 Vše, co potřebujete vědět o terminálech, saloncích, levném parkování a nejrychlejší dopravě do centra Prahy.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* BRQ */}
+                    <Link href="/pruvodce/letiste-brno-turany" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            <Image
+                                src="https://images.unsplash.com/photo-1570654621852-9dd2a3449914?q=80&w=2069&auto=format&fit=crop"
+                                alt="Letiště Brno"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Letiště Brno-Tuřany (BRQ)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Malé, ale šikovné. Průvodce parkováním, dopravou a službami na letišti v Brně.
+                            </p>
+                            <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
+                                Číst více <ArrowRight className="h-4 w-4" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* OSR */}
+                    <Link href="/pruvodce/letiste-leose-janacka-ostrava" className="flex flex-col group cursor-pointer">
+                        <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
+                            <Image
+                                src="https://images.unsplash.com/photo-1596825205420-72c207f2df23?q=80&w=2070&auto=format&fit=crop"
+                                alt="Letiště Ostrava"
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div className="absolute top-3 left-3">
+                                <span className="px-2 py-1 bg-white/90 backdrop-blur-md rounded-md text-xs font-bold text-slate-900 border border-white/20 shadow-sm">
+                                    Letiště
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                Letiště Ostrava (OSR)
+                            </h3>
+                            <p className="text-slate-500 text-sm line-clamp-2 mb-4">
+                                Jediné letiště v ČR s vlakovým spojením. Tipy na dopravu a parkování zdarma.
                             </p>
                             <div className="flex items-center text-blue-600 text-sm font-medium gap-2 group-hover:underline">
                                 Číst více <ArrowRight className="h-4 w-4" />
