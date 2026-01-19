@@ -87,7 +87,7 @@ export default function GuidePage() {
                     <Link href="/pruvodce/letiste-brno-turany" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1570654621852-9dd2a3449914?q=80&w=2069&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=1470&auto=format&fit=crop"
                                 alt="Letiště Brno"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -115,7 +115,7 @@ export default function GuidePage() {
                     <Link href="/pruvodce/letiste-leose-janacka-ostrava" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1596825205420-72c207f2df23?q=80&w=2070&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1464037866556-56549506206b?q=80&w=1420&auto=format&fit=crop"
                                 alt="Letiště Ostrava"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -143,7 +143,7 @@ export default function GuidePage() {
                     <Link href="/pruvodce/letiste-viden-schwechat" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=1472&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1559981883-7d884fb0e12e?q=80&w=1470&auto=format&fit=crop"
                                 alt="Letiště Vídeň"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -171,7 +171,7 @@ export default function GuidePage() {
                     <Link href="/pruvodce/letiste-krakov-balice" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1596328695027-d0354178a87c?q=80&w=1470&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1476&auto=format&fit=crop"
                                 alt="Letiště Krakov"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -199,7 +199,7 @@ export default function GuidePage() {
                     <Link href="/pruvodce/letiste-katovice-pyrzowice" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1542296332-2e44a991849a?q=80&w=1470&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1582136009841-a1288c037949?q=80&w=1470&auto=format&fit=crop"
                                 alt="Letiště Katovice"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -227,7 +227,7 @@ export default function GuidePage() {
                     <Link href="/pruvodce/letiste-bratislava-stefanik" className="flex flex-col group cursor-pointer">
                         <div className="aspect-[3/2] rounded-2xl bg-slate-200 border border-slate-200 overflow-hidden mb-4 relative hover:shadow-lg transition-all duration-300">
                             <Image
-                                src="https://images.unsplash.com/photo-1565426873118-a1fb8da73188?q=80&w=1470&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1579227181531-97ced5dfa9a6?q=80&w=1470&auto=format&fit=crop"
                                 alt="Letiště Bratislava"
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"

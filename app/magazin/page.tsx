@@ -46,8 +46,8 @@ export default function MagazinePage() {
                         </div>
                     </Link>
 
-                    {/* Placeholder Article 1 */}
-                    <Link href="/pruvodce" className="group relative h-[400px] rounded-3xl overflow-hidden block bg-white border border-slate-200 flex flex-col">
+                    {/* Article 1 */}
+                    <Link href="/magazin/5-nejkrasnejsich-jezer-svycarska" className="group relative h-[400px] rounded-3xl overflow-hidden block bg-white border border-slate-200 flex flex-col">
                         <div className="relative h-48 overflow-hidden">
                             <Image
                                 src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
