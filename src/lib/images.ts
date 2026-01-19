@@ -45,6 +45,9 @@ export function getDestinationImage(destination: string, fallbackImage?: string)
 
     const normalized = destination.toLowerCase().trim();
 
+    // 0. Priority: Use provided specific image if available (User upload or scraped high-quality)
+    if (fallbackImage) return fallbackImage;
+
     // 1. Exact or partial match (check if normalized string contains any key)
     // Optimization: Split destination by comma to get City and Country, then check both
     const parts = normalized.split(',').map(p => p.trim());
