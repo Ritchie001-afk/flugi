@@ -129,6 +129,11 @@ export async function createDeal(formData: FormData) {
     const airline = formData.get('airline') as string;
     const tagsStr = formData.get('tags') as string; // "Tag1, Tag2"
 
+    const destination = formData.get('destination') as string;
+    const image = formData.get('image') as string;
+    const url = formData.get('url') as string;
+    const type = formData.get('type') as string;
+
     if (!title || !price || !destination || !url) {
         return { error: 'Chybí povinná pole (Název, Cena, Destinace, URL)' };
     }
