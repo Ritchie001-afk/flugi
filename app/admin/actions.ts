@@ -134,8 +134,9 @@ export async function createDeal(formData: FormData) {
     const url = formData.get('url') as string;
     const type = formData.get('type') as string;
 
-    if (!title || !price || !destination || !url) {
-        return { error: 'Chybí povinná pole (Název, Cena, Destinace, URL)' };
+    // Fixed: Added image validation
+    if (!title || !price || !destination || !url || !image) {
+        return { error: 'Chybí povinná pole (Název, Cena, Destinace, URL, Obrázek)' };
     }
 
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()) : [];
@@ -149,7 +150,7 @@ export async function createDeal(formData: FormData) {
         images = [];
     }
     // Ensure main image is in the list if not already
-    if (!images.includes(image)) {
+    if (image && !images.includes(image)) {
         images.unshift(image);
     }
 
@@ -236,9 +237,14 @@ export async function updateDeal(id: string, formData: FormData) {
     const type = formData.get('type') as string;
     const description = formData.get('description') as string;
 
-    // Simplification: We will just grab all fields safely
+    // Fixed: Construct data object safely to avoid null on required fields
     const data: any = {
-        title, price, destination, image, url, type, description,
+        title,
+        price,
+        destination,
+        url,
+        type,
+        description,
         originalPrice,
         transferCount,
         baggageInfo: formData.get('baggageInfo') as string,
@@ -250,6 +256,11 @@ export async function updateDeal(id: string, formData: FormData) {
         reviewUrl: formData.get('reviewUrl') as string,
         tags: (formData.get('tags') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
     };
+
+    // Only update image if it's provided (not null/empty)
+    if (image) {
+        data.image = image;
+    }
 
     // Images parsing
     try {
