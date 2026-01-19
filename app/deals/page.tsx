@@ -143,6 +143,11 @@ export default async function DealsPage(props: {
                                                         -{Math.round((1 - deal.price / deal.originalPrice) * 100)}%
                                                     </span>
                                                 )}
+                                                {deal.rating && deal.type !== 'flight' && (
+                                                    <span className="px-2 py-1 bg-yellow-400 rounded-md text-xs font-bold text-white shadow-sm flex items-center gap-1">
+                                                        ★ {deal.rating}
+                                                    </span>
+                                                )}
                                             </div>
                                         </div>
 

@@ -77,28 +77,30 @@ export default async function DealPage({ params }: DealPageProps) {
                             <Amenities text={deal.description} tags={deal.tags} />
                         </div>
 
-                        {/* Reviews (Already Implemented) */}
-                        <div className="border-t border-slate-100 pt-8">
-                            <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-2xl font-bold text-slate-900">Hodnocení hostů</h3>
-                                {deal.rating && (
-                                    <div className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">
-                                        ★ {deal.rating}/10
+                        {/* Reviews (Only for packages/hotels) */}
+                        {deal.type !== 'flight' && (
+                            <div className="border-t border-slate-100 pt-8">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-2xl font-bold text-slate-900">Hodnocení hostů</h3>
+                                    {deal.rating && (
+                                        <div className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">
+                                            ★ {deal.rating}/10
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col md:flex-row gap-6 items-center text-center md:text-left">
+                                    <div className="flex-1">
+                                        <p className="text-slate-600 italic">"Skvělá dovolená, hotel odpovídal popisu. Jídlo vynikající a pláž čistá."</p>
+                                        <div className="mt-2 font-bold text-slate-900">– Jana, ověřený zákazník</div>
                                     </div>
-                                )}
-                            </div>
-                            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col md:flex-row gap-6 items-center text-center md:text-left">
-                                <div className="flex-1">
-                                    <p className="text-slate-600 italic">"Skvělá dovolená, hotel odpovídal popisu. Jídlo vynikající a pláž čistá."</p>
-                                    <div className="mt-2 font-bold text-slate-900">– Jana, ověřený zákazník</div>
-                                </div>
-                                <div className="flex-shrink-0">
-                                    <a href={deal.reviewUrl || '#'} target="_blank" className="text-blue-600 text-sm font-medium hover:underline">
-                                        Číst recenze na {deal.reviewSource || 'TripADvisor'} →
-                                    </a>
+                                    <div className="flex-shrink-0">
+                                        <a href={deal.reviewUrl || '#'} target="_blank" className="text-blue-600 text-sm font-medium hover:underline">
+                                            Číst recenze na {deal.reviewSource || 'TripADvisor'} →
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* AI Itinerary */}
                         <div className="border-t border-slate-100 pt-8">
@@ -164,57 +166,72 @@ export default async function DealPage({ params }: DealPageProps) {
                             </div>
 
                             {/* Cross-sell Sidebar Cards */}
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 {deal.type === 'package' ? (
-                                    <a href={`https://www.tripadvisor.com/Search?q=${encodeURIComponent(deal.destination)}`} target="_blank" rel="noopener noreferrer" className="block group">
-                                        <div className="p-4 rounded-xl bg-green-50 border border-green-100 hover:bg-green-100 transition-colors flex items-center gap-4">
-                                            <div className="p-3 bg-green-600 rounded-lg text-white">
-                                                <MapPin className="h-5 w-5" />
+                                    <div className="bg-white rounded-xl border border-green-100 p-4 shadow-sm">
+                                        <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                            <MapPin className="h-4 w-4 text-green-600" /> Tipy na výlety
+                                        </h4>
+                                        <a href={`https://www.tripadvisor.com/Search?q=${encodeURIComponent(deal.destination)}`} target="_blank" rel="noopener noreferrer" className="block group">
+                                            <div className="p-3 rounded-lg bg-green-50 hover:bg-green-100 transition-colors flex items-center gap-3">
+                                                <div className="p-2 bg-green-600 rounded-lg text-white">
+                                                    <MapPin className="h-4 w-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-green-900 text-sm group-hover:underline">Recenze a tipy</h4>
+                                                    <p className="text-xs text-green-700">TripAdvisor</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <div className="bg-white rounded-xl border border-blue-100 p-4 shadow-sm">
+                                        <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                            <Bed className="h-4 w-4 text-blue-600" /> Ubytování
+                                        </h4>
+                                        <div className="space-y-3">
+                                            <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                                <div className="p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-3">
+                                                    <div className="p-2 bg-blue-600 rounded-lg text-white">
+                                                        <Bed className="h-4 w-4" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-blue-900 text-sm group-hover:underline">{AFFILIATE_LINKS.booking.name}</h4>
+                                                        <p className="text-xs text-blue-700">{AFFILIATE_LINKS.booking.cta}</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                                <div className="p-3 rounded-lg bg-rose-50 hover:bg-rose-100 transition-colors flex items-center gap-3">
+                                                    <div className="p-2 bg-rose-500 rounded-lg text-white">
+                                                        <Home className="h-4 w-4" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-rose-900 text-sm group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
+                                                        <p className="text-xs text-rose-700">{AFFILIATE_LINKS.airbnb.cta}</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="bg-white rounded-xl border border-orange-100 p-4 shadow-sm">
+                                    <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                        <Car className="h-4 w-4 text-orange-600" /> Doprava na místě
+                                    </h4>
+                                    <a href={getRentalcarsUrl()} target="_blank" rel="noopener noreferrer" className="block group">
+                                        <div className="p-3 rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors flex items-center gap-3">
+                                            <div className="p-2 bg-orange-500 rounded-lg text-white">
+                                                <Car className="h-4 w-4" />
                                             </div>
                                             <div>
-                                                <h4 className="font-bold text-green-900 group-hover:underline">Recenze a tipy</h4>
-                                                <p className="text-xs text-green-700">Co vidět v okolí na TripAdvisoru</p>
+                                                <h4 className="font-bold text-orange-900 text-sm group-hover:underline">{AFFILIATE_LINKS.rentalcars.name}</h4>
+                                                <p className="text-xs text-orange-700">{AFFILIATE_LINKS.rentalcars.cta}</p>
                                             </div>
                                         </div>
                                     </a>
-                                ) : (
-                                    <>
-                                        <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
-                                            <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors flex items-center gap-4">
-                                                <div className="p-3 bg-blue-600 rounded-lg text-white">
-                                                    <Bed className="h-5 w-5" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-blue-900 group-hover:underline">{AFFILIATE_LINKS.booking.name}</h4>
-                                                    <p className="text-xs text-blue-700">{AFFILIATE_LINKS.booking.cta}</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
-                                            <div className="p-4 rounded-xl bg-rose-50 border border-rose-100 hover:bg-rose-100 transition-colors flex items-center gap-4">
-                                                <div className="p-3 bg-rose-500 rounded-lg text-white">
-                                                    <Home className="h-5 w-5" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-rose-900 group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
-                                                    <p className="text-xs text-rose-700">{AFFILIATE_LINKS.airbnb.cta}</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </>
-                                )}
-
-                                <a href={getRentalcarsUrl()} target="_blank" rel="noopener noreferrer" className="block group">
-                                    <div className="p-4 rounded-xl bg-orange-50 border border-orange-100 hover:bg-orange-100 transition-colors flex items-center gap-4">
-                                        <div className="p-3 bg-orange-500 rounded-lg text-white">
-                                            <Car className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-orange-900 group-hover:underline">{AFFILIATE_LINKS.rentalcars.name}</h4>
-                                            <p className="text-xs text-orange-700">{AFFILIATE_LINKS.rentalcars.cta}</p>
-                                        </div>
-                                    </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
