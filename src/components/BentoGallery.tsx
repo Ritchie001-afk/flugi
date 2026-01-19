@@ -21,16 +21,16 @@ export function BentoGallery({ images, title, destination, price }: BentoGallery
         <div className="relative w-full max-w-7xl mx-auto md:pt-6 md:px-6">
             {/* Gallery Grid - Dynamic based on count */}
             <div className={`grid gap-2 h-[50vh] min-h-[400px] ${count === 1 ? 'grid-cols-1' :
-                    count === 2 ? 'grid-cols-2' :
-                        count === 3 ? 'grid-cols-2 md:grid-cols-3' :
-                            'grid-cols-1 md:grid-cols-4 md:grid-rows-2'
+                count === 2 ? 'grid-cols-2' :
+                    count === 3 ? 'grid-cols-2 md:grid-cols-3' :
+                        'grid-cols-1 md:grid-cols-4 md:grid-rows-2'
                 }`}>
 
                 {/* Main Large Image - Always First */}
                 <div className={`relative rounded-2xl overflow-hidden group ${count === 1 ? 'col-span-1' :
-                        count === 2 ? 'col-span-1' :
-                            count === 3 ? 'col-span-2' :
-                                'col-span-2 row-span-2' // Standard layout for 4+ images
+                    count === 2 ? 'col-span-1' :
+                        count === 3 ? 'col-span-2' :
+                            'col-span-2 row-span-2' // Standard layout for 4+ images
                     }`}>
                     <Image
                         src={displayImages[0]}
@@ -63,14 +63,7 @@ export function BentoGallery({ images, title, destination, price }: BentoGallery
                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
 
-                        {/* Show "View Gallery" on the LAST item */}
-                        {idx === count - 2 && (
-                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer">
-                                <span className="text-white font-bold border border-white/30 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full hover:bg-white/20 transition-all">
-                                    {count > 4 ? `+${images.length - 4} dalších` : 'Zobrazit galerii'}
-                                </span>
-                            </div>
-                        )}
+                        {/* Overlay removed as per user request */}
                     </div>
                 ))}
             </div>
