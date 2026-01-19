@@ -92,6 +92,33 @@ export default function DealForm({ initialData }: DealFormProps) {
         }
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Limit file size (e.g. 5MB) to avoid server payload issues before upload
+        if (file.size > 5 * 1024 * 1024) {
+            return alert('Soubor je příliš velký (max 5MB).');
+        }
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Dynamic import to avoid circular dependencies if any, ensuring client calls server action
+        const { uploadImageAction } = await import('../../../app/admin/actions');
+
+        const res = await uploadImageAction(formData);
+
+        if (res.error) {
+            alert(res.error);
+        } else if (res.url) {
+            setImages(prev => [...prev, res.url!]);
+            if (!image) setImage(res.url!); // Set as main if empty
+        }
+        setUploading(false);
+    };
+
     const findImage = async () => {
         if (!destination) return alert('Vyplňte destinaci');
         setUploading(true);
@@ -311,6 +338,12 @@ export default function DealForm({ initialData }: DealFormProps) {
                         <Button type="button" onClick={handleAIGenerate} variant="outline" size="icon" className="text-purple-600 border-purple-200 hover:bg-purple-50" title="Vygenerovat AI obrázek">
                             <Sparkles className="h-4 w-4" />
                         </Button>
+                        <label className={`cursor-pointer ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+                            <div className="h-9 w-9 flex items-center justify-center rounded-lg border border-blue-200 bg-white hover:bg-slate-50 text-slate-600 transition-colors">
+                                {uploading ? <span className="animate-spin">⏳</span> : <Upload className="h-4 w-4" />}
+                            </div>
+                        </label>
                     </div>
                 </div>
 

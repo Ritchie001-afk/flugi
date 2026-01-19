@@ -79,6 +79,36 @@ export async function logout() {
     redirect('/admin/login');
 }
 
+// --- Cloudinary Actions ---
+import cloudinary from '@/lib/cloudinary';
+
+export async function uploadImageAction(formData: FormData) {
+    const file = formData.get('file') as File;
+    if (!file) return { error: 'Žádný soubor nebyl nahrán.' };
+
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        return new Promise<{ url: string; error?: string }>((resolve, reject) => {
+            cloudinary.uploader.upload_stream(
+                { resource_type: 'image', folder: 'flugi_deals' },
+                (error: any, result: any) => {
+                    if (error) {
+                        console.error('Cloudinary upload error:', error);
+                        resolve({ url: '', error: 'Chyba při nahrávání obrázku.' });
+                    } else {
+                        resolve({ url: result?.secure_url || '' });
+                    }
+                }
+            ).end(buffer);
+        });
+    } catch (e) {
+        console.error('Upload handler error:', e);
+        return { error: 'Chyba při zpracování souboru.' };
+    }
+}
+
 // --- Deal Actions ---
 
 export async function createDeal(formData: FormData) {
