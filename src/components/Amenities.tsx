@@ -1,4 +1,4 @@
-import { Wifi, Waves, Snowflake, Utensils, Baby, Car, Plane, Coffee, Dumbbell, Flower2 } from 'lucide-react';
+import { Wifi, Waves, Snowflake, Utensils, Baby, Car, Plane, Coffee, Dumbbell, Flower2, MapPin } from 'lucide-react';
 
 interface AmenitiesProps {
     text: string;    // Description text to search in
