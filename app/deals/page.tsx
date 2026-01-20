@@ -75,46 +75,16 @@ export default async function DealsPage(props: {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    {/* Sidebar Filters - Keeping static for now, functional enhancement later */}
-                    <aside className="space-y-8">
+                    {/* Sidebar Filters - Hidden per user request */}
+                    {/* <aside className="space-y-8">
                         <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                            <div className="flex items-center justify-between mb-6">
-                                <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                                    <Filter className="h-4 w-4" /> Filtrování
-                                </h3>
-                                <button className="text-xs text-blue-600 hover:text-blue-500">Resetovat</button>
-                            </div>
-
-                            {/* Price Range */}
-                            <div className="space-y-4 mb-6">
-                                <h4 className="text-sm font-medium text-slate-700">Cenové rozpětí</h4>
-                                <div className="flex items-center gap-2">
-                                    <input type="number" placeholder="Od" className="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-900 focus:border-blue-500 outline-none" />
-                                    <span className="text-slate-400">-</span>
-                                    <input type="number" placeholder="Do" className="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-900 focus:border-blue-500 outline-none" />
-                                </div>
-                            </div>
-
-                            {/* Destinations */}
-                            <div className="space-y-4 mb-6">
-                                <h4 className="text-sm font-medium text-slate-700">Destinace</h4>
-                                <div className="space-y-2">
-                                    {['Evropa', 'Asie', 'Severní Amerika', 'Afrika'].map(region => (
-                                        <label key={region} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 cursor-pointer group">
-                                            <div className="w-4 h-4 rounded border border-slate-300 bg-white group-hover:border-blue-500 transition-colors"></div>
-                                            {region}
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <Button className="w-full" variant="secondary">Použít filtry</Button>
+                           ...
                         </div>
-                    </aside>
+                    </aside> */}
 
-                    {/* Deals Grid */}
-                    <div className="lg:col-span-3">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Deals Grid - Full Width */}
+                    <div className="col-span-full">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {deals.length === 0 ? (
                                 <div className="col-span-full py-12 text-center text-slate-500">
                                     <p>Zatím žádné nabídky. Zkuste to později.</p>

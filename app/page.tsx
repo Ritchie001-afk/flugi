@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { SearchSection } from "@/components/SearchSection";
+// import { SearchSection } from "@/components/SearchSection";
 import { Search, ArrowRight, CheckCircle2, Globe, ShieldCheck } from "lucide-react";
 import prisma from "@/lib/db";
 import { getDestinationImage } from "@/lib/images";
@@ -65,9 +65,10 @@ export default async function Home() {
           </div>
 
           {/* Search Section */}
-          <div className="w-full max-w-4xl animate-fade-in-up delay-200 shadow-2xl rounded-2xl">
+          {/* Search Section Removed per user request */}
+          {/* <div className="w-full max-w-4xl animate-fade-in-up delay-200 shadow-2xl rounded-2xl">
             <SearchSection />
-          </div>
+          </div> */}
         </div>
 
       </section>
