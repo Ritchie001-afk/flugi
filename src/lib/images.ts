@@ -38,6 +38,13 @@ const DESTINATION_IMAGES: Record<string, string> = {
     'portugalsko': 'https://images.unsplash.com/photo-1548705085-101177834f47?q=80&w=1470&auto=format&fit=crop',
     'švédsko': 'https://images.unsplash.com/photo-1509356843151-3e7d96241e11?q=80&w=1470&auto=format&fit=crop',
     'rumunsko': 'https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?q=80&w=1500&auto=format&fit=crop',
+
+    // Swiss Lakes
+    'vierwaldstättersee': 'https://images.unsplash.com/photo-1555986845-6a568c09a349?q=80&w=2070&auto=format&fit=crop',
+    'oeschinensee': 'https://images.unsplash.com/photo-1465311440653-baace58694be?q=80&w=2070&auto=format&fit=crop',
+    'blausee': 'https://images.unsplash.com/photo-1510300951230-e374d6c6506d?q=80&w=2070&auto=format&fit=crop',
+    'brienzersee': 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop',
+    'caumasee': 'https://images.unsplash.com/photo-1629731296726-2bb5e0766f1e?q=80&w=2070&auto=format&fit=crop',
 };
 
 export function getDestinationImage(destination: string, fallbackImage?: string): string {

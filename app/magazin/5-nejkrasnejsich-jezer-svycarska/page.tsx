@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, MapPin, Calendar, Clock, Share2 } from "lucide-react";
+import { getDestinationImage } from "@/lib/images";
 
 export const metadata = {
     title: '5 nejkrásnějších jezer ve Švýcarsku | Flugi Magazín',
@@ -55,9 +56,11 @@ export default function SwissLakesArticle() {
                         Švýcarsko není jen o čokoládě, hodinkách a vysokých horách. Je to také země vody. Tyrkysová barva, která vypadá jako z Karibiku, ale s kulisou zasněžených Alp. Vybrali jsme pro vás 5 jezer, která byste neměli minout.
                     </p>
 
+
+
                     <h2>1. Vierwaldstättersee (Lucernské jezero)</h2>
                     <Image
-                        src="https://images.unsplash.com/photo-1555986845-6a568c09a349?q=80&w=2070&auto=format&fit=crop"
+                        src={getDestinationImage('vierwaldstättersee')}
                         alt="Vierwaldstättersee - Lucernské jezero"
                         width={800}
                         height={500}
@@ -69,7 +72,7 @@ export default function SwissLakesArticle() {
 
                     <h2>2. Oeschinensee</h2>
                     <Image
-                        src="https://images.unsplash.com/photo-1465311440653-baace58694be?q=80&w=2070&auto=format&fit=crop"
+                        src={getDestinationImage('oeschinensee')}
                         alt="Oeschinensee"
                         width={800}
                         height={500}
@@ -81,7 +84,7 @@ export default function SwissLakesArticle() {
 
                     <h2>3. Blausee</h2>
                     <Image
-                        src="https://images.unsplash.com/photo-1510300951230-e374d6c6506d?q=80&w=2070&auto=format&fit=crop"
+                        src={getDestinationImage('blausee')}
                         alt="Blausee - Modré jezero"
                         width={800}
                         height={500}
@@ -93,7 +96,7 @@ export default function SwissLakesArticle() {
 
                     <h2>4. Brienzersee</h2>
                     <Image
-                        src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
+                        src={getDestinationImage('brienzersee')}
                         alt="Brienzersee - Tyrkysové jezero"
                         width={800}
                         height={500}
@@ -105,7 +108,7 @@ export default function SwissLakesArticle() {
 
                     <h2>5. Caumasee</h2>
                     <Image
-                        src="https://images.unsplash.com/photo-1629731296726-2bb5e0766f1e?q=80&w=2070&auto=format&fit=crop"
+                        src={getDestinationImage('caumasee')}
                         alt="Caumasee - Perla Flimsu"
                         width={800}
                         height={500}
