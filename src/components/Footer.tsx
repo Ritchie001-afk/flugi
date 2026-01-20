@@ -33,9 +33,9 @@ export default function Footer() {
                     <div className="space-y-4">
                         <h3 className="font-display font-bold text-slate-900">Společnost</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/blog" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Magazín</Link></li>
-                            <li><Link href="/about" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">O nás</Link></li>
-                            <li><Link href="/contact" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Kontakt</Link></li>
+                            <li><Link href="/magazin" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Magazín</Link></li>
+                            <li><Link href="/o-nas" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">O nás</Link></li>
+                            <li><Link href="/kontakt" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">Kontakt</Link></li>
                         </ul>
                     </div>
 
