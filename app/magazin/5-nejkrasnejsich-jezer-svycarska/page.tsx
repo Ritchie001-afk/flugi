@@ -56,6 +56,13 @@ export default function SwissLakesArticle() {
                     </p>
 
                     <h2>1. Vierwaldstättersee (Lucernské jezero)</h2>
+                    <Image
+                        src="https://images.unsplash.com/photo-1555986845-6a568c09a349?q=80&w=2070&auto=format&fit=crop"
+                        alt="Vierwaldstättersee - Lucernské jezero"
+                        width={800}
+                        height={500}
+                        className="w-full h-auto my-8 rounded-2xl"
+                    />
                     <p>
                         Klenot uprostřed Švýcarska. Díky svému nepravidelnému tvaru a strmým břehům připomíná spíše norské fjordy. Nejlepší zážitek? Projížďka historickým kolesovým parníkem z města Lucern.
                     </p>
@@ -66,23 +73,44 @@ export default function SwissLakesArticle() {
                         alt="Oeschinensee"
                         width={800}
                         height={500}
-                        className="w-full h-auto my-8"
+                        className="w-full h-auto my-8 rounded-2xl"
                     />
                     <p>
                         Jezero zapsané na seznamu UNESCO. Dostanete se k němu lanovkou z Kanderstegu a pak krátkou procházkou. Voda je v létě dost teplá na rychlé koupání, ale hlavním lákadlem je panorama.
                     </p>
 
                     <h2>3. Blausee</h2>
+                    <Image
+                        src="https://images.unsplash.com/photo-1510300951230-e374d6c6506d?q=80&w=2070&auto=format&fit=crop"
+                        alt="Blausee - Modré jezero"
+                        width={800}
+                        height={500}
+                        className="w-full h-auto my-8 rounded-2xl"
+                    />
                     <p>
                         Malé, ale neuvěřitelně modré. Podle legendy získalo svou barvu ze slz dívky, která zde plakala pro svou lásku. Vstup je placený, ale zahrnuje i projížďku na loďce s proskleným dnem.
                     </p>
 
                     <h2>4. Brienzersee</h2>
+                    <Image
+                        src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
+                        alt="Brienzersee - Tyrkysové jezero"
+                        width={800}
+                        height={500}
+                        className="w-full h-auto my-8 rounded-2xl"
+                    />
                     <p>
                         Soused známějšího Thunersee, ale s mnohem intenzivnější tyrkysovou barvou. Pokud jste fanoušky seriálu <em>Crash Landing on You</em>, určitě poznáte molo v Iseltwaldu.
                     </p>
 
                     <h2>5. Caumasee</h2>
+                    <Image
+                        src="https://images.unsplash.com/photo-1629731296726-2bb5e0766f1e?q=80&w=2070&auto=format&fit=crop"
+                        alt="Caumasee - Perla Flimsu"
+                        width={800}
+                        height={500}
+                        className="w-full h-auto my-8 rounded-2xl"
+                    />
                     <p>
                         "Perla Flimsu". Jezero uprostřed lesů s malým ostrůvkem. Voda je zde díky podzemním pramenům překvapivě teplá (až 24°C).
                     </p>
