@@ -1,5 +1,5 @@
 
-import { prisma } from "@/lib/db";
+import prisma from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, MapPin, Calendar, ArrowRight } from "lucide-react";
