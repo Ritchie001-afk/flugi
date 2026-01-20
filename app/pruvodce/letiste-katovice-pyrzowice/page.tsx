@@ -41,7 +41,7 @@ export default function KatowiceAirportGuide() {
 
             <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2 space-y-8 prose prose-lg prose-slate max-w-none">
-                    <section>
+                    <section className="mb-12 border-b border-slate-100 pb-12">
                         <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900">
                             <Info className="text-blue-600 h-6 w-6" /> Terminály A, B a C - Pozor na zmatek!
                         </h2>
@@ -67,8 +67,8 @@ export default function KatowiceAirportGuide() {
                         </ul>
                     </section>
 
-                    <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                    <section className="mb-12 border-b border-slate-100 pb-12">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Car className="text-blue-600 h-6 w-6" /> Doprava a Parkování
                         </h2>
                         <p>Z Ostravy jste tu za hodinu (115 km) po dálnici A1. Sjezd je výborně značený ("Pyrzowice").</p>
@@ -82,7 +82,7 @@ export default function KatowiceAirportGuide() {
                     </section>
 
                     <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Coffee className="text-blue-600 h-6 w-6" /> Služby
                         </h2>
                         <p>

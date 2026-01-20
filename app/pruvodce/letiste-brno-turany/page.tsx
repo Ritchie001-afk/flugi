@@ -46,7 +46,7 @@ export default function BrnoAirportGuide() {
 
                 {/* Main Article */}
                 <div className="lg:col-span-2 space-y-8 prose prose-lg prose-slate max-w-none">
-                    <section>
+                    <section className="mb-12 border-b border-slate-100 pb-12">
                         <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900">
                             <Info className="text-blue-600 h-6 w-6" /> Odbavení a Terminál
                         </h2>
@@ -56,8 +56,8 @@ export default function BrnoAirportGuide() {
                         </p>
                     </section>
 
-                    <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                    <section className="mb-12 border-b border-slate-100 pb-12">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Train className="text-blue-600 h-6 w-6" /> Doprava z centra
                         </h2>
                         <div className="space-y-4 not-prose">
@@ -86,8 +86,8 @@ export default function BrnoAirportGuide() {
                         </div>
                     </section>
 
-                    <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                    <section className="mb-12 border-b border-slate-100 pb-12">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Car className="text-blue-600 h-6 w-6" /> Parkování
                         </h2>
                         <p>
@@ -100,7 +100,7 @@ export default function BrnoAirportGuide() {
                     </section>
 
                     <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Coffee className="text-blue-600 h-6 w-6" /> Služby
                         </h2>
                         <ul className="list-disc pl-5 space-y-2 text-slate-600 marker:text-blue-500">

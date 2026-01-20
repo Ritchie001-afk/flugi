@@ -46,7 +46,7 @@ export default function PragueAirportGuide() {
 
                 {/* Main Article */}
                 <div className="lg:col-span-2 space-y-8 prose prose-lg prose-slate max-w-none">
-                    <section>
+                    <section className="mb-12 border-b border-slate-100 pb-12">
                         <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900">
                             <Info className="text-blue-600 h-6 w-6" /> Terminály: Kde se odbavit?
                         </h2>
@@ -67,8 +67,8 @@ export default function PragueAirportGuide() {
                         </ul>
                     </section>
 
-                    <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                    <section className="mb-12 border-b border-slate-100 pb-12">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Train className="text-blue-600 h-6 w-6" /> Doprava do centra
                         </h2>
                         <div className="space-y-4 not-prose">
@@ -101,13 +101,13 @@ export default function PragueAirportGuide() {
                             </div>
                             <div className="p-4 bg-yellow-50 rounded-xl border border-yellow-100 text-sm text-yellow-800 flex gap-3">
                                 <Info className="h-5 w-5 shrink-0" />
-                                Nezapomeňte si koupit jízdenku před nástupem v automatech nebo přes aplikaci Lítačka. Jízdenka na 90 minut (40 Kč) obvykle stačí.
+                                <p>Nezapomeňte si koupit jízdenku před nástupem v automatech nebo přes aplikaci Lítačka. Jízdenka na 90 minut (40 Kč) obvykle stačí.</p>
                             </div>
                         </div>
                     </section>
 
-                    <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                    <section className="mb-12 border-b border-slate-100 pb-12">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Car className="text-blue-600 h-6 w-6" /> Parkování
                         </h2>
                         <p>
@@ -121,7 +121,7 @@ export default function PragueAirportGuide() {
                     </section>
 
                     <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Coffee className="text-blue-600 h-6 w-6" /> Jídlo a odpočinek
                         </h2>
                         <p>

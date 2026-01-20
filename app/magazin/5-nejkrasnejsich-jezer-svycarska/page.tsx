@@ -58,65 +58,76 @@ export default function SwissLakesArticle() {
 
 
 
-                    <h2>1. Vierwaldstättersee (Lucernské jezero)</h2>
-                    <Image
-                        src={getDestinationImage('vierwaldstättersee')}
-                        alt="Vierwaldstättersee - Lucernské jezero"
-                        width={800}
-                        height={500}
-                        className="w-full h-auto my-8 rounded-2xl"
-                    />
-                    <p>
-                        Klenot uprostřed Švýcarska. Díky svému nepravidelnému tvaru a strmým břehům připomíná spíše norské fjordy. Nejlepší zážitek? Projížďka historickým kolesovým parníkem z města Lucern.
-                    </p>
 
-                    <h2>2. Oeschinensee</h2>
-                    <Image
-                        src={getDestinationImage('oeschinensee')}
-                        alt="Oeschinensee"
-                        width={800}
-                        height={500}
-                        className="w-full h-auto my-8 rounded-2xl"
-                    />
-                    <p>
-                        Jezero zapsané na seznamu UNESCO. Dostanete se k němu lanovkou z Kanderstegu a pak krátkou procházkou. Voda je v létě dost teplá na rychlé koupání, ale hlavním lákadlem je panorama.
-                    </p>
+                    <div className="mb-12 border-b border-slate-100 pb-12">
+                        <h2>1. Vierwaldstättersee (Lucernské jezero)</h2>
+                        <Image
+                            src={getDestinationImage('vierwaldstättersee')}
+                            alt="Vierwaldstättersee - Lucernské jezero"
+                            width={800}
+                            height={500}
+                            className="w-full h-auto my-8 rounded-2xl shadow-md"
+                        />
+                        <p>
+                            Klenot uprostřed Švýcarska. Díky svému nepravidelnému tvaru a strmým břehům připomíná spíše norské fjordy. Nejlepší zážitek? Projížďka historickým kolesovým parníkem z města Lucern.
+                        </p>
+                    </div>
 
-                    <h2>3. Blausee</h2>
-                    <Image
-                        src={getDestinationImage('blausee')}
-                        alt="Blausee - Modré jezero"
-                        width={800}
-                        height={500}
-                        className="w-full h-auto my-8 rounded-2xl"
-                    />
-                    <p>
-                        Malé, ale neuvěřitelně modré. Podle legendy získalo svou barvu ze slz dívky, která zde plakala pro svou lásku. Vstup je placený, ale zahrnuje i projížďku na loďce s proskleným dnem.
-                    </p>
+                    <div className="mb-12 border-b border-slate-100 pb-12">
+                        <h2>2. Oeschinensee</h2>
+                        <Image
+                            src={getDestinationImage('oeschinensee')}
+                            alt="Oeschinensee"
+                            width={800}
+                            height={500}
+                            className="w-full h-auto my-8 rounded-2xl shadow-md"
+                        />
+                        <p>
+                            Jezero zapsané na seznamu UNESCO. Dostanete se k němu lanovkou z Kanderstegu a pak krátkou procházkou. Voda je v létě dost teplá na rychlé koupání, ale hlavním lákadlem je panorama.
+                        </p>
+                    </div>
 
-                    <h2>4. Brienzersee</h2>
-                    <Image
-                        src={getDestinationImage('brienzersee')}
-                        alt="Brienzersee - Tyrkysové jezero"
-                        width={800}
-                        height={500}
-                        className="w-full h-auto my-8 rounded-2xl"
-                    />
-                    <p>
-                        Soused známějšího Thunersee, ale s mnohem intenzivnější tyrkysovou barvou. Pokud jste fanoušky seriálu <em>Crash Landing on You</em>, určitě poznáte molo v Iseltwaldu.
-                    </p>
+                    <div className="mb-12 border-b border-slate-100 pb-12">
+                        <h2>3. Blausee</h2>
+                        <Image
+                            src={getDestinationImage('blausee')}
+                            alt="Blausee - Modré jezero"
+                            width={800}
+                            height={500}
+                            className="w-full h-auto my-8 rounded-2xl shadow-md"
+                        />
+                        <p>
+                            Malé, ale neuvěřitelně modré. Podle legendy získalo svou barvu ze slz dívky, která zde plakala pro svou lásku. Vstup je placený, ale zahrnuje i projížďku na loďce s proskleným dnem.
+                        </p>
+                    </div>
 
-                    <h2>5. Caumasee</h2>
-                    <Image
-                        src={getDestinationImage('caumasee')}
-                        alt="Caumasee - Perla Flimsu"
-                        width={800}
-                        height={500}
-                        className="w-full h-auto my-8 rounded-2xl"
-                    />
-                    <p>
-                        "Perla Flimsu". Jezero uprostřed lesů s malým ostrůvkem. Voda je zde díky podzemním pramenům překvapivě teplá (až 24°C).
-                    </p>
+                    <div className="mb-12 border-b border-slate-100 pb-12">
+                        <h2>4. Brienzersee</h2>
+                        <Image
+                            src={getDestinationImage('brienzersee')}
+                            alt="Brienzersee - Tyrkysové jezero"
+                            width={800}
+                            height={500}
+                            className="w-full h-auto my-8 rounded-2xl shadow-md"
+                        />
+                        <p>
+                            Soused známějšího Thunersee, ale s mnohem intenzivnější tyrkysovou barvou. Pokud jste fanoušky seriálu <em>Crash Landing on You</em>, určitě poznáte molo v Iseltwaldu.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2>5. Caumasee</h2>
+                        <Image
+                            src={getDestinationImage('caumasee')}
+                            alt="Caumasee - Perla Flimsu"
+                            width={800}
+                            height={500}
+                            className="w-full h-auto my-8 rounded-2xl shadow-md"
+                        />
+                        <p>
+                            "Perla Flimsu". Jezero uprostřed lesů s malým ostrůvkem. Voda je zde díky podzemním pramenům překvapivě teplá (až 24°C).
+                        </p>
+                    </div>
 
                     <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 my-8 not-prose">
                         <h4 className="font-bold text-blue-900 mb-2 flex items-center gap-2">

@@ -41,7 +41,7 @@ export default function BratislavaAirportGuide() {
 
             <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2 space-y-8 prose prose-lg prose-slate max-w-none">
-                    <section>
+                    <section className="mb-12 border-b border-slate-100 pb-12">
                         <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900">
                             <Info className="text-blue-600 h-6 w-6" /> Terminál
                         </h2>
@@ -50,8 +50,8 @@ export default function BratislavaAirportGuide() {
                         </p>
                     </section>
 
-                    <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                    <section className="mb-12 border-b border-slate-100 pb-12">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Bus className="text-blue-600 h-6 w-6" /> Autobus 61 na nádraží
                         </h2>
                         <p>
@@ -68,7 +68,7 @@ export default function BratislavaAirportGuide() {
                     </section>
 
                     <section>
-                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-8">
+                        <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mt-0">
                             <Car className="text-blue-600 h-6 w-6" /> Parkování
                         </h2>
                         <p>
