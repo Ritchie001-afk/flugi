@@ -185,5 +185,6 @@ export default async function DealsPage(props: {
                     </div>
                 </div>
             </div>
-            );
+        </div>
+    );
 }
