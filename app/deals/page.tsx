@@ -172,20 +172,18 @@ export default async function DealsPage(props: {
                                             </Link>
                                         </div>
                                     </div>
-                                    </div>
-                        ))
+                                ))
                             )}
-                    </div>
+                        </div>
 
-                    {/* Pagination / Load More */}
-                    <div className="mt-12 text-center">
-                        <Button variant="ghost" size="lg" className="text-slate-500 hover:text-blue-600">
-                            Načíst další nabídky
-                        </Button>
+                        {/* Pagination / Load More */}
+                        <div className="mt-12 text-center">
+                            <Button variant="ghost" size="lg" className="text-slate-500 hover:text-blue-600">
+                                Načíst další nabídky
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div >
-    );
+            );
 }
