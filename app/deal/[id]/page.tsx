@@ -150,7 +150,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                     <div className="bg-blue-50 rounded-lg p-3 mb-6 flex items-center justify-between">
                                         <div className="flex items-center text-blue-800 font-medium">
                                             <Calendar className="h-5 w-5 mr-3 text-blue-600" />
-                                            <span>Termín zájezdu</span>
+                                            <span>Termín cesty</span>
                                         </div>
                                         <div className="text-right">
                                             <div className="font-bold text-slate-900">

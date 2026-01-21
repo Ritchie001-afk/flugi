@@ -160,12 +160,12 @@ export default async function DealsPage(props: {
                                             <Amenities text={deal.description || ''} tags={deal.tags} type={deal.type} />
                                         </div>
 
-                                        <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                                        <div className="mt-auto px-5 pb-5 pt-4 border-t border-slate-100 flex items-center justify-between">
                                             <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
                                                 {/* Provider text removed */}
                                             </div>
                                             <Link href={`/deal/${deal.id}`}>
-                                                <Button size="sm" variant="outline" className="h-8 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600">
+                                                <Button size="sm" variant="outline" className="h-9 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-4">
                                                     Zobrazit
                                                 </Button>
                                             </Link>
