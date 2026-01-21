@@ -145,14 +145,10 @@ export default async function DealsPage(props: {
                                             </div>
                                         </div>
 
-                                        <div className="space-y-2 mb-6">
+                                        <div className="mb-3 flex justify-center">
                                             <div className="flex items-center gap-2 text-xs text-slate-500">
                                                 <MapPin className="h-3 w-3" />
                                                 <span>{deal.destination}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-xs text-slate-500">
-                                                <Calendar className="h-3 w-3" />
-                                                <span>7 dní (přibližně)</span>
                                             </div>
                                         </div>
 
