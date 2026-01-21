@@ -78,7 +78,6 @@ model Airport {
   content     String   // Full guide content
   facilities  String[]
   transport   String[]
-  transport   String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -87,5 +86,14 @@ model Subscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
   createdAt DateTime @default(now())
 }

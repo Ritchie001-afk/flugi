@@ -3,19 +3,33 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { Mail, MapPin, Send, MessageSquare } from "lucide-react";
+import { Mail, Send, MessageSquare } from "lucide-react";
+import { sendContactMessage } from "../actions/contact";
 
 export default function ContactPage() {
-    const [formState, setFormState] = useState<'idle' | 'submitting' | 'success'>('idle');
+    const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setFormState('submitting');
+        setErrorMessage("");
 
-        // Simulate sending
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        const formData = new FormData(e.target as HTMLFormElement);
 
-        setFormState('success');
+        try {
+            const result = await sendContactMessage(formData);
+
+            if (result.success) {
+                setFormState('success');
+            } else {
+                setFormState('error');
+                setErrorMessage(result.error || "Odeslání se nezdařilo.");
+            }
+        } catch (error) {
+            setFormState('error');
+            setErrorMessage("Chyba připojení.");
+        }
     };
 
     return (
@@ -95,6 +109,7 @@ export default function ContactPage() {
                                                 <label htmlFor="name" className="text-sm font-bold text-slate-900">Jméno</label>
                                                 <input
                                                     id="name"
+                                                    name="name"
                                                     required
                                                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
                                                     placeholder="Jan Novák"
@@ -104,6 +119,7 @@ export default function ContactPage() {
                                                 <label htmlFor="email" className="text-sm font-bold text-slate-900">Email</label>
                                                 <input
                                                     id="email"
+                                                    name="email"
                                                     type="email"
                                                     required
                                                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
@@ -116,6 +132,7 @@ export default function ContactPage() {
                                             <label htmlFor="subject" className="text-sm font-bold text-slate-900">Předmět</label>
                                             <select
                                                 id="subject"
+                                                name="subject"
                                                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
                                             >
                                                 <option>Obecný dotaz</option>
@@ -129,12 +146,19 @@ export default function ContactPage() {
                                             <label htmlFor="message" className="text-sm font-bold text-slate-900">Zpráva</label>
                                             <textarea
                                                 id="message"
+                                                name="message"
                                                 required
                                                 rows={5}
                                                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all resize-none"
                                                 placeholder="Jak vám můžeme pomoci?"
                                             />
                                         </div>
+
+                                        {formState === 'error' && (
+                                            <div className="bg-red-50 text-red-600 p-4 rounded-xl text-center text-sm">
+                                                {errorMessage}
+                                            </div>
+                                        )}
 
                                         <Button
                                             type="submit"
