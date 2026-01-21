@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { X, Mail, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { subscribeToNewsletter } from "../../app/actions/subscribe";
 
 interface NewsletterModalProps {
     isOpen: boolean;
@@ -12,23 +13,37 @@ interface NewsletterModalProps {
 
 export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
     const [email, setEmail] = useState("");
-    const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [errorMessage, setErrorMessage] = useState("");
 
     if (!isOpen) return null;
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setStatus("loading");
+        setErrorMessage("");
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        try {
+            const formData = new FormData();
+            formData.append("email", email);
 
-        setStatus("success");
-        setTimeout(() => {
-            onClose();
-            setStatus("idle");
-            setEmail("");
-        }, 2000);
+            const result = await subscribeToNewsletter(formData);
+
+            if (result.success) {
+                setStatus("success");
+                setTimeout(() => {
+                    onClose();
+                    setStatus("idle");
+                    setEmail("");
+                }, 3000);
+            } else {
+                setStatus("error");
+                setErrorMessage(result.error || "Něco se pokazilo.");
+            }
+        } catch (error) {
+            setStatus("error");
+            setErrorMessage("Chyba připojení. Zkuste to prosím znovu.");
+        }
     }
 
     return (
@@ -42,7 +57,7 @@ export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                 </button>
 
                 <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-4 text-blue-600">
+                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-4 ${status === "success" ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600"}`}>
                         {status === "success" ? <Check className="h-6 w-6" /> : <Mail className="h-6 w-6" />}
                     </div>
                     <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -55,7 +70,7 @@ export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                     </p>
                 </div>
 
-                {status !== "success" && (
+                {status !== "success" ? (
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <input
@@ -67,6 +82,13 @@ export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                             />
                         </div>
+
+                        {status === "error" && (
+                            <p className="text-red-500 text-sm text-center bg-red-50 p-2 rounded-lg">
+                                {errorMessage}
+                            </p>
+                        )}
+
                         <Button
                             variant="premium"
                             className="w-full py-6 text-lg"
@@ -78,6 +100,16 @@ export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                             Žádný spam. Odhlásit se můžete kdykoliv.
                         </p>
                     </form>
+                ) : (
+                    <div className="text-center">
+                        <Button
+                            variant="outline"
+                            className="mt-4"
+                            onClick={onClose}
+                        >
+                            Zavřít
+                        </Button>
+                    </div>
                 )}
             </div>
         </div>
