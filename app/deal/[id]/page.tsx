@@ -292,7 +292,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                     <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
                                         <Car className="h-4 w-4 text-orange-600" /> Doprava na místě
                                     </h4>
-                                    <a href={getRentalcarsUrl()} target="_blank" rel="noopener noreferrer" className="block group">
+                                    <a href={getRentalcarsUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
                                         <div className="p-3 rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors flex items-center gap-3">
                                             <div className="p-2 bg-orange-500 rounded-lg text-white">
                                                 <Car className="h-4 w-4" />

@@ -34,7 +34,11 @@ export const getAirbnbUrl = (destination: string) => {
     return `${AFFILIATE_LINKS.airbnb.baseUrl}/${query}/homes`;
 };
 
-export const getRentalcarsUrl = () => {
+export const getRentalcarsUrl = (destination?: string | null) => {
+    const baseUrl = AFFILIATE_LINKS.rentalcars.baseUrl;
+    if (destination) {
+        return `${baseUrl}?preflang=cs&location=${encodeURIComponent(destination)}`;
+    }
     // Rentalcars generic link for now, detail search is harder to construct without dates/coords
-    return AFFILIATE_LINKS.rentalcars.baseUrl;
+    return baseUrl;
 };
