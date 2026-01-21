@@ -43,7 +43,7 @@ export default function Footer() {
                     <div className="space-y-4">
                         <h3 className="font-display font-bold text-slate-900">Sledujte nás</h3>
                         <div className="flex gap-4">
-                            <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-white border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all group">
+                            <a href="https://www.facebook.com/Flugicze/" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all group">
                                 <Facebook className="h-4 w-4 text-slate-400 group-hover:text-blue-500" />
                             </a>
                             <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-white border border-slate-200 hover:border-black hover:bg-slate-50 transition-all group">
