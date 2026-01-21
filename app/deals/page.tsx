@@ -132,18 +132,17 @@ export default async function DealsPage(props: {
                                                     {deal.originalPrice && deal.originalPrice > deal.price && (
                                                         <span className="text-xs text-slate-400 line-through">{deal.originalPrice.toLocaleString('cs-CZ')} Kč</span>
                                                     )}
+                                                    {deal.startDate && deal.endDate && (
+                                                        <div className="mt-1">
+                                                            <span className="text-xs text-slate-500 block">
+                                                                {new Date(deal.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}
+                                                                {' - '}
+                                                                {new Date(deal.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' })}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
-
-                                            {deal.startDate && deal.endDate && (
-                                                <div className="text-right -mt-2 mb-2">
-                                                    <span className="text-xs text-slate-500">
-                                                        {new Date(deal.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}
-                                                        {' - '}
-                                                        {new Date(deal.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' })}
-                                                    </span>
-                                                </div>
-                                            )}
                                         </div>
 
                                         <div className="space-y-2 mb-6">

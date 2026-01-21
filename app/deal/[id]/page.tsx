@@ -146,6 +146,25 @@ export default async function DealPage({ params }: DealPageProps) {
                                     <div className="text-3xl font-extrabold text-blue-600">{deal.price.toLocaleString('cs-CZ')} Kč</div>
                                 </div>
 
+                                {deal.startDate && deal.endDate && (
+                                    <div className="bg-blue-50 rounded-lg p-3 mb-6 flex items-center justify-between">
+                                        <div className="flex items-center text-blue-800 font-medium">
+                                            <Calendar className="h-5 w-5 mr-3 text-blue-600" />
+                                            <span>Termín zájezdu</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="font-bold text-slate-900">
+                                                {new Date(deal.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}
+                                                {' - '}
+                                                {new Date(deal.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' })}
+                                            </div>
+                                            <div className="text-xs text-slate-500">
+                                                {Math.ceil((new Date(deal.endDate).getTime() - new Date(deal.startDate).getTime()) / (1000 * 60 * 60 * 24))} dní
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <a href={deal.url} target="_blank" rel="noopener noreferrer" className="block mb-3">
                                     <Button size="lg" className="w-full h-14 text-lg font-bold shadow-lg shadow-blue-600/20">
                                         Rezervovat termín
