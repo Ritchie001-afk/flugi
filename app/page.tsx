@@ -34,7 +34,9 @@ export default async function Home() {
         type: true,
         rating: true,
         reviewSource: true,
-        expiresAt: true
+        expiresAt: true,
+        startDate: true,
+        endDate: true
       },
       orderBy: { createdAt: 'desc' }, // Latest deals first
       take: 6
@@ -130,6 +132,13 @@ export default async function Home() {
                             <p className="text-xs text-slate-400 line-through">{deal.originalPrice.toLocaleString('cs-CZ')} Kč</p>
                           )}
                           <p className="text-xl font-bold text-white">{deal.price.toLocaleString('cs-CZ')} Kč</p>
+                          {deal.startDate && deal.endDate && (
+                            <p className="text-xs text-blue-200 mt-1">
+                              {new Date(deal.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}
+                              {' - '}
+                              {new Date(deal.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' })}
+                            </p>
+                          )}
                         </div>
                         <Button size="sm" variant="secondary" className="opacity-0 group-hover:opacity-100 transition-opacity">
                           Zobrazit

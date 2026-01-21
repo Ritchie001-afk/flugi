@@ -208,6 +208,11 @@ export async function createDeal(formData: FormData) {
     const airline = formData.get('airline') as string;
     const tagsStr = formData.get('tags') as string; // "Tag1, Tag2"
 
+    const startDateStr = formData.get('startDate') as string;
+    const endDateStr = formData.get('endDate') as string;
+    const startDate = startDateStr ? new Date(startDateStr) : null;
+    const endDate = endDateStr ? new Date(endDateStr) : null;
+
     const destination = formData.get('destination') as string;
     const image = formData.get('image') as string;
     const url = formData.get('url') as string;
@@ -271,10 +276,11 @@ export async function createDeal(formData: FormData) {
                 slug,
                 tags,
                 rating,
-                reviewCount,
                 reviewSource,
                 reviewUrl,
-                expiresAt: null
+                expiresAt: null,
+                startDate,
+                endDate
             }
         });
         revalidatePath('/zajezdy');
@@ -316,6 +322,11 @@ export async function updateDeal(id: string, formData: FormData) {
     const type = formData.get('type') as string;
     const description = formData.get('description') as string;
 
+    const startDateStr = formData.get('startDate') as string;
+    const endDateStr = formData.get('endDate') as string;
+    const startDate = startDateStr ? new Date(startDateStr) : null;
+    const endDate = endDateStr ? new Date(endDateStr) : null;
+
     // Fixed: Construct data object safely to avoid null on required fields
     const data: any = {
         title,
@@ -334,6 +345,8 @@ export async function updateDeal(id: string, formData: FormData) {
         reviewSource: formData.get('reviewSource') as string,
         reviewUrl: formData.get('reviewUrl') as string,
         tags: (formData.get('tags') as string)?.split(',').map(t => t.trim()).filter(Boolean) || [],
+        startDate,
+        endDate
     };
 
     // Only update image if it's provided (not null/empty)

@@ -309,6 +309,27 @@ export default function DealForm({ initialData }: DealFormProps) {
                 </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Datum od (Tam)</label>
+                    <input
+                        name="startDate"
+                        type="date"
+                        defaultValue={initialData?.startDate ? new Date(initialData.startDate).toISOString().split('T')[0] : ''}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
+                    />
+                </div>
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Datum do (Zpět)</label>
+                    <input
+                        name="endDate"
+                        type="date"
+                        defaultValue={initialData?.endDate ? new Date(initialData.endDate).toISOString().split('T')[0] : ''}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
+                    />
+                </div>
+            </div>
+
             <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Destinace</label>
                 <input

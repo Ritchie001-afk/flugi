@@ -135,46 +135,57 @@ export default async function DealsPage(props: {
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-2 mb-6">
-                                                <div className="flex items-center gap-2 text-xs text-slate-500">
-                                                    <MapPin className="h-3 w-3" />
-                                                    <span>{deal.destination}</span>
+                                            {deal.startDate && deal.endDate && (
+                                                <div className="text-right -mt-2 mb-2">
+                                                    <span className="text-xs text-slate-500">
+                                                        {new Date(deal.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}
+                                                        {' - '}
+                                                        {new Date(deal.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' })}
+                                                    </span>
                                                 </div>
-                                                <div className="flex items-center gap-2 text-xs text-slate-500">
-                                                    <Calendar className="h-3 w-3" />
-                                                    <span>7 dní (přibližně)</span>
-                                                </div>
-                                            </div>
+                                            )}
+                                        </div>
 
-                                            <div className="mt-4 pt-4 border-t border-slate-100">
-                                                <Amenities text={deal.description || ''} tags={deal.tags} type={deal.type} />
+                                        <div className="space-y-2 mb-6">
+                                            <div className="flex items-center gap-2 text-xs text-slate-500">
+                                                <MapPin className="h-3 w-3" />
+                                                <span>{deal.destination}</span>
                                             </div>
-
-                                            <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                                                <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
-                                                    {/* Provider text removed */}
-                                                </div>
-                                                <Link href={`/deal/${deal.id}`}>
-                                                    <Button size="sm" variant="outline" className="h-8 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600">
-                                                        Zobrazit
-                                                    </Button>
-                                                </Link>
+                                            <div className="flex items-center gap-2 text-xs text-slate-500">
+                                                <Calendar className="h-3 w-3" />
+                                                <span>7 dní (přibližně)</span>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
 
-                        {/* Pagination / Load More */}
-                        <div className="mt-12 text-center">
-                            <Button variant="ghost" size="lg" className="text-slate-500 hover:text-blue-600">
-                                Načíst další nabídky
-                            </Button>
-                        </div>
+                                        <div className="mt-4 pt-4 border-t border-slate-100">
+                                            <Amenities text={deal.description || ''} tags={deal.tags} type={deal.type} />
+                                        </div>
+
+                                        <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                                            <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
+                                                {/* Provider text removed */}
+                                            </div>
+                                            <Link href={`/deal/${deal.id}`}>
+                                                <Button size="sm" variant="outline" className="h-8 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600">
+                                                    Zobrazit
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    </div>
+                        ))
+                            )}
+                    </div>
+
+                    {/* Pagination / Load More */}
+                    <div className="mt-12 text-center">
+                        <Button variant="ghost" size="lg" className="text-slate-500 hover:text-blue-600">
+                            Načíst další nabídky
+                        </Button>
                     </div>
                 </div>
             </div>
         </div>
+        </div >
     );
 }
