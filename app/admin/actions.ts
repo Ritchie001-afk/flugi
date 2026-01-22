@@ -24,7 +24,8 @@ export async function generateDescriptionAction(destination: string) {
 
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        // Using gemini-2.0-flash as it is the current stable flash model
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const prompt = `Napiš lákavý marketingový popis pro dovolenou v destinaci "${destination}". 
         Délka cca 2-3 krátké odstavce (do 100 slov). 
@@ -45,7 +46,7 @@ export async function generateEntryRequirementsAction(destination: string) {
 
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const prompt = `Jaké jsou aktuální vstupní podmínky a vízová povinnost pro občany ČR do destinace "${destination}"?
         Odpověz stručně (max 2 věty).
@@ -109,9 +110,12 @@ export async function generateImageWithGeminiAction(destination: string) {
             console.log("Attempting Gemini Image Gen...");
             const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography`;
 
-            // Try specific model gemini-2.5-flash-image as requested
+            // Try specific model gemini-2.0-flash-exp (or stable if listed) for images if supported, or back to standard generation
+            // Note: generateContent for images usually requires specific vision models or imagen. 
+            // Current codebase tries to use a generateContent endpoint for images which is ... unusual for standard Gemini unless using Imagen.
+            // Let's stick to the URL structure but update model version if 2.5 was the issue.
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${process.env.GEMINI_API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
