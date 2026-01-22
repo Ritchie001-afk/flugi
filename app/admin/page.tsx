@@ -79,10 +79,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                             </div>
 
                             {/* Interactive Client Component Form */}
-                            <DealForm initialData={editDeal} />
+                            {/* <DealForm initialData={editDeal} /> */}
+                            <div className="p-4 bg-yellow-100 text-yellow-800 rounded">Formulář dočasně deaktivován pro debug</div>
 
                             <div className="mt-8 border-t border-slate-100 pt-4">
-                                <form action={async () => {
+                                {/* <form action={async () => {
                                     'use server';
                                     const { cleanupImagesAction } = await import('./cleanup-action');
                                     await cleanupImagesAction();
@@ -90,7 +91,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                                     <button className="text-xs text-red-400 hover:text-red-600 underline">
                                         Nouzová oprava DB (Smazat Base64 obrázky)
                                     </button>
-                                </form>
+                                </form> */}
                             </div>
                         </div>
                     </div>
