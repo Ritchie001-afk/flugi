@@ -13,3 +13,15 @@ export async function deleteDeal(id: string) {
         return { error: `Chyba při mazání: ${e.message}` };
     }
 }
+
+export async function deleteAllDeals() {
+    console.log("Attempting to DELETE ALL DEALS");
+    try {
+        const count = await prisma.deal.deleteMany({});
+        console.log(`Deleted ${count.count} deals.`);
+        return { success: true, count: count.count };
+    } catch (e: any) {
+        console.error("Delete ALL Error:", e);
+        return { error: `Chyba při hromadném mazání: ${e.message}` };
+    }
+}
