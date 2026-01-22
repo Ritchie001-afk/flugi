@@ -1,8 +1,8 @@
 'use client';
 
 import { Trash2 } from 'lucide-react';
-import { deleteDeal } from '../../../app/admin/deal-actions';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface DeleteDealButtonProps {
     id: string;
@@ -10,16 +10,22 @@ interface DeleteDealButtonProps {
 
 export default function DeleteDealButton({ id }: DeleteDealButtonProps) {
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleDelete = async () => {
         if (!confirm('Opravdu smazat tento deal?')) return;
 
         setLoading(true);
         try {
-            const res = await deleteDeal(id);
-            if (res?.error) {
-                alert(res.error);
-            }
+            const res = await fetch(`/api/deals/${id}`, {
+                method: 'DELETE'
+            });
+            const json = await res.json();
+
+            if (!res.ok) throw new Error(json.error || 'Failed to delete');
+
+            // Refresh to show changes
+            router.refresh();
         } catch (e: any) {
             console.error("Delete failed:", e);
             alert("Chyba při mazání: " + e.message);
