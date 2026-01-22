@@ -1,7 +1,7 @@
 'use client';
 
 import { Trash2 } from 'lucide-react';
-import { deleteDeal } from '../../../app/admin/actions';
+import { deleteDeal } from '../../../app/admin/deal-actions';
 import { useState } from 'react';
 
 interface DeleteDealButtonProps {
