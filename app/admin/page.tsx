@@ -1,8 +1,8 @@
 export default function AdminPage() {
     return (
-        <div style={{ padding: '50px', fontFamily: 'sans-serif' }}>
-            <h1>Absolute Minimal Static Admin Content</h1>
-            <p>If you see this, the routing works and the issue was in imports/components.</p>
+        <div style={{ padding: '50px', marginTop: '100px', fontFamily: 'sans-serif' }}>
+            <h1>Absolute Minimal Static Admin Content (No Actions)</h1>
+            <p>Actions files renamed to .bak - testing if they were poisoning the build.</p>
         </div>
     );
 }
