@@ -254,6 +254,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                                     <button
                                         type="button"
                                         onClick={async () => {
+                                            alert("AI je dočasně vypnuto pro údržbu.");
+                                            /*
                                             if (!destination) return alert('Vyplňte destinaci');
                                             // You might want to add a separate loader state for this button
                                             const res = await generateEntryRequirementsAction(destination);
@@ -263,6 +265,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                                             } else {
                                                 alert(res.error);
                                             }
+                                            */
                                         }}
                                         className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
                                     >
