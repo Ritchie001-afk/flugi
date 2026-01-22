@@ -1,4 +1,5 @@
 import prisma from '@/lib/db';
+import DeleteDealButton from '@/components/admin/DeleteDealButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,8 +19,9 @@ export default async function AdminPage() {
                 <h2>Nalezené zájezdy ({deals.length})</h2>
                 <ul>
                     {deals.map(deal => (
-                        <li key={deal.id} style={{ margin: '5px 0' }}>
-                            {deal.title} <small>({deal.id})</small>
+                        <li key={deal.id} style={{ margin: '10px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <span style={{ flex: 1 }}>{deal.title} <small>({deal.id})</small></span>
+                            <DeleteDealButton id={deal.id} />
                         </li>
                     ))}
                 </ul>
