@@ -14,7 +14,7 @@ export async function deleteDeal(id: string) {
     }
 }
 
-export async function deleteAllDeals() {
+export async function deleteAllDeals(_formData?: FormData) {
     console.log("Attempting to DELETE ALL DEALS");
     try {
         const count = await prisma.deal.deleteMany({});
