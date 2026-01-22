@@ -14,14 +14,12 @@ export async function deleteDeal(id: string) {
     }
 }
 
-export async function deleteAllDeals(_formData?: FormData) {
+export async function deleteAllDeals(_formData?: FormData): Promise<void> {
     console.log("Attempting to DELETE ALL DEALS");
     try {
         const count = await prisma.deal.deleteMany({});
         console.log(`Deleted ${count.count} deals.`);
-        return { success: true, count: count.count };
     } catch (e: any) {
         console.error("Delete ALL Error:", e);
-        return { error: `Chyba při hromadném mazání: ${e.message}` };
     }
 }
