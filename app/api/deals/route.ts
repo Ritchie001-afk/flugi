@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         const deal = await prisma.deal.create({
             data: {
                 title,
-                description: "Manuálně přidáno", // Or passed from FE
+                description: json.description || "", // Fix: Accept description from FE
                 price: parseFloat(price),
                 originalPrice: originalPrice ? parseFloat(originalPrice) : null,
                 transferCount: transferCount ? parseInt(transferCount) : null,

@@ -174,12 +174,7 @@ export default function DealForm({ initialData }: DealFormProps) {
 
             if (initialData) {
                 url = `/api/deals/${initialData.id}`;
-                // method = 'PUT'; // If we implement PUT, usually POST/PATCH is fine too depending on implementation
-                // For now let's assume POST to /api/deals for create. 
-                // But wait, I only made DELETE on [id]. I need PUT/PATCH on [id] to support update.
-                // I will stick to CREATE ONLY for this turn to safeguard.
-                alert("Editace zatím není migrována na API. Vytvořte nový deal.");
-                return;
+                method = 'PATCH';
             }
 
             const res = await fetch(url, {
@@ -195,12 +190,12 @@ export default function DealForm({ initialData }: DealFormProps) {
             } else {
                 alert('Uloženo!');
                 // Reset form or redirect
+                router.refresh(); // Refresh in both cases (edit or create)
                 if (!initialData) {
                     setDestination('');
                     setDescription('');
                     setImage('');
                     setType('flight');
-                    router.refresh();
                 }
             }
         } catch (e: any) {
