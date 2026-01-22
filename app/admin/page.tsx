@@ -31,11 +31,16 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
         let editDeal = null;
         if (params.edit) {
-            editDeal = await prisma.deal.findUnique({
+            const rawDeal = await prisma.deal.findUnique({
                 where: { id: params.edit }
             });
 
-            // SANITIZATION: Check for base64 and strip it if present to prevent crash
+            // SANITIZATION: Serialize to JSON to prevent "Server Components render" error with Date objects
+            if (rawDeal) {
+                editDeal = JSON.parse(JSON.stringify(rawDeal));
+            }
+
+            // Additional cleanup
             if (editDeal) {
                 if (editDeal.image && editDeal.image.startsWith('data:')) editDeal.image = '';
                 // Fix: properly type map argument
