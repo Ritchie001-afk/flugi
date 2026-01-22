@@ -24,7 +24,7 @@ export async function generateDescriptionAction(destination: string) {
 
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `Napiš lákavý marketingový popis pro dovolenou v destinaci "${destination}". 
         Délka cca 2-3 krátké odstavce (do 100 slov). 
@@ -35,8 +35,8 @@ export async function generateDescriptionAction(destination: string) {
         const text = result.response.text();
         return { text };
     } catch (e: any) {
-        console.error("Gemini Error:", e);
-        return { error: `Chyba AI (gemini-1.5-flash): ${e.message || 'Neznámá chyba'}` };
+        console.error("Gemini Details Generation Error:", JSON.stringify(e, Object.getOwnPropertyNames(e)));
+        return { error: `Chyba AI (popis): ${e.message || 'Neznámá chyba'}` };
     }
 }
 
@@ -45,7 +45,7 @@ export async function generateEntryRequirementsAction(destination: string) {
 
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `Jaké jsou aktuální vstupní podmínky a vízová povinnost pro občany ČR do destinace "${destination}"?
         Odpověz stručně (max 2 věty).
@@ -57,8 +57,8 @@ export async function generateEntryRequirementsAction(destination: string) {
         const text = result.response.text();
         return { text };
     } catch (e: any) {
-        console.error("Gemini Error:", e);
-        return { error: `Chyba AI: ${e.message || 'Neznámá chyba'}` };
+        console.error("Gemini Requirements Generation Error:", JSON.stringify(e, Object.getOwnPropertyNames(e)));
+        return { error: `Chyba AI (požadavky): ${e.message || 'Neznámá chyba'}` };
     }
 }
 
@@ -131,6 +131,10 @@ export async function generateImageWithGeminiAction(destination: string) {
 
             if (response.ok) {
                 const data = await response.json();
+
+                // Detailed logging for debug
+                // console.log("Gemini Image Response parts:", JSON.stringify(data.candidates?.[0]?.content?.parts));
+
                 // Check multiple possible paths for image data in response
                 const base64Image = data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData)?.inline_data?.data
                     || data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData)?.inlineData?.data;
@@ -139,12 +143,15 @@ export async function generateImageWithGeminiAction(destination: string) {
                     // Upload to Cloudinary
                     const buffer = Buffer.from(base64Image, 'base64');
                     return await uploadBufferToCloudinary(buffer, 'flugi_ai_gen');
+                } else {
+                    console.warn("Gemini Image Response was OK but contained no image data.");
                 }
             } else {
-                console.warn(`Gemini 2.5 Flash Image Failed (${response.status}), falling back to Flux...`);
+                const errorText = await response.text();
+                console.warn(`Gemini Image API Failed (${response.status}): ${errorText}. Falling back...`);
             }
         } catch (e) {
-            console.error("Gemini AI Error:", e);
+            console.error("Gemini AI Image Gen Error:", e);
             // Fallthrough to fallback
         }
     }
@@ -383,12 +390,17 @@ export async function updateDeal(id: string, formData: FormData) {
 export async function deleteDeal(id: string) {
     try {
         await prisma.deal.delete({ where: { id } });
-        revalidatePath('/admin');
-        revalidatePath('/zajezdy');
-        revalidatePath('/deals');
+        try {
+            revalidatePath('/admin');
+            revalidatePath('/zajezdy');
+            revalidatePath('/deals');
+        } catch (revalError) {
+            console.error("Revalidation Error during deleteDeal:", revalError);
+            // Continue execution as deletion was successful
+        }
         return { success: true };
     } catch (e: any) {
-        console.error("Delete Error:", e);
-        return { error: `Chyba při mazání: ${e.message}` };
+        console.error("Delete Deal Error (Full):", JSON.stringify(e, Object.getOwnPropertyNames(e)));
+        return { error: `Chyba při mazání: ${e.message || 'Neznámá chyba serveru'}` };
     }
 }
