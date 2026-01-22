@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload, Plane } from 'lucide-react';
-import { createDeal, updateDeal, generateDescriptionAction, findImageAction, generateEntryRequirementsAction } from '../../../app/admin/actions';
+import { createDeal, updateDeal, generateDescriptionAction, findImageAction, generateEntryRequirementsAction, generateImageWithGeminiAction, uploadImageAction } from '../../../app/admin/actions';
 import Link from 'next/link';
 
 interface DealFormProps {
@@ -76,19 +76,18 @@ export default function DealForm({ initialData }: DealFormProps) {
         if (!destination) return alert('Vyplňte destinaci');
         setUploading(true);
         try {
-            const { generateImageWithGeminiAction } = await import('../../../app/admin/actions');
             const res = await generateImageWithGeminiAction(destination);
 
             if (res.error) {
                 console.error(res.error);
-                alert(res.error); // Show explicit error from server
+                alert(res.error);
             } else if (res.url) {
                 setImages(prev => [...prev, res.url!]);
                 if (!image) setImage(res.url!);
             }
-        } catch (error) {
-            console.error(error);
-            alert('Chyba při komunikaci se serverem');
+        } catch (error: any) {
+            console.error("AI Generation FE Error:", error);
+            alert(`Chyba při komunikaci se serverem: ${error.message}`);
         } finally {
             setUploading(false);
         }
@@ -108,7 +107,6 @@ export default function DealForm({ initialData }: DealFormProps) {
             const formData = new FormData();
             formData.append('file', file);
 
-            const { uploadImageAction } = await import('../../../app/admin/actions');
             const res = await uploadImageAction(formData);
 
             if (res.error) {
@@ -117,7 +115,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                 setImages(prev => [...prev, res.url!]);
                 if (!image) setImage(res.url!);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             alert('Chyba při nahrávání souboru. Zkuste to znovu.');
         } finally {
