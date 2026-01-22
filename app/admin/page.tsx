@@ -5,12 +5,25 @@ import { deleteAllDeals } from './deal-actions';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPage() {
+import Link from 'next/link';
+import { Pencil } from 'lucide-react';
+
+export default async function AdminPage(props: { searchParams: Promise<{ edit?: string }> }) {
+    const searchParams = await props.searchParams;
+    const editId = searchParams?.edit;
+
     const deals = await prisma.deal.findMany({
         select: { id: true, title: true, price: true, destination: true },
         orderBy: { createdAt: 'desc' },
         take: 50
     });
+
+    let dealToEdit = null;
+    if (editId) {
+        dealToEdit = await prisma.deal.findUnique({
+            where: { id: editId }
+        });
+    }
 
     return (
         <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
@@ -33,8 +46,10 @@ export default async function AdminPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left: Form */}
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 className="text-lg font-bold mb-4">Přidat nový deal</h2>
-                    <DealForm />
+                    <h2 className="text-lg font-bold mb-4">
+                        {dealToEdit ? `Úprava: ${dealToEdit.title}` : 'Přidat nový deal'}
+                    </h2>
+                    <DealForm initialData={dealToEdit} />
                 </div>
 
                 {/* Right: List */}
@@ -50,7 +65,13 @@ export default async function AdminPage() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <small className="text-slate-300 font-mono text-[10px]">{deal.id.substring(deal.id.length - 6)}</small>
+                                    <Link
+                                        href={`/admin?edit=${deal.id}`}
+                                        className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                                        title="Upravit"
+                                    >
+                                        <Pencil className="h-4 w-4" />
+                                    </Link>
                                     <DeleteDealButton id={deal.id} />
                                 </div>
                             </div>
