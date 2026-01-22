@@ -110,9 +110,18 @@ export async function uploadImageAction(formData: FormData): Promise<{ url?: str
 }
 
 export async function generateImageWithGeminiAction(destination: string) {
+    console.log(`generateImageWithGeminiAction called for: ${destination}`);
+
+    // Runtime check
+    if (typeof Buffer === 'undefined') {
+        console.error("CRITICAL: Buffer is undefined in runtime environment!");
+        return { error: 'Server Runtime Error: Buffer missing.' };
+    }
+
     // 1. Try Gemini (Imagen 3)
     if (process.env.GEMINI_API_KEY) {
         try {
+            console.log("Attempting Gemini Image Gen...");
             const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography`;
 
             // Try specific model gemini-2.5-flash-image as requested
@@ -140,6 +149,7 @@ export async function generateImageWithGeminiAction(destination: string) {
                     || data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData)?.inlineData?.data;
 
                 if (base64Image) {
+                    console.log("Gemini Image received, uploading...");
                     // Upload to Cloudinary
                     const buffer = Buffer.from(base64Image, 'base64');
                     return await uploadBufferToCloudinary(buffer, 'flugi_ai_gen');
@@ -150,10 +160,12 @@ export async function generateImageWithGeminiAction(destination: string) {
                 const errorText = await response.text();
                 console.warn(`Gemini Image API Failed (${response.status}): ${errorText}. Falling back...`);
             }
-        } catch (e) {
+        } catch (e: any) {
             console.error("Gemini AI Image Gen Error:", e);
             // Fallthrough to fallback
         }
+    } else {
+        console.warn("Skipping Gemini: No API Key");
     }
 
     // 2. Fallback: Flux via Pollinations (High Quality)
@@ -165,7 +177,7 @@ export async function generateImageWithGeminiAction(destination: string) {
 
         // Fetch the image to upload it to our storage
         const res = await fetch(fluxUrl);
-        if (!res.ok) throw new Error('Pollinations Flux failed');
+        if (!res.ok) throw new Error(`Pollinations Flux failed with status: ${res.status}`);
 
         const arrayBuffer = await res.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
@@ -173,8 +185,8 @@ export async function generateImageWithGeminiAction(destination: string) {
         return await uploadBufferToCloudinary(buffer, 'flugi_ai_flux');
 
     } catch (e: any) {
-        console.error("Fallback AI Error:", e);
-        return { error: `Chyba při generování (AI i Fallback): ${e.message}` };
+        console.error("Fallback AI Error (Flux):", e);
+        return { error: `Chyba při generování (AI i Fallback selhal): ${e.message}` };
     }
 }
 
