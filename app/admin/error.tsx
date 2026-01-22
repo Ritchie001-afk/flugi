@@ -1,3 +1,5 @@
+'use client';
+
 // Suspended error boundary
 export default function Error({
     error,
