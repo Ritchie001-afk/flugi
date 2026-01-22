@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/Button';
 import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload, Plane } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 // import { createDeal, updateDeal } from '../../../app/admin/deal-actions';
-import { generateDescriptionAction, findImageAction, generateEntryRequirementsAction, generateImageWithGeminiAction, uploadImageAction } from '../../../app/admin/actions';
+// import { generateDescriptionAction, findImageAction, generateEntryRequirementsAction, generateImageWithGeminiAction, uploadImageAction } from '../../../app/admin/actions';
+import { findImageAction, uploadImageAction } from '../../../app/admin/actions';
 import Link from 'next/link';
 
 interface DealFormProps {
@@ -41,13 +42,24 @@ export default function DealForm({ initialData }: DealFormProps) {
     const handleGenerate = async () => {
         if (!destination) return alert('Nejdříve vyplňte destinaci!');
         setIsGenerating(true);
-        const result = await generateDescriptionAction(destination);
-        setIsGenerating(false);
+        try {
+            const res = await fetch('/api/admin/ai/text', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'description', destination })
+            });
+            const result = await res.json();
 
-        if (result.error) {
-            alert(result.error);
-        } else if (result.text) {
-            setDescription(result.text);
+            if (result.error) {
+                alert(result.error);
+            } else if (result.text) {
+                setDescription(result.text);
+            }
+        } catch (e: any) {
+            console.error(e);
+            alert("Chyba při generování: " + e.message);
+        } finally {
+            setIsGenerating(false);
         }
     };
 
@@ -79,14 +91,20 @@ export default function DealForm({ initialData }: DealFormProps) {
         if (!destination) return alert('Vyplňte destinaci');
         setUploading(true);
         try {
-            const res = await generateImageWithGeminiAction(destination);
+            // Call API endpoint instead of server action
+            const res = await fetch('/api/admin/ai/image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ destination })
+            });
+            const data = await res.json();
 
-            if (res.error) {
-                console.error(res.error);
-                alert(res.error);
-            } else if (res.url) {
-                setImages(prev => [...prev, res.url!]);
-                if (!image) setImage(res.url!);
+            if (data.error) {
+                console.error(data.error);
+                alert(data.error);
+            } else if (data.url) {
+                setImages(prev => [...prev, data.url!]);
+                if (!image) setImage(data.url!);
             }
         } catch (error: any) {
             console.error("AI Generation FE Error:", error);
@@ -274,13 +292,23 @@ export default function DealForm({ initialData }: DealFormProps) {
                                         type="button"
                                         onClick={async () => {
                                             if (!destination) return alert('Vyplňte destinaci');
-                                            // You might want to add a separate loader state for this button
-                                            const res = await generateEntryRequirementsAction(destination);
-                                            if (res.text) {
-                                                const input = document.getElementsByName('entryRequirements')[0] as HTMLInputElement;
-                                                if (input) input.value = res.text;
-                                            } else {
-                                                alert(res.error);
+
+                                            try {
+                                                const res = await fetch('/api/admin/ai/text', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ type: 'requirements', destination })
+                                                });
+                                                const result = await res.json();
+
+                                                if (result.text) {
+                                                    const input = document.getElementsByName('entryRequirements')[0] as HTMLInputElement;
+                                                    if (input) input.value = result.text;
+                                                } else {
+                                                    alert(result.error || "Neznámá chyba");
+                                                }
+                                            } catch (e: any) {
+                                                alert("Chyba: " + e.message);
                                             }
                                         }}
                                         className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
