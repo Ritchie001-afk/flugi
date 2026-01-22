@@ -36,7 +36,7 @@ export async function generateDescriptionAction(destination: string) {
         return { text };
     } catch (e: any) {
         console.error("Gemini Error:", e);
-        return { error: `Chyba AI: ${e.message || 'Neznámá chyba'}` };
+        return { error: `Chyba AI (gemini-1.5-flash): ${e.message || 'Neznámá chyba'}` };
     }
 }
 
@@ -386,7 +386,9 @@ export async function deleteDeal(id: string) {
         revalidatePath('/admin');
         revalidatePath('/zajezdy');
         revalidatePath('/deals');
-    } catch (e) {
-        console.error(e);
+        return { success: true };
+    } catch (e: any) {
+        console.error("Delete Error:", e);
+        return { error: `Chyba při mazání: ${e.message}` };
     }
 }

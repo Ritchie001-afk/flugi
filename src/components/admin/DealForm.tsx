@@ -149,19 +149,12 @@ export default function DealForm({ initialData }: DealFormProps) {
                 res = await createDeal(formData);
             }
 
-            // If we get here and have a response with error, show it.
-            // If success, the action redirects, so this code might not even run or returns undefined/void-like.
             if (res?.error) {
                 alert(res.error);
             }
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
-            // This catches client-side errors or if redirect throws (though redirect in server action usually handled by router)
-            // Actually in Next.js Server Actions, redirect() creates a special error that should NOT be caught by user code if we want it to work?
-            // "When a Server Action forces a redirect... it throws an error... useTransition hook..."
-            // But we are invoking it directly.
-            // If redirect is thrown, it bubbles up. We should NOT catch it? Or catch and rethrow?
-            // Let's assume standard behavior: return value logic is safer.
+            alert(`Chyba: ${e.message}`);
         }
     };
 

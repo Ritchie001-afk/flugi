@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button';
 import prisma from '@/lib/db';
 import { Trash2, ExternalLink, LogOut, Plus, Image as ImageIcon, Pencil } from 'lucide-react';
 import DealForm from '@/components/admin/DealForm';
+import DeleteDealButton from '@/components/admin/DeleteDealButton';
 import Link from 'next/link';
 
 export const revalidate = 0; // Always fresh data for admin
@@ -137,11 +138,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Link>
-                                                    <form action={deleteDeal.bind(null, deal.id)} className="inline">
-                                                        <button className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 transition-all" title="Smazat">
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </button>
-                                                    </form>
+                                                    <DeleteDealButton id={deal.id} />
                                                 </div>
                                             </td>
                                         </tr>
