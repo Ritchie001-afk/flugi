@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload, Plane } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 // import { createDeal, updateDeal } from '../../../app/admin/deal-actions';
-// import { generateDescriptionAction, findImageAction, generateEntryRequirementsAction, generateImageWithGeminiAction, uploadImageAction } from '../../../app/admin/actions';
+import { generateDescriptionAction, findImageAction, generateEntryRequirementsAction, generateImageWithGeminiAction, uploadImageAction } from '../../../app/admin/actions';
 import Link from 'next/link';
 
 interface DealFormProps {
@@ -39,8 +39,6 @@ export default function DealForm({ initialData }: DealFormProps) {
     const router = useRouter();
 
     const handleGenerate = async () => {
-        alert("AI je dočasně vypnuto pro údržbu.");
-        /*
         if (!destination) return alert('Nejdříve vyplňte destinaci!');
         setIsGenerating(true);
         const result = await generateDescriptionAction(destination);
@@ -53,73 +51,94 @@ export default function DealForm({ initialData }: DealFormProps) {
         }
     };
 
-        }
-        */
-    };
-
     // Placeholder for removeImage (unchanged)
     const removeImage = (index: number) => {
         setImages(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleImageSearch = async () => {
-        alert("AI je dočasně vypnuto pro údržbu.");
-        /*
-       setIsSearchingImage(true);
-       const result = await findImageAction(destination);
-       setIsSearchingImage(false);
+        if (!destination) return alert('Nejdříve vyplňte destinaci!');
+        setIsSearchingImage(true);
+        const result = await findImageAction(destination);
+        setIsSearchingImage(false);
 
-       if (result.error || !result.url) {
-           alert('Bohužel jsem nenašel vhodný obrázek v databázi.');
-       } else if (result.url) {
-           setImage(result.url);
-       }
-   };
+        if (result.error || !result.url) {
+            alert('Bohužel jsem nenašel vhodný obrázek v databázi.');
+        } else if (result.url) {
+            setImage(result.url);
+        }
+    };
 
-   const handleManualUnsplashSearch = () => {
-       if (!destination) return alert('Nejdříve vyplňte destinaci!');
-       const query = encodeURIComponent(destination + ' travel info');
-       window.open(`https://unsplash.com/s/photos/${query}`, '_blank');
-   };
-
-
-
-       }
-       */
+    const handleManualUnsplashSearch = () => {
+        if (!destination) return alert('Nejdříve vyplňte destinaci!');
+        const query = encodeURIComponent(destination + ' travel info');
+        window.open(`https://unsplash.com/s/photos/${query}`, '_blank');
     };
 
     const handleAIGenerate = async () => {
-        alert("AI je dočasně vypnuto pro údržbu.");
-        /*
-       setUploading(true);
-       try {
-           const res = await generateImageWithGeminiAction(destination);
+        if (!destination) return alert('Vyplňte destinaci');
+        setUploading(true);
+        try {
+            const res = await generateImageWithGeminiAction(destination);
 
-           if (res.error) {
-               console.error(res.error);
-               alert(res.error);
-           } else if (res.url) {
-               setImages(prev => [...prev, res.url!]);
-               if (!image) setImage(res.url!);
-           }
-       } catch (error: any) {
-           console.error("AI Generation FE Error:", error);
-           alert(`Chyba při komunikaci se serverem: ${error.message}`);
-       } finally {
-           setUploading(false);
-       }
-   };
-
-       }
-       */
+            if (res.error) {
+                console.error(res.error);
+                alert(res.error);
+            } else if (res.url) {
+                setImages(prev => [...prev, res.url!]);
+                if (!image) setImage(res.url!);
+            }
+        } catch (error: any) {
+            console.error("AI Generation FE Error:", error);
+            alert(`Chyba při komunikaci se serverem: ${error.message}`);
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        alert("Upload je dočasně vypnut.");
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Limit file size (e.g. 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            return alert('Soubor je příliš velký (max 5MB).');
+        }
+
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const res = await uploadImageAction(formData);
+
+            if (res.error) {
+                alert(res.error);
+            } else if (res.url) {
+                setImages(prev => [...prev, res.url!]);
+                if (!image) setImage(res.url!);
+            }
+        } catch (error: any) {
+            console.error(error);
+            alert('Chyba při nahrávání souboru. Zkuste to znovu.');
+        } finally {
+            setUploading(false);
+            // Reset input value to allow selecting same file again if needed
+            e.target.value = '';
+        }
     };
 
     const findImage = async () => {
-        alert("AI je dočasně vypnuto.");
+        if (!destination) return alert('Vyplňte destinaci');
+        setUploading(true);
+        const res = await findImageAction(destination);
+        setUploading(false);
+        if (res.url) {
+            setImages(prev => [...prev, res.url]);
+            if (!image) setImage(res.url); // Set as main if empty
+        } else {
+            alert(res.error);
+        }
     };
 
     const handleSubmit = async (formData: FormData) => {
@@ -186,7 +205,7 @@ export default function DealForm({ initialData }: DealFormProps) {
             </div>
 
             <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Název</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Název <span className="text-red-500">*</span></label>
                 <input
                     name="title"
                     required
@@ -254,8 +273,6 @@ export default function DealForm({ initialData }: DealFormProps) {
                                     <button
                                         type="button"
                                         onClick={async () => {
-                                            alert("AI je dočasně vypnuto pro údržbu.");
-                                            /*
                                             if (!destination) return alert('Vyplňte destinaci');
                                             // You might want to add a separate loader state for this button
                                             const res = await generateEntryRequirementsAction(destination);
@@ -265,7 +282,6 @@ export default function DealForm({ initialData }: DealFormProps) {
                                             } else {
                                                 alert(res.error);
                                             }
-                                            */
                                         }}
                                         className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
                                     >
@@ -297,7 +313,7 @@ export default function DealForm({ initialData }: DealFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Cena (Kč)</label>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Cena (Kč) <span className="text-red-500">*</span></label>
                     <input
                         name="price"
                         type="number"
@@ -341,7 +357,7 @@ export default function DealForm({ initialData }: DealFormProps) {
             </div>
 
             <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Destinace</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Destinace <span className="text-red-500">*</span></label>
                 <input
                     name="destination"
                     required
@@ -377,7 +393,7 @@ export default function DealForm({ initialData }: DealFormProps) {
 
             <div>
                 <div className="flex justify-between items-center mb-1">
-                    <label className="block text-xs font-bold text-slate-500 uppercase">URL Obrázku</label>
+                    <label className="block text-xs font-bold text-slate-500 uppercase">URL Obrázku <span className="text-red-500">*</span></label>
                 </div>
                 <div className="flex gap-2 mb-2">
                     <input
@@ -437,7 +453,7 @@ export default function DealForm({ initialData }: DealFormProps) {
             </div>
 
             <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Affiliate Odkaz</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Affiliate Odkaz <span className="text-red-500">*</span></label>
                 <div className="relative">
                     <ExternalLink className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <input
