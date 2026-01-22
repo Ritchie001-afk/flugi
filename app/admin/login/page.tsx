@@ -1,5 +1,4 @@
-
-import { login } from '../actions';
+import { login } from '../auth-actions';
 import { Button } from '@/components/ui/Button';
 import { Plane } from 'lucide-react';
 import Link from 'next/link';

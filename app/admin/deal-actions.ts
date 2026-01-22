@@ -219,14 +219,14 @@ export async function updateDeal(id: string, formData: FormData) {
 export async function deleteDeal(id: string) {
     try {
         await prisma.deal.delete({ where: { id } });
-        try {
-            revalidatePath('/admin');
-            revalidatePath('/zajezdy');
-            revalidatePath('/deals');
-        } catch (revalError) {
-            console.error("Revalidation Error during deleteDeal:", revalError);
-            // Continue execution as deletion was successful
-        }
+        // try {
+        //     revalidatePath('/admin');
+        //     revalidatePath('/zajezdy');
+        //     revalidatePath('/deals');
+        // } catch (revalError) {
+        //     console.error("Revalidation Error during deleteDeal:", revalError);
+        //     // Continue execution as deletion was successful
+        // }
         return { success: true };
     } catch (e: any) {
         console.error("Delete Deal Error (Full):", JSON.stringify(e, Object.getOwnPropertyNames(e)));

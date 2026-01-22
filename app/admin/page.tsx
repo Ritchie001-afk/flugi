@@ -1,5 +1,5 @@
 
-import { logout } from './actions';
+import { logout } from './auth-actions';
 import { Button } from '@/components/ui/Button';
 import prisma from '@/lib/db';
 import { Trash2, ExternalLink, LogOut, Plus, Image as ImageIcon, Pencil } from 'lucide-react';
