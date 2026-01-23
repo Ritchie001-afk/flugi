@@ -29,9 +29,53 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing destination" }, { status: 400 });
         }
 
-        // Use Pollinations Flux directly (User requested "nano banana" - likely implies high quality/Flux, fixing "tragic" output from Gemini)
+        if (!process.env.GEMINI_API_KEY) {
+            return NextResponse.json({ error: "Missing API Key" }, { status: 500 });
+        }
+
+        // 1. Try Google Imagen (User requested "gemini-2.5-flash-image", likely meaning the latest Imagen capability)
+        // We will try to target the Imagen 3 endpoint which provides high quality images.
         try {
-            console.log("Generating Image via Pollinations Flux...");
+            console.log("Attempting Google Imagen 3 (User requested model)...");
+            const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography, national geographic style`;
+
+            // Using the REST API for Imagen 3
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${process.env.GEMINI_API_KEY}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        instances: [{ prompt: prompt }],
+                        parameters: {
+                            sampleCount: 1,
+                            aspectRatio: "16:9"
+                        }
+                    }),
+                }
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                // Imagen 3 response structure can vary, checking common paths
+                const base64Image = data.predictions?.[0]?.bytesBase64Encoded || data.predictions?.[0]?.bytes;
+
+                if (base64Image) {
+                    const buffer = Buffer.from(base64Image, 'base64');
+                    const upload = await uploadBufferToCloudinary(buffer, 'flugi_ai_imagen');
+                    if (upload.url) return NextResponse.json({ url: upload.url });
+                    if (upload.error) throw new Error(upload.error);
+                }
+            } else {
+                console.warn("Google Imagen API failed status:", response.status);
+            }
+        } catch (e) {
+            console.error("Google Imagen Attempt failed:", e);
+        }
+
+        // 2. Fallback: Pollinations Flux
+        try {
+            console.log("Using Fallback: Pollinations Flux (API Route)");
             const seed = Math.floor(Math.random() * 1000);
             // Enhanced prompt for travel
             const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography, national geographic style, high detail`;
