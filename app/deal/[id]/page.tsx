@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
-import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket, ShieldCheck } from 'lucide-react';
 import { ShareButtons } from '@/components/ShareButtons';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -302,6 +302,23 @@ export default async function DealPage({ params }: DealPageProps) {
                                             <div>
                                                 <h4 className="font-bold text-orange-900 text-sm group-hover:underline">{AFFILIATE_LINKS.rentalcars.name}</h4>
                                                 <p className="text-xs text-orange-700">{AFFILIATE_LINKS.rentalcars.cta}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div className="bg-white rounded-xl border border-indigo-100 p-4 shadow-sm">
+                                    <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                        <ShieldCheck className="h-4 w-4 text-indigo-600" /> Cestovní pojištění
+                                    </h4>
+                                    <a href="https://www.top-pojisteni.cz/cestovni-pojisteni/kalkulacka" target="_blank" rel="noopener noreferrer" className="block group">
+                                        <div className="p-3 rounded-lg bg-indigo-50 hover:bg-indigo-100 transition-colors flex items-center gap-3">
+                                            <div className="p-2 bg-indigo-500 rounded-lg text-white">
+                                                <ShieldCheck className="h-4 w-4" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-indigo-900 text-sm group-hover:underline">Srovnání pojištění</h4>
+                                                <p className="text-xs text-indigo-700">Top-Pojištění.cz</p>
                                             </div>
                                         </div>
                                     </a>
