@@ -339,6 +339,7 @@ export default async function DealPage({ params }: DealPageProps) {
 
                     </div>
                 </div>
+            </div>
         </main>
     );
 }
