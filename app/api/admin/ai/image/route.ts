@@ -33,44 +33,43 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing API Key" }, { status: 500 });
         }
 
-        // 1. Try Google Imagen (User requested "gemini-2.5-flash-image", likely meaning the latest Imagen capability)
-        // We will try to target the Imagen 3 endpoint which provides high quality images.
+        // 1. Try Gemini 2.5 Flash Image (Nano Banana) as requested
         try {
-            console.log("Attempting Google Imagen 3 (User requested model)...");
+            console.log("Attempting Gemini 2.5 Flash Image (Nano Banana)...");
             const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography, national geographic style`;
 
-            // Using the REST API for Imagen 3
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${process.env.GEMINI_API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${process.env.GEMINI_API_KEY}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        instances: [{ prompt: prompt }],
-                        parameters: {
-                            sampleCount: 1,
-                            aspectRatio: "16:9"
-                        }
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }]
                     }),
                 }
             );
 
             if (response.ok) {
                 const data = await response.json();
-                // Imagen 3 response structure can vary, checking common paths
-                const base64Image = data.predictions?.[0]?.bytesBase64Encoded || data.predictions?.[0]?.bytes;
+                // Check candidates for inline_data (image)
+                const part = data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData);
 
-                if (base64Image) {
-                    const buffer = Buffer.from(base64Image, 'base64');
-                    const upload = await uploadBufferToCloudinary(buffer, 'flugi_ai_imagen');
-                    if (upload.url) return NextResponse.json({ url: upload.url });
-                    if (upload.error) throw new Error(upload.error);
+                if (part) {
+                    const base64Image = part.inline_data?.data || part.inlineData?.data;
+                    if (base64Image) {
+                        const buffer = Buffer.from(base64Image, 'base64');
+                        const upload = await uploadBufferToCloudinary(buffer, 'flugi_ai_gemini_flash');
+                        if (upload.url) return NextResponse.json({ url: upload.url });
+                        if (upload.error) throw new Error(upload.error);
+                    }
                 }
             } else {
-                console.warn("Google Imagen API failed status:", response.status);
+                console.warn("Gemini 2.5 Flash Image API failed status:", response.status);
             }
         } catch (e) {
-            console.error("Google Imagen Attempt failed:", e);
+            console.error("Gemini 2.5 Flash Image Attempt failed:", e);
         }
 
         // 2. Fallback: Pollinations Flux
