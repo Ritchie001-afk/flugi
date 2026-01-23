@@ -15,9 +15,14 @@ export async function login(formData: FormData) {
         return { error: 'Nesprávné heslo' };
     }
 
-    await createSession();
-    // Return success to let client handle redirect
-    return { success: true };
+    try {
+        await createSession();
+        // Return success to let client handle redirect
+        return { success: true };
+    } catch (e: any) {
+        console.error("Create Session Error:", e);
+        return { error: `Session Error: ${e.message}` };
+    }
 }
 
 export async function logout() {

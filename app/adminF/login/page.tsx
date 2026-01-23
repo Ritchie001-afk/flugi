@@ -30,7 +30,7 @@ export default function LoginPage() {
             }
         } catch (err: any) {
             console.error(err);
-            setError('Chyba při přihlašování.');
+            setError(`Chyba: ${err.message || JSON.stringify(err)}`);
             setIsPending(false);
         }
     };
