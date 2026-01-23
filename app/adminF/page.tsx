@@ -6,7 +6,9 @@ import { deleteAllDeals } from './deal-actions';
 export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
-import { Pencil } from 'lucide-react';
+import { Pencil, LogOut } from 'lucide-react';
+import { logout } from './auth-actions';
+import { Button } from '@/components/ui/Button';
 
 export default async function AdminPage(props: { searchParams: Promise<{ edit?: string }> }) {
     const searchParams = await props.searchParams;
@@ -28,7 +30,14 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
     return (
         <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                <h1 className="text-2xl font-bold">Administrace Zájezdů</h1>
+                <div className="flex items-center gap-4">
+                    <h1 className="text-2xl font-bold">Administrace Zájezdů</h1>
+                    <form action={logout}>
+                        <button type="submit" className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1">
+                            <LogOut className="h-3 w-3" /> Odhlásit
+                        </button>
+                    </form>
+                </div>
                 <form action={deleteAllDeals}>
                     <button
                         type="submit"
