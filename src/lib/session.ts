@@ -27,16 +27,33 @@ export async function decrypt(session: string | undefined = '') {
 
 export async function createSession() {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const session = await encrypt({ user: 'admin', expiresAt });
-    const cookieStore = await cookies();
 
-    cookieStore.set('session', session, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Only secure in prod (or localhost/https)
-        expires: expiresAt,
-        sameSite: 'lax',
-        path: '/',
-    });
+    let session;
+    try {
+        session = await encrypt({ user: 'admin', expiresAt });
+    } catch (e: any) {
+        throw new Error(`Encryption failed: ${e.message}`);
+    }
+
+    let cookieStore;
+    try {
+        // Await cookies() because in recent Next.js versions it is async
+        cookieStore = await cookies();
+    } catch (e: any) {
+        throw new Error(`Cookie store access failed: ${e.message}`);
+    }
+
+    try {
+        cookieStore.set('session', session, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            expires: expiresAt,
+            sameSite: 'lax',
+            path: '/',
+        });
+    } catch (e: any) {
+        throw new Error(`Cookie set failed: ${e.message}`);
+    }
 }
 
 export async function deleteSession() {
