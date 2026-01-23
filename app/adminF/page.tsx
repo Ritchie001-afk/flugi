@@ -88,7 +88,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
                     <h2 className="text-lg font-bold mb-4">
                         {dealToEdit ? `Úprava: ${dealToEdit.title}` : 'Přidat nový deal'}
                     </h2>
-                    <DealForm initialData={dealToEdit} />
+                    <DealForm initialData={dealToEdit ? JSON.parse(JSON.stringify(dealToEdit)) : null} />
                 </div>
 
                 {/* Right: List */}
