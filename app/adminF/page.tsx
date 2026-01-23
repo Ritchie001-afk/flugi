@@ -14,17 +14,47 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
     const searchParams = await props.searchParams;
     const editId = searchParams?.edit;
 
-    const deals = await prisma.deal.findMany({
-        select: { id: true, title: true, price: true, destination: true },
-        orderBy: { createdAt: 'desc' },
-        take: 50
-    });
-
+    let deals: any[] = [];
     let dealToEdit = null;
-    if (editId) {
-        dealToEdit = await prisma.deal.findUnique({
-            where: { id: editId }
+    let dbError = null;
+
+    try {
+        deals = await prisma.deal.findMany({
+            select: { id: true, title: true, price: true, destination: true },
+            orderBy: { createdAt: 'desc' },
+            take: 50
         });
+
+        if (editId) {
+            dealToEdit = await prisma.deal.findUnique({
+                where: { id: editId }
+            });
+        }
+    } catch (e: any) {
+        console.error("Admin DB Error:", e);
+        dbError = e.message;
+    }
+
+    if (dbError) {
+        return (
+            <div className="p-10 max-w-4xl mx-auto">
+                <h1 className="text-2xl font-bold text-red-600 mb-4">Chyba připojení k databázi</h1>
+                <div className="bg-red-50 border border-red-200 p-6 rounded-xl font-mono text-xs text-red-800 break-all whitespace-pre-wrap">
+                    {dbError}
+                </div>
+                <div className="mt-6">
+                    <p className="text-slate-600 mb-2">Možné příčiny:</p>
+                    <ul className="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                        <li>Databáze (Supabase) je pozastavená (Paused).</li>
+                        <li>Chybné připojovací údaje (DATABASE_URL env var).</li>
+                        <li>Omezení sítě nebo firewall (Vercel &rarr; Supabase).</li>
+                    </ul>
+                </div>
+                <Link href="/" className="inline-block mt-8 text-blue-600 hover:underline">
+                    &larr; Zpět na web
+                </Link>
+            </div>
+        );
     }
 
     return (
