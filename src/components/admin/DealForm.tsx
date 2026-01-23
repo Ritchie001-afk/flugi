@@ -104,7 +104,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                 alert(data.error);
             } else if (data.url) {
                 setImages(prev => [...prev, data.url!]);
-                if (!image) setImage(data.url!);
+                setImage(data.url!); // Always update main image to the new one
             }
         } catch (error: any) {
             console.error("AI Generation FE Error:", error);
