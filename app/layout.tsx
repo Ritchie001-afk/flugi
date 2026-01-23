@@ -17,10 +17,6 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Flugi - Premium Travel Deals",
   description: "Find the best flight and hotel deals with a premium experience.",
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
 };
 
 import Navbar from "@/components/Navbar";

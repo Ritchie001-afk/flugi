@@ -324,6 +324,19 @@ export default async function DealPage({ params }: DealPageProps) {
                                     </a>
                                 </div>
                             </div>
+
+                            {/* Google Map */}
+                            <div className="bg-white rounded-2xl p-4 shadow-xl shadow-slate-200/50 border border-slate-100 h-[300px] overflow-hidden">
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    loading="lazy"
+                                    allowFullScreen
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(destinationCity)}&t=&z=11&ie=UTF8&iwloc=&output=embed`}
+                                    title="Mapa destinace"
+                                />
+                            </div>
                         </div>
                     </div>
 
