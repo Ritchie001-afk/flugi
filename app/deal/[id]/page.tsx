@@ -33,8 +33,9 @@ export default async function DealPage({ params }: DealPageProps) {
     const destinationCity = deal.destinationCity || deal.destination.split(',')[0];
     const images = deal.images && deal.images.length > 0 ? deal.images : [deal.image];
 
-    // Normalize type check
-    const isFlight = deal.type?.toLowerCase().trim() === 'flight';
+    // Normalize type check (Handle English 'flight', Czech 'letenka', etc.)
+    const rawType = deal.type?.toLowerCase().trim() || '';
+    const isFlight = rawType === 'flight' || rawType === 'letenka' || rawType.includes('let');
 
     return (
         <main className="min-h-screen bg-white pb-20">
