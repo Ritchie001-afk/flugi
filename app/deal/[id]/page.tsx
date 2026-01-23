@@ -290,58 +290,55 @@ export default async function DealPage({ params }: DealPageProps) {
                                     </div>
                                 </div>
 
-                                <div className="bg-white rounded-xl border border-orange-100 p-4 shadow-sm">
-                                    <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
-                                        <Car className="h-4 w-4 text-orange-600" /> Doprava na místě
+                                {/* Transport & Insurance & Map Group */}
+                                <div className="bg-white rounded-xl border border-slate-100 p-4 shadow-sm space-y-4">
+                                    <h4 className="font-bold text-slate-900 flex items-center gap-2">
+                                        <MapPin className="h-4 w-4 text-slate-600" /> Průzkum destinace
                                     </h4>
-                                    <a href={getRentalcarsUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
-                                        <div className="p-3 rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors flex items-center gap-3">
-                                            <div className="p-2 bg-orange-500 rounded-lg text-white">
-                                                <Car className="h-4 w-4" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-orange-900 text-sm group-hover:underline">{AFFILIATE_LINKS.rentalcars.name}</h4>
-                                                <p className="text-xs text-orange-700">{AFFILIATE_LINKS.rentalcars.cta}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
 
-                                <div className="bg-white rounded-xl border border-indigo-100 p-4 shadow-sm">
-                                    <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
-                                        <ShieldCheck className="h-4 w-4 text-indigo-600" /> Cestovní pojištění
-                                    </h4>
-                                    <a href="https://www.top-pojisteni.cz/cestovni-pojisteni/kalkulacka" target="_blank" rel="noopener noreferrer" className="block group">
-                                        <div className="p-3 rounded-lg bg-indigo-50 hover:bg-indigo-100 transition-colors flex items-center gap-3">
-                                            <div className="p-2 bg-indigo-500 rounded-lg text-white">
-                                                <ShieldCheck className="h-4 w-4" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-indigo-900 text-sm group-hover:underline">Srovnání pojištění</h4>
-                                                <p className="text-xs text-indigo-700">Top-Pojištění.cz</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                                    {/* Map */}
+                                    <div className="rounded-lg overflow-hidden h-48 border border-slate-200">
+                                        <iframe
+                                            width="100%"
+                                            height="100%"
+                                            style={{ border: 0 }}
+                                            loading="lazy"
+                                            allowFullScreen
+                                            src={`https://maps.google.com/maps?q=${encodeURIComponent(destinationCity)}&t=&z=10&ie=UTF8&iwloc=&output=embed`}
+                                            title="Mapa destinace"
+                                        />
+                                    </div>
 
-                            {/* Google Map */}
-                            <div className="bg-white rounded-2xl p-4 shadow-xl shadow-slate-200/50 border border-slate-100 h-[300px] overflow-hidden">
-                                <iframe
-                                    width="100%"
-                                    height="100%"
-                                    style={{ border: 0 }}
-                                    loading="lazy"
-                                    allowFullScreen
-                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(destinationCity)}&t=&z=11&ie=UTF8&iwloc=&output=embed`}
-                                    title="Mapa destinace"
-                                />
+                                    {/* Buttons Grid */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <a href={getRentalcarsUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                            <div className="p-3 h-full rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors flex flex-col items-center text-center gap-2">
+                                                <div className="p-2 bg-orange-500 rounded-lg text-white">
+                                                    <Car className="h-4 w-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-orange-900 text-xs leading-tight group-hover:underline">Půjčovna aut</h4>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <a href="https://www.top-pojisteni.cz/cestovni-pojisteni/kalkulacka" target="_blank" rel="noopener noreferrer" className="block group">
+                                            <div className="p-3 h-full rounded-lg bg-indigo-50 hover:bg-indigo-100 transition-colors flex flex-col items-center text-center gap-2">
+                                                <div className="p-2 bg-indigo-500 rounded-lg text-white">
+                                                    <ShieldCheck className="h-4 w-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-indigo-900 text-xs leading-tight group-hover:underline">Pojištění</h4>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
         </main>
     );
 }
