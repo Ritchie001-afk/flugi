@@ -136,6 +136,24 @@ export default async function DealPage({ params }: DealPageProps) {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Google Map (Main Column) */}
+                        <div className="border-t border-slate-100 pt-8 pb-8">
+                            <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                                <MapPin className="h-5 w-5 text-slate-600" /> Mapa destinace
+                            </h3>
+                            <div className="bg-slate-50 rounded-2xl overflow-hidden h-[400px] border border-slate-200 shadow-sm">
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    loading="lazy"
+                                    allowFullScreen
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(destinationCity)}&t=&z=11&ie=UTF8&iwloc=&output=embed`}
+                                    title="Mapa destinace"
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     {/* Sidebar / Booking Card */}
@@ -290,24 +308,11 @@ export default async function DealPage({ params }: DealPageProps) {
                                     </div>
                                 </div>
 
-                                {/* Transport & Insurance & Map Group */}
+                                {/* Transport & Insurance buttons (Sidebar) */}
                                 <div className="bg-white rounded-xl border border-slate-100 p-4 shadow-sm space-y-4">
                                     <h4 className="font-bold text-slate-900 flex items-center gap-2">
-                                        <MapPin className="h-4 w-4 text-slate-600" /> Průzkum destinace
+                                        <Car className="h-4 w-4 text-slate-600" /> Doprava a služby
                                     </h4>
-
-                                    {/* Map */}
-                                    <div className="rounded-lg overflow-hidden h-48 border border-slate-200">
-                                        <iframe
-                                            width="100%"
-                                            height="100%"
-                                            style={{ border: 0 }}
-                                            loading="lazy"
-                                            allowFullScreen
-                                            src={`https://maps.google.com/maps?q=${encodeURIComponent(destinationCity)}&t=&z=10&ie=UTF8&iwloc=&output=embed`}
-                                            title="Mapa destinace"
-                                        />
-                                    </div>
 
                                     {/* Buttons Grid */}
                                     <div className="grid grid-cols-2 gap-3">
