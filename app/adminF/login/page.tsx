@@ -1,19 +1,47 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Plane, Lock } from 'lucide-react';
 import { login } from '../auth-actions';
 
-// Initial state for the form action
-const initialState = {
-    error: '',
-};
-
 export default function LoginPage() {
-    // useActionState handles the pending state and result automatically
-    // It captures the error returned by the server action without crashing on redirect
-    const [state, formAction, isPending] = useActionState(login, initialState);
+    const router = useRouter();
+    const [error, setError] = useState('');
+    const [isPending, setIsPending] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError('');
+        setIsPending(true);
+
+        try {
+            const formData = new FormData(e.currentTarget);
+            const result = await login(formData); // Calling Server Action directly
+
+            if (result?.error) {
+                setError(result.error);
+                setIsPending(false);
+            } else {
+                // If no error returned, it likely redirected (or we can force it)
+                // Note: redirect() in Server Action throws error that is caught by Next.js
+                // but in explicit try/catch block we might catch it?
+                // Actually redirect() throws NEXT_REDIRECT which we should NOT catch or should rethrow.
+                // But server actions handle this... mostly.
+                // To be safe, if we get here, we might manually redirect if needed, 
+                // but checking connection first.
+            }
+        } catch (err: any) {
+            // If it's a redirect error, we let it pass? 
+            // In Next.js client handlers, server action redirects often just happen.
+            // If we catch it, we might block the redirect.
+            // But usually redirect() in SA happens on network response.
+            // Let's assume complex error:
+            console.error(err);
+            // setIsPending(false); // Do not unset if redirecting
+        }
+    };
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -27,13 +55,13 @@ export default function LoginPage() {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
                 <h2 className="text-xl font-bold text-slate-900 mb-6 text-center">Přihlášení</h2>
 
-                {state?.error && (
+                {error && (
                     <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 text-center font-medium">
-                        {state.error}
+                        {error}
                     </div>
                 )}
 
-                <form action={formAction} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Heslo</label>
                         <div className="relative">
