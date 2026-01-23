@@ -19,11 +19,17 @@ export default async function middleware(req: NextRequest) {
 
     // 3. Decrypt the session from the cookie
     if (isProtectedRoute) {
-        const cookie = req.cookies.get('session')?.value;
-        const session = await decrypt(cookie);
+        try {
+            const cookie = req.cookies.get('session')?.value;
+            const session = await decrypt(cookie);
 
-        // 4. Redirect to /login if the user is not authenticated
-        if (!session?.user) {
+            // 4. Redirect to /login if the user is not authenticated
+            if (!session?.user) {
+                return NextResponse.redirect(new URL('/adminF/login', req.nextUrl));
+            }
+        } catch (e) {
+            console.error("Middleware Session Error:", e);
+            // On error, redirect to login to be safe
             return NextResponse.redirect(new URL('/adminF/login', req.nextUrl));
         }
     }
