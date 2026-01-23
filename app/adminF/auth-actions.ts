@@ -16,7 +16,8 @@ export async function login(formData: FormData) {
     }
 
     await createSession();
-    redirect('/adminF');
+    // Return success to let client handle redirect
+    return { success: true };
 }
 
 export async function logout() {

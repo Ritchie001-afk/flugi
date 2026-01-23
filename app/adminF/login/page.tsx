@@ -23,23 +23,15 @@ export default function LoginPage() {
             if (result?.error) {
                 setError(result.error);
                 setIsPending(false);
-            } else {
-                // If no error returned, it likely redirected (or we can force it)
-                // Note: redirect() in Server Action throws error that is caught by Next.js
-                // but in explicit try/catch block we might catch it?
-                // Actually redirect() throws NEXT_REDIRECT which we should NOT catch or should rethrow.
-                // But server actions handle this... mostly.
-                // To be safe, if we get here, we might manually redirect if needed, 
-                // but checking connection first.
+            } else if (result?.success) {
+                // Client side redirect
+                router.push('/adminF');
+                router.refresh(); // Ensure session cookie is applied
             }
         } catch (err: any) {
-            // If it's a redirect error, we let it pass? 
-            // In Next.js client handlers, server action redirects often just happen.
-            // If we catch it, we might block the redirect.
-            // But usually redirect() in SA happens on network response.
-            // Let's assume complex error:
             console.error(err);
-            // setIsPending(false); // Do not unset if redirecting
+            setError('Chyba při přihlašování.');
+            setIsPending(false);
         }
     };
 
