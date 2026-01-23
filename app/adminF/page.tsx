@@ -66,7 +66,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Link
-                                        href={`/admin?edit=${deal.id}`}
+                                        href={`/adminF?edit=${deal.id}`}
                                         className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
                                         title="Upravit"
                                     >

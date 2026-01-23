@@ -4,8 +4,8 @@ import type { NextRequest } from 'next/server';
 import { decrypt } from './src/lib/session';
 
 // 1. Specify protected and public routes
-const protectedRoutes = ['/admin'];
-const publicRoutes = ['/admin/login', '/'];
+const protectedRoutes = ['/adminF'];
+const publicRoutes = ['/adminF/login', '/'];
 
 export default async function middleware(req: NextRequest) {
     // 2. Check if the current route is protected
@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
     const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
 
     // Allow login page access without check
-    if (path === '/admin/login') {
+    if (path === '/adminF/login') {
         return NextResponse.next();
     }
 
@@ -24,7 +24,7 @@ export default async function middleware(req: NextRequest) {
 
         // 4. Redirect to /login if the user is not authenticated
         if (!session?.user) {
-            return NextResponse.redirect(new URL('/admin/login', req.nextUrl));
+            return NextResponse.redirect(new URL('/adminF/login', req.nextUrl));
         }
     }
 

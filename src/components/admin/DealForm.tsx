@@ -6,7 +6,7 @@ import { ExternalLink, Image as ImageIcon, Sparkles, Search, Save, X, Upload, Pl
 import { useRouter } from 'next/navigation';
 // import { createDeal, updateDeal } from '../../../app/admin/deal-actions';
 // import { generateDescriptionAction, findImageAction, generateEntryRequirementsAction, generateImageWithGeminiAction, uploadImageAction } from '../../../app/admin/actions';
-import { findImageAction, uploadImageAction } from '../../../app/admin/actions';
+import { findImageAction, uploadImageAction } from '../../../app/adminF/actions';
 import Link from 'next/link';
 
 interface DealFormProps {
@@ -211,7 +211,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                     {initialData ? 'Upravit deal' : 'Nový deal'}
                 </h3>
                 {initialData && (
-                    <Link href="/admin" className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1">
+                    <Link href="/adminF" className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1">
                         <X className="h-3 w-3" /> Zrušit úpravy
                     </Link>
                 )}

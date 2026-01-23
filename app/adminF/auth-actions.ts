@@ -8,14 +8,15 @@ export async function login(formData: FormData) {
     const correctPassword = process.env.ADMIN_PASSWORD || 'flugi123'; // Fallback for dev
 
     if (password !== correctPassword) {
-        redirect('/admin/login?error=invalid');
+        // Return error state instead of redirecting if possible, or redirect with param
+        return { error: 'Nesprávné heslo' };
     }
 
     await createSession();
-    redirect('/admin');
+    redirect('/adminF');
 }
 
 export async function logout() {
     await deleteSession();
-    redirect('/admin/login');
+    redirect('/adminF/login');
 }
