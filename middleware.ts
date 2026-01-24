@@ -1,7 +1,6 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { decrypt } from './src/lib/session';
 
 // 1. Specify protected and public routes
 const protectedRoutes: string[] = []; // Temporarily disabled: ['/adminF']
@@ -17,21 +16,28 @@ export default async function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
-    // 3. Decrypt the session from the cookie
-    if (isProtectedRoute) {
-        try {
-            const cookie = req.cookies.get('session')?.value;
-            const session = await decrypt(cookie);
+    // 3. Basic Auth for Admin
+    if (path.startsWith('/adminF')) {
+        const basicAuth = req.headers.get('authorization');
 
-            // 4. Redirect to /login if the user is not authenticated
-            if (!session?.user) {
-                return NextResponse.redirect(new URL('/adminF/login', req.nextUrl));
+        if (basicAuth) {
+            const authValue = basicAuth.split(' ')[1];
+            const [user, pwd] = atob(authValue).split(':');
+
+            const validUser = 'admin'; // Hardcoded username
+            const validPass = process.env.ADMIN_PASSWORD || 'FlugiSup3rS3cur3!2024';
+
+            if (user === validUser && pwd === validPass) {
+                return NextResponse.next();
             }
-        } catch (e) {
-            console.error("Middleware Session Error:", e);
-            // On error, redirect to login to be safe
-            return NextResponse.redirect(new URL('/adminF/login', req.nextUrl));
         }
+
+        return new NextResponse('Auth Required.', {
+            status: 401,
+            headers: {
+                'WWW-Authenticate': 'Basic realm="Secure Area"',
+            },
+        });
     }
 
     return NextResponse.next();

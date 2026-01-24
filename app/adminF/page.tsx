@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
 import { Pencil, LogOut } from 'lucide-react';
-import { logout } from './auth-actions';
+// import { logout } from './auth-actions';
 import { Button } from '@/components/ui/Button';
 
 export default async function AdminPage(props: { searchParams: Promise<{ edit?: string }> }) {
