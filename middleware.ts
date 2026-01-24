@@ -4,8 +4,8 @@ import type { NextRequest } from 'next/server';
 import { decrypt } from './src/lib/session';
 
 // 1. Specify protected and public routes
-const protectedRoutes = ['/adminF'];
-const publicRoutes = ['/adminF/login', '/'];
+const protectedRoutes: string[] = []; // Temporarily disabled: ['/adminF']
+const publicRoutes: string[] = ['/adminF/login', '/'];
 
 export default async function middleware(req: NextRequest) {
     // 2. Check if the current route is protected

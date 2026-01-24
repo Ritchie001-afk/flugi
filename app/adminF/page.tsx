@@ -62,11 +62,13 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
                 <div className="flex items-center gap-4">
                     <h1 className="text-2xl font-bold">Administrace Zájezdů</h1>
+                    {/* Logout disabled 
                     <form action={logout}>
                         <button type="submit" className="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1">
                             <LogOut className="h-3 w-3" /> Odhlásit
                         </button>
-                    </form>
+                    </form> 
+                    */}
                 </div>
                 <form action={deleteAllDeals}>
                     <button
