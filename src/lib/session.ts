@@ -49,13 +49,14 @@ export async function createSession() {
     }
 
     try {
-        cookieStore.set('session', session, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            expires: expiresAt,
-            sameSite: 'lax',
-            path: '/',
-        });
+        // cookieStore.set('session', session, {
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === 'production',
+        //     expires: expiresAt,
+        //     sameSite: 'lax',
+        //     path: '/',
+        // });
+        console.log("Mocking Cookie Set for debugging");
     } catch (e: any) {
         throw new Error(`Cookie set failed: ${e.message}`);
     }
