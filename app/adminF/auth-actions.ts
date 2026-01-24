@@ -16,7 +16,8 @@ export async function login(formData: FormData) {
     }
 
     try {
-        await createSession();
+        // await createSession();
+        console.log("Skipping session creation for debug");
         // Return success to let client handle redirect
         return { success: true };
     } catch (e: any) {
