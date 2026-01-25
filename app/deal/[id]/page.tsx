@@ -229,39 +229,39 @@ export default async function DealPage({ params }: DealPageProps) {
                                             <span className="text-slate-500">Zavazadla</span>
                                             <span className="font-medium text-slate-900">{deal.baggageInfo || 'Dle tarifu'}</span>
                                         </div>
-                                        {deal.entryRequirements && (() => {
-                                            // Simple URL extraction logic
-                                            const urlRegex = /(https?:\/\/[^\s]+)/g;
-                                            const match = deal.entryRequirements.match(urlRegex);
-                                            // - [x] Fix Vercel Build (Moved components to `src/` to match alias)
-                                            // - [/] Refine Deal Page Layout
-                                            //     - [ ] Hide "Where to stay" for Package Deals (`!isFlight`)
-                                            const url = match ? match[0] : null;
-                                            const text = deal.entryRequirements.replace(urlRegex, '').replace(/Více info:/i, '').trim();
-
-                                            return (
-                                                <div className="pt-3 border-t border-slate-100">
-                                                    <span className="block text-xs font-bold text-slate-500 uppercase mb-1">Vstupní podmínky</span>
-                                                    <div className="flex flex-col gap-2">
-                                                        <span className="text-sm text-slate-700">{text}</span>
-                                                        {url && (
-                                                            <a
-                                                                href={url}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1.5 rounded-lg self-start transition-colors hover:bg-blue-100"
-                                                            >
-                                                                <ExternalLink className="h-3 w-3 mr-1" />
-                                                                Oficiální info (MZV)
-                                                            </a>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })()}
                                     </div>
                                 </div>
                             )}
+
+                            {/* Entry Requirements (For all deal types) */}
+                            {deal.entryRequirements && (() => {
+                                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                                const match = deal.entryRequirements.match(urlRegex);
+                                const url = match ? match[0] : null;
+                                const text = deal.entryRequirements.replace(urlRegex, '').replace(/Více info:/i, '').trim();
+
+                                return (
+                                    <div className="bg-white rounded-2xl p-6 shadow-xl shadow-slate-200/50 border border-amber-100 mt-6">
+                                        <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                            <ShieldCheck className="h-4 w-4 text-amber-500" /> Vstupní podmínky
+                                        </h4>
+                                        <div className="flex flex-col gap-2">
+                                            <span className="text-sm text-slate-700">{text}</span>
+                                            {url && (
+                                                <a
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1.5 rounded-lg self-start transition-colors hover:bg-blue-100"
+                                                >
+                                                    <ExternalLink className="h-3 w-3 mr-1" />
+                                                    Oficiální info (MZV)
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })()}
 
                             {/* Cross-sell Sidebar Cards */}
                             <div className="space-y-6">

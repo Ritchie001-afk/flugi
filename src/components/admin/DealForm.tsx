@@ -280,48 +280,49 @@ export default function DealForm({ initialData }: DealFormProps) {
                                     className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
                                 />
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-blue-700 uppercase mb-1 flex justify-between">
-                                    Vstupní podmínky
-                                    <button
-                                        type="button"
-                                        onClick={async () => {
-                                            if (!destination) return alert('Vyplňte destinaci');
 
-                                            try {
-                                                const res = await fetch('/api/admin/ai/text', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify({ type: 'requirements', destination })
-                                                });
-                                                const result = await res.json();
-
-                                                if (result.text) {
-                                                    const input = document.getElementsByName('entryRequirements')[0] as HTMLInputElement;
-                                                    if (input) input.value = result.text;
-                                                } else {
-                                                    alert(result.error || "Neznámá chyba");
-                                                }
-                                            } catch (e: any) {
-                                                alert("Chyba: " + e.message);
-                                            }
-                                        }}
-                                        className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
-                                    >
-                                        <Sparkles className="h-3 w-3" /> AI
-                                    </button>
-                                </label>
-                                <input
-                                    name="entryRequirements"
-                                    type="text"
-                                    defaultValue={initialData?.entryRequirements}
-                                    placeholder="např. Vízum online"
-                                    className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
-                                />
-                            </div>
                         </div>
                     </div>
                 )}
+
+                {/* General Fields for all types */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1 flex justify-between">
+                        Vstupní podmínky
+                        <button
+                            type="button"
+                            onClick={async () => {
+                                if (!destination) return alert('Vyplňte destinaci');
+                                try {
+                                    const res = await fetch('/api/admin/ai/text', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ type: 'requirements', destination })
+                                    });
+                                    const result = await res.json();
+                                    if (result.text) {
+                                        const input = document.getElementsByName('entryRequirements')[0] as HTMLInputElement;
+                                        if (input) input.value = result.text;
+                                    } else {
+                                        alert(result.error || "Neznámá chyba");
+                                    }
+                                } catch (e: any) {
+                                    alert("Chyba: " + e.message);
+                                }
+                            }}
+                            className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                        >
+                            <Sparkles className="h-3 w-3" /> AI
+                        </button>
+                    </label>
+                    <input
+                        name="entryRequirements"
+                        type="text"
+                        defaultValue={initialData?.entryRequirements}
+                        placeholder="např. Vízum online, Pas min 6 měsíců..."
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
+                    />
+                </div>
 
                 <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tagy (oddělené čárkou)</label>
