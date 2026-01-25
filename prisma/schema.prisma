@@ -39,6 +39,8 @@ model Deal {
   reviewCount     Int?      // e.g. 150
   reviewSource    String?   // e.g. "Google", "TripAdvisor"
   reviewUrl       String?   // e.g. "https://..."
+  featuredReviewAuthor String? // "Jana, Brno"
+  featuredReviewText   String? // Full text of the review
   
   // Flight Specifics
   transferCount   Int?      // 0 = Direct, 1 = 1 stop

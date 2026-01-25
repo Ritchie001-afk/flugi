@@ -94,12 +94,16 @@ export default async function DealPage({ params }: DealPageProps) {
                                 </div>
                                 <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col md:flex-row gap-6 items-center text-center md:text-left">
                                     <div className="flex-1">
-                                        <p className="text-slate-600 italic">"Skvělá dovolená, hotel odpovídal popisu. Jídlo vynikající a pláž čistá."</p>
-                                        <div className="mt-2 font-bold text-slate-900">– Jana, ověřený zákazník</div>
+                                        <p className="text-slate-600 italic">
+                                            "{deal.featuredReviewText || 'Skvělá dovolená, hotel odpovídal popisu. Jídlo vynikající a pláž čistá.'}"
+                                        </p>
+                                        <div className="mt-2 font-bold text-slate-900">
+                                            – {deal.featuredReviewAuthor || 'Jana, ověřený zákazník'}
+                                        </div>
                                     </div>
                                     <div className="flex-shrink-0">
                                         <a href={deal.reviewUrl || '#'} target="_blank" className="text-blue-600 text-sm font-medium hover:underline">
-                                            Číst recenze na {deal.reviewSource || 'TripADvisor'} →
+                                            Číst recenze na {deal.reviewSource || 'TripAdvisor'} →
                                         </a>
                                     </div>
                                 </div>
@@ -108,7 +112,7 @@ export default async function DealPage({ params }: DealPageProps) {
 
                         {/* AI Itinerary */}
                         <div className="border-t border-slate-100 pt-8">
-                            <ItineraryGenerator destination={deal.destinationCity || deal.destination} length={7} />
+                            <ItineraryGenerator destination={deal.destination} length={7} />
                         </div>
 
                         {/* GetYourGuide Upsell */}
@@ -149,7 +153,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                     style={{ border: 0 }}
                                     loading="lazy"
                                     allowFullScreen
-                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(destinationCity)}&t=&z=11&ie=UTF8&iwloc=&output=embed`}
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(deal.destination)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
                                     title="Mapa destinace"
                                 />
                             </div>

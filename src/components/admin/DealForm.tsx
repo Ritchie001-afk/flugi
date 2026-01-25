@@ -558,7 +558,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                         />
                     </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Zdroj Recenzí</label>
                         <select
@@ -575,11 +575,90 @@ export default function DealForm({ initialData }: DealFormProps) {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Odkaz na recenze</label>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1 flex justify-between">
+                            Odkaz na recenze
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    const urlInput = document.getElementsByName('reviewUrl')[0] as HTMLInputElement;
+                                    const url = urlInput?.value;
+                                    if (!url) return alert('Vyplňte URL recenzí (TripAdvisor)');
+
+                                    // Dynamic import or safe call
+                                    try {
+                                        setUploading(true);
+                                        // Importing server action dynamically or passing it via props is cleaner, but here we invoke via a wrapper api or direct import if supported
+                                        // Since we can't easily import server action in client component without 'use server' props or separation, 
+                                        // we'll use a new API route for scraping to avoid build issues with server actions in client components if not set up perfectly.
+                                        // OR: We simply assume `scrapeTripAdvisor` makes it through boundaries if used in a Server Component wrapper. 
+                                        // BUT `DealForm` is `use client`. So we need to call it via a prop OR separate API.
+                                        // EASIEST FIX: Use the existing pattern - create a small API endpoint for scraping.
+
+                                        // NOTE: I will implement a quick API route /api/admin/scrape for this button to work reliably
+                                        const res = await fetch('/api/admin/scrape', {
+                                            method: 'POST',
+                                            body: JSON.stringify({ url }),
+                                            headers: { 'Content-Type': 'application/json' }
+                                        });
+                                        const json = await res.json();
+
+                                        if (json.error) {
+                                            alert(json.error);
+                                        } else {
+                                            // Auto-fill fields
+                                            if (json.data.rating) {
+                                                const rInput = document.getElementsByName('rating')[0] as HTMLInputElement;
+                                                if (rInput) rInput.value = json.data.rating;
+                                            }
+                                            if (json.data.reviewCount) {
+                                                const cInput = document.getElementsByName('reviewCount')[0] as HTMLInputElement;
+                                                if (cInput) cInput.value = json.data.reviewCount;
+                                            }
+                                            if (json.data.featuredReviewText) {
+                                                const tInput = document.getElementsByName('featuredReviewText')[0] as HTMLTextAreaElement;
+                                                if (tInput) tInput.value = json.data.featuredReviewText;
+                                            }
+                                            // Images handling if needed...
+                                            alert('Data načtena! Zkontrolujte pole.');
+                                        }
+                                    } catch (e: any) {
+                                        alert('Chyba: ' + e.message);
+                                    } finally {
+                                        setUploading(false);
+                                    }
+                                }}
+                                className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-bold text-[10px]"
+                            >
+                                <Search className="h-3 w-3" /> NAČÍST DATA
+                            </button>
+                        </label>
                         <input
                             name="reviewUrl"
                             defaultValue={initialData?.reviewUrl}
-                            placeholder="https://..."
+                            placeholder="https://www.tripadvisor.com/..."
+                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
+                        />
+                    </div>
+                </div>
+
+                {/* New Featured Review Fields */}
+                <div className="space-y-3 pt-3 border-t border-slate-200">
+                    <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Hlavní Recenze - Text (Česky)</label>
+                        <textarea
+                            name="featuredReviewText"
+                            rows={3}
+                            defaultValue={initialData?.featuredReviewText}
+                            placeholder="'Naprosto úžasný hotel, skvělé jídlo...'"
+                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm italic"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Autor Recenze</label>
+                        <input
+                            name="featuredReviewAuthor"
+                            defaultValue={initialData?.featuredReviewAuthor}
+                            placeholder="Jana, Praha"
                             className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
                         />
                     </div>

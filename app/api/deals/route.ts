@@ -24,7 +24,7 @@ export async function POST(req: Request) {
             title, price, originalPrice, transferCount, baggageInfo,
             entryRequirements, airline, tags, startDate, endDate,
             destination, image, images, url, type, rating,
-            reviewCount, reviewSource, reviewUrl
+            reviewCount, reviewSource, reviewUrl, featuredReviewAuthor, featuredReviewText
         } = json;
 
         if (!title || !price || !destination || !url || !image) {
@@ -55,6 +55,8 @@ export async function POST(req: Request) {
                 reviewCount: reviewCount ? parseInt(reviewCount) : null,
                 reviewSource,
                 reviewUrl,
+                featuredReviewAuthor,
+                featuredReviewText,
                 startDate: startDate ? new Date(startDate) : null,
                 endDate: endDate ? new Date(endDate) : null,
                 expiresAt: null,

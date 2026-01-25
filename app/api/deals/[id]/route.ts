@@ -15,11 +15,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
             title, price, originalPrice, transferCount, baggageInfo,
             entryRequirements, airline, tags, startDate, endDate,
             destination, image, images, url, type, rating,
-            reviewCount, reviewSource, reviewUrl, description
+            reviewCount, reviewSource, reviewUrl, description,
+            featuredReviewAuthor, featuredReviewText
         } = json;
 
         const updateData: any = {
             title, destination, image, url, type, baggageInfo, entryRequirements, airline, description,
+            featuredReviewAuthor, featuredReviewText,
+            reviewSource, reviewUrl,
             images: images || undefined, // undefined prevents clearing if not sent, though usually we send full array
             tags: tags || undefined
         };
