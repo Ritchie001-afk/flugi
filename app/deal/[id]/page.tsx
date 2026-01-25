@@ -229,6 +229,9 @@ export default async function DealPage({ params }: DealPageProps) {
                                             // Simple URL extraction logic
                                             const urlRegex = /(https?:\/\/[^\s]+)/g;
                                             const match = deal.entryRequirements.match(urlRegex);
+                                            // - [x] Fix Vercel Build (Moved components to `src/` to match alias)
+                                            // - [/] Refine Deal Page Layout
+                                            //     - [ ] Hide "Where to stay" for Package Deals (`!isFlight`)
                                             const url = match ? match[0] : null;
                                             const text = deal.entryRequirements.replace(urlRegex, '').replace(/Více info:/i, '').trim();
 
@@ -277,36 +280,37 @@ export default async function DealPage({ params }: DealPageProps) {
                                     </div>
                                 ) : null}
 
-                                {/* Accommodation Links (Booking / Airbnb) */}
-                                <div className="bg-white rounded-xl border border-blue-100 p-4 shadow-sm">
-                                    <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
-                                        <Bed className="h-4 w-4 text-blue-600" /> Kde se ubytovat?
-                                    </h4>
-                                    <div className="space-y-3">
-                                        <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
-                                            <div className="p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-3">
-                                                <div className="p-2 bg-blue-600 rounded-lg text-white">
-                                                    <Bed className="h-4 w-4" />
+                                {isFlight && (
+                                    <div className="bg-white rounded-xl border border-blue-100 p-4 shadow-sm">
+                                        <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                            <Bed className="h-4 w-4 text-blue-600" /> Kde se ubytovat?
+                                        </h4>
+                                        <div className="space-y-3">
+                                            <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                                <div className="p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-3">
+                                                    <div className="p-2 bg-blue-600 rounded-lg text-white">
+                                                        <Bed className="h-4 w-4" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-blue-900 text-sm group-hover:underline">{AFFILIATE_LINKS.booking.name}</h4>
+                                                        <p className="text-xs text-blue-700">{AFFILIATE_LINKS.booking.cta}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h4 className="font-bold text-blue-900 text-sm group-hover:underline">{AFFILIATE_LINKS.booking.name}</h4>
-                                                    <p className="text-xs text-blue-700">{AFFILIATE_LINKS.booking.cta}</p>
+                                            </a>
+                                            <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                                <div className="p-3 rounded-lg bg-rose-50 hover:bg-rose-100 transition-colors flex items-center gap-3">
+                                                    <div className="p-2 bg-rose-500 rounded-lg text-white">
+                                                        <Home className="h-4 w-4" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-rose-900 text-sm group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
+                                                        <p className="text-xs text-rose-700">{AFFILIATE_LINKS.airbnb.cta}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                        <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
-                                            <div className="p-3 rounded-lg bg-rose-50 hover:bg-rose-100 transition-colors flex items-center gap-3">
-                                                <div className="p-2 bg-rose-500 rounded-lg text-white">
-                                                    <Home className="h-4 w-4" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-rose-900 text-sm group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
-                                                    <p className="text-xs text-rose-700">{AFFILIATE_LINKS.airbnb.cta}</p>
-                                                </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 {/* Transport & Insurance buttons (Sidebar) */}
                                 <div className="bg-white rounded-xl border border-slate-100 p-4 shadow-sm space-y-4">
