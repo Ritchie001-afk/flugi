@@ -164,7 +164,12 @@ export default function DealForm({ initialData }: DealFormProps) {
             // Convert FormData to JSON
             const data: any = {};
             formData.forEach((value, key) => {
-                data[key] = value;
+                // Special handling for tags - convert comma-separated string to array
+                if (key === 'tags' && typeof value === 'string') {
+                    data[key] = value.split(',').map(t => t.trim()).filter(Boolean);
+                } else {
+                    data[key] = value;
+                }
             });
             // Add state values explicitly
             data.images = images;
