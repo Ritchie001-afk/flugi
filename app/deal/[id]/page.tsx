@@ -30,7 +30,11 @@ export default async function DealPage({ params }: DealPageProps) {
         notFound();
     }
 
-    const destinationCity = deal.destinationCity || deal.destination.split(',')[0];
+    // Extract City for GYG and others (Prefer explicit field, then part after comma, then full string)
+    // Example: "Hotel X, Hurghada" -> "Hurghada"
+    // Extract City for GYG and others (Prefer explicit field, then part after comma, then full string)
+    // Example: "Hotel X, Hurghada" -> "Hurghada"
+    const destinationCity = deal.destinationCity || (deal.destination.includes(',') ? deal.destination.split(',').pop()?.trim() : deal.destination) || '';
     const images = deal.images && deal.images.length > 0 ? deal.images : [deal.image];
 
     // Normalize type check (Handle English 'flight', Czech 'letenka', etc.)
@@ -81,31 +85,27 @@ export default async function DealPage({ params }: DealPageProps) {
                             </div>
                         )}
 
-                        {/* Reviews (Only for packages/hotels) */}
-                        {!isFlight && (
+                        {/* Reviews Link (Simplified) */}
+                        {!isFlight && deal.reviewUrl && (
                             <div className="border-t border-slate-100 pt-8">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-2xl font-bold text-slate-900">Hodnocení hostů</h3>
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-2xl font-bold text-slate-900">Hodnocení</h3>
                                     {deal.rating && (
                                         <div className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">
                                             ★ {deal.rating}/10
                                         </div>
                                     )}
                                 </div>
-                                <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col md:flex-row gap-6 items-center text-center md:text-left">
-                                    <div className="flex-1">
-                                        <p className="text-slate-600 italic">
-                                            "{deal.featuredReviewText || 'Skvělá dovolená, hotel odpovídal popisu. Jídlo vynikající a pláž čistá.'}"
-                                        </p>
-                                        <div className="mt-2 font-bold text-slate-900">
-                                            – {deal.featuredReviewAuthor || 'Jana, ověřený zákazník'}
-                                        </div>
-                                    </div>
-                                    <div className="flex-shrink-0">
-                                        <a href={deal.reviewUrl || '#'} target="_blank" className="text-blue-600 text-sm font-medium hover:underline">
-                                            Číst recenze na {deal.reviewSource || 'TripAdvisor'} →
-                                        </a>
-                                    </div>
+                                <div className="mt-4">
+                                    <a
+                                        href={deal.reviewUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 text-blue-600 font-medium hover:text-blue-800 hover:underline"
+                                    >
+                                        <ExternalLink className="h-4 w-4" />
+                                        Číst recenze na {deal.reviewSource || 'TripAdvisor'}
+                                    </a>
                                 </div>
                             </div>
                         )}
