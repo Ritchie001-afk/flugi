@@ -25,6 +25,9 @@ export async function POST(req: Request) {
             Na konec PŘIDEJ oficiální odkaz na stránky Ministerstva zahraničních věcí ČR (mzv.cz) s informacemi pro tuto zemi/oblast.
             Pokud odkaz neznáš přesně, vygeneruj odkaz na vyhledávání na mzv.cz.
             Formát: "[Podmínky]. Více info: [URL]"`;
+        } else if (type === 'weather') {
+            const dates = startDate ? `v termínu od ${startDate} do ${endDate}` : 'v tomto období';
+            prompt = `Jsi expert na počasí. Popiš stručně (max 2 věty) typické počasí a teploty pro destinaci "${destination}" ${dates}. Odpověz česky.`;
         } else {
             return NextResponse.json({ error: "Invalid type" }, { status: 400 });
         }
