@@ -57,6 +57,7 @@ export async function POST(req: Request) {
                 reviewUrl,
                 featuredReviewAuthor,
                 featuredReviewText,
+                weatherInfo: json.weatherInfo || null,
                 startDate: startDate ? new Date(startDate) : null,
                 endDate: endDate ? new Date(endDate) : null,
                 expiresAt: null,

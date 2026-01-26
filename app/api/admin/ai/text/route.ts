@@ -7,21 +7,18 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function POST(req: Request) {
     try {
-        const { type, destination } = await req.json();
+        const { type, destination, startDate, endDate } = await req.json();
 
         if (!destination) {
             return NextResponse.json({ error: "Missing destination" }, { status: 400 });
         }
 
-        // Using verified model from search (gemini-3-flash-preview)
+        // Using verified model from search
         const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
         let prompt = "";
         if (type === 'description') {
-            prompt = `Napiš lákavý marketingový popis pro dovolenou v destinaci "${destination}". 
-            Délka cca 2-3 krátké odstavce (do 100 slov). 
-            Zaměř se na pláže, moře, relax, jídlo nebo památky (podle destinace).
-            Česky. Nepoužívej markdown nadpisy, jen čistý text.`;
+            prompt = `Napiš lákavý marketingový popis pro dovolenou v destinaci "${destination}". Maximálně 3 odstavce. Použij emotikony.`;
         } else if (type === 'requirements') {
             prompt = `Jaké jsou aktuální vstupní podmínky a vízová povinnost pro občany ČR do destinace "${destination}"?
             Odpověz stručně (max 2 věty).
@@ -39,6 +36,6 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error("AI Text Gen Error:", error);
-        return NextResponse.json({ error: `AI Error: ${error.message}` }, { status: 500 });
+        return NextResponse.json({ error: `AI Error: ${error.message} ` }, { status: 500 });
     }
 }

@@ -420,6 +420,52 @@ export default function DealForm({ initialData }: DealFormProps) {
                 />
             </div>
 
+            <div className="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                <div className="flex justify-between items-center mb-1">
+                    <label className="block text-xs font-bold text-amber-800 uppercase">Počasí & Klima</label>
+                    <button
+                        type="button"
+                        onClick={async () => {
+                            if (!destination) return alert('Vyplňte destinaci');
+                            const sDate = document.getElementsByName('startDate')[0] as HTMLInputElement;
+                            const eDate = document.getElementsByName('endDate')[0] as HTMLInputElement;
+
+                            try {
+                                const res = await fetch('/api/admin/ai/text', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        type: 'weather',
+                                        destination,
+                                        startDate: sDate?.value,
+                                        endDate: eDate?.value
+                                    })
+                                });
+                                const result = await res.json();
+                                if (result.text) {
+                                    const input = document.getElementsByName('weatherInfo')[0] as HTMLTextAreaElement;
+                                    if (input) input.value = result.text;
+                                } else {
+                                    alert(result.error || "Neznámá chyba");
+                                }
+                            } catch (e: any) {
+                                alert("Chyba: " + e.message);
+                            }
+                        }}
+                        className="text-amber-600 hover:text-amber-800 flex items-center gap-1 font-medium text-[10px] cursor-pointer"
+                    >
+                        <Sparkles className="h-3 w-3" /> VYGENEROVAT POČASÍ
+                    </button>
+                </div>
+                <textarea
+                    name="weatherInfo"
+                    rows={2}
+                    defaultValue={initialData?.weatherInfo}
+                    placeholder="Např. V dubnu je v destinaci Dubaj průměrně 30°C, slunečno..."
+                    className="w-full px-3 py-2 rounded-lg border border-amber-200 focus:border-amber-500 outline-none text-sm bg-white"
+                />
+            </div>
+
             <div>
                 <div className="flex justify-between items-center mb-1">
                     <label className="block text-xs font-bold text-slate-500 uppercase">URL Obrázku <span className="text-red-500">*</span></label>

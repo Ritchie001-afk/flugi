@@ -23,6 +23,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
             title, destination, image, url, type, baggageInfo, entryRequirements, airline, description,
             featuredReviewAuthor, featuredReviewText,
             reviewSource, reviewUrl,
+            weatherInfo: json.weatherInfo,
             images: images || undefined, // undefined prevents clearing if not sent, though usually we send full array
             tags: tags || undefined
         };

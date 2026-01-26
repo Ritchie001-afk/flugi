@@ -41,6 +41,7 @@ model Deal {
   reviewUrl       String?   // e.g. "https://..."
   featuredReviewAuthor String? // "Jana, Brno"
   featuredReviewText   String? // Full text of the review
+  weatherInfo          String? // AI summary of weather
   
   // Flight Specifics
   transferCount   Int?      // 0 = Direct, 1 = 1 stop

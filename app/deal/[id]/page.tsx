@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
-import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket, ShieldCheck, Sun } from 'lucide-react';
 import { ShareButtons } from '@/components/ShareButtons';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -233,6 +233,18 @@ export default async function DealPage({ params }: DealPageProps) {
                                 </div>
                             )}
 
+                            {/* Weather Info */}
+                            {deal.weatherInfo && (
+                                <div className="bg-amber-50 rounded-2xl p-6 border border-amber-100 mt-6">
+                                    <h4 className="font-bold text-amber-900 mb-2 flex items-center gap-2">
+                                        <Sun className="h-5 w-5 text-amber-500" /> Počasí v termínu
+                                    </h4>
+                                    <p className="text-sm text-amber-800/80 leading-relaxed">
+                                        {deal.weatherInfo}
+                                    </p>
+                                </div>
+                            )}
+
                             {/* Entry Requirements (For all deal types) */}
                             {deal.entryRequirements && (() => {
                                 const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -353,6 +365,6 @@ export default async function DealPage({ params }: DealPageProps) {
                     </div>
                 </div>
             </div>
-        </main>
+        </main >
     );
 }
