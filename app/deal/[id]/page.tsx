@@ -21,24 +21,31 @@ interface DealPageProps {
 }
 
 export async function generateMetadata({ params }: DealPageProps): Promise<Metadata> {
-    const { id } = await params;
-    const deal = await prisma.deal.findUnique({ where: { id } });
+    try {
+        const { id } = await params;
+        const deal = await prisma.deal.findUnique({ where: { id } });
 
-    if (!deal) {
+        if (!deal) {
+            return {
+                title: 'Nabídka nenalezena | Flugi',
+            };
+        }
+
         return {
-            title: 'Nabídka nenalezena | Flugi',
+            title: `${deal.title} | Flugi`,
+            description: deal.description.substring(0, 160) + '...',
+            openGraph: {
+                title: deal.title,
+                description: deal.description.substring(0, 160) + '...',
+                images: [deal.image],
+            },
+        };
+    } catch (e) {
+        console.error("Metadata generation error:", e);
+        return {
+            title: 'Flugi Deal',
         };
     }
-
-    return {
-        title: `${deal.title} | Flugi`,
-        description: deal.description.substring(0, 160) + '...',
-        openGraph: {
-            title: deal.title,
-            description: deal.description.substring(0, 160) + '...',
-            images: [deal.image], // Single image for OG
-        },
-    };
 }
 
 export default async function DealPage({ params }: DealPageProps) {

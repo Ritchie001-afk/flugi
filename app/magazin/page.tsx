@@ -24,24 +24,24 @@ export default function MagazinePage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-                    {/* Featured Article - Hidden City Ticketing */}
-                    <Link href="/pruvodce/skryte-letenky-hidden-city-ticketing" className="col-span-1 lg:col-span-2 group relative h-[400px] rounded-3xl overflow-hidden block">
+                    {/* Featured Article - Reseller Pricing */}
+                    <Link href="/magazin/proc-jsou-prekupnici-levnejsi" className="col-span-1 lg:col-span-2 group relative h-[400px] rounded-3xl overflow-hidden block">
                         <Image
-                            src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop"
-                            alt="Hidden City Ticketing"
+                            src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=2071&auto=format&fit=crop"
+                            alt="Ceny letenek"
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 p-8 md:p-12">
                             <span className="inline-block px-3 py-1 bg-purple-500/80 backdrop-blur-sm text-white text-xs font-bold rounded-full mb-4 uppercase tracking-wider">
-                                Tipy & Triky
+                                Travel Hack
                             </span>
                             <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors">
-                                Jak najít skryté letenky (Hidden City Ticketing)
+                                Proč jsou překupníci levnější než samotná aerolinka?
                             </h2>
                             <p className="text-slate-200 line-clamp-2 max-w-xl">
-                                Objevte kontroverzní metodu, díky které můžete ušetřit tisíce korun na letenkách. Aerolinky ji nenávidí, cestovatelé milují.
+                                Nedává to smysl, že? Kde berou prodejci jako Kiwi nebo Gotogate nižší ceny? Odhalujeme tajemství IT tarifů a měnových kurzů.
                             </p>
                         </div>
                     </Link>

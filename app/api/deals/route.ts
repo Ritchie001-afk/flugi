@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const slug = title.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-') + '-' + Math.random().toString(36).substring(7);
+
 
         const deal = await prisma.deal.create({
             data: {
@@ -49,7 +49,6 @@ export async function POST(req: Request) {
                 images: images || [],
                 url,
                 type,
-                slug,
                 tags: tags || [],
                 rating: rating ? parseFloat(rating) : null,
                 reviewCount: reviewCount ? parseInt(reviewCount) : null,

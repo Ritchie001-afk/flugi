@@ -11,7 +11,6 @@ datasource db {
 model Deal {
   id              String    @id @default(cuid())
   title           String
-  slug            String    @unique @default(cuid())
   description     String
   price           Float
   originalPrice   Float?
