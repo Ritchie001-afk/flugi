@@ -11,11 +11,33 @@ import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Imports needed for metadata
+import { Metadata } from 'next';
 
 interface DealPageProps {
-    params: {
+    params: Promise<{
         id: string;
+    }>;
+}
+
+export async function generateMetadata({ params }: DealPageProps): Promise<Metadata> {
+    const { id } = await params;
+    const deal = await prisma.deal.findUnique({ where: { id } });
+
+    if (!deal) {
+        return {
+            title: 'Nabídka nenalezena | Flugi',
+        };
+    }
+
+    return {
+        title: `${deal.title} | Flugi`,
+        description: deal.description.substring(0, 160) + '...',
+        openGraph: {
+            title: deal.title,
+            description: deal.description.substring(0, 160) + '...',
+            images: [deal.image], // Single image for OG
+        },
     };
 }
 
@@ -75,7 +97,11 @@ export default async function DealPage({ params }: DealPageProps) {
                         {/* Description */}
                         <div className="prose prose-slate max-w-none">
                             <h2 className="text-2xl font-bold text-slate-900 mb-4 hidden md:block">O zájezdu</h2>
-                            <p className="text-lg leading-relaxed text-slate-600">{deal.description}</p>
+                            <div className="text-lg leading-relaxed text-slate-600 space-y-4">
+                                {deal.description.split('\n').map((paragraph, idx) => (
+                                    paragraph.trim() && <p key={idx}>{paragraph}</p>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Amenities Grid - Hide for flights */}
