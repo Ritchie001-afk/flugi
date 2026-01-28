@@ -160,7 +160,7 @@ export default async function DealsPage(props: {
                                             <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
                                                 {/* Provider text removed */}
                                             </div>
-                                            <Link href={`/deal/${deal.id}`}>
+                                            <Link href={`/deal/${deal.slug || deal.id}`}>
                                                 <Button size="sm" variant="outline" className="h-9 text-xs border-slate-200 hover:bg-blue-600 hover:text-white hover:border-blue-600 px-4">
                                                     Zobrazit
                                                 </Button>
