@@ -4,9 +4,10 @@ interface AmenitiesProps {
     text: string;    // Description text to search in
     tags: string[];  // Tags array
     type?: string;   // Deal type (flight/package)
+    variant?: 'default' | 'compact';
 }
 
-export function Amenities({ text, tags, type }: AmenitiesProps) {
+export function Amenities({ text, tags, type, variant = 'default' }: AmenitiesProps) {
     const fullText = (text + ' ' + tags.join(' ')).toLowerCase();
 
     // Configuration of possible amenities
@@ -30,6 +31,24 @@ export function Amenities({ text, tags, type }: AmenitiesProps) {
     });
 
     if (active.length === 0) return null;
+
+    if (variant === 'compact') {
+        return (
+            <div className="w-full">
+                <div className="flex flex-wrap gap-2">
+                    {active.slice(0, 3).map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-50 border border-slate-100 text-slate-600">
+                            <item.icon className="h-3.5 w-3.5 text-blue-500" />
+                            <span className="text-xs font-medium whitespace-nowrap">{item.label}</span>
+                        </div>
+                    ))}
+                    {active.length > 3 && (
+                        <span className="text-xs text-slate-400 flex items-center">+{active.length - 3}</span>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="my-8">

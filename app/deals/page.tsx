@@ -153,7 +153,7 @@ export default async function DealsPage(props: {
                                         </div>
 
                                         <div className="mt-4 pt-4 border-t border-slate-100">
-                                            <Amenities text={deal.description || ''} tags={deal.tags} type={deal.type} />
+                                            <Amenities text={deal.description || ''} tags={deal.tags} type={deal.type} variant="compact" />
                                         </div>
 
                                         <div className="mt-auto px-5 pb-5 pt-4 border-t border-slate-100 flex items-center justify-between">
