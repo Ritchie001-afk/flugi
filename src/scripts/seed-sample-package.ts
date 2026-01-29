@@ -17,7 +17,7 @@ async function seedSamplePackage() {
                 destination: "Dubaj, Spojené arabské emiráty",
                 image: "https://images.unsplash.com/photo-1512453979798-5ea904ac6605?q=80&w=1920&auto=format&fit=crop",
                 url: "https://www.fischer.cz/spojene-arabske-emiraty/dubaj/hotel-atlantis-the-palm",
-                slug: "luxusni-dovolena-dubaj-atlantis-" + Math.random().toString(36).substring(7),
+
                 type: "package",
                 // removed discountPercentage as it is not in schema
                 tags: ["All Inclusive", "Luxusní", "Aquapark"]
