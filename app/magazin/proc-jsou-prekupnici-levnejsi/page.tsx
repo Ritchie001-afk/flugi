@@ -92,6 +92,26 @@ export default function ResellerArticle() {
                         </p>
                     </div>
 
+                    <div className="mb-12 border-b border-slate-100 pb-12">
+                        <h2>4. Virtuální propojování (Self-transfer)</h2>
+                        <p>
+                            Aerolinky spolu často nekamarádí. Ryanair vám neprodá letenku s přípojem na Wizz Air. Překupník to ale udělá – spojí dva nesouvisející lety do jedné rezervace.
+                        </p>
+                        <p>
+                            Vypadá to jako jeden výlet, ale technicky jsou to dvě samostatné cesty. Musíte si v přestupním bodě vyzvednout kufr a znovu ho odbavit. A pokud první letadlo má zpoždění a druhé vám uletí? Aerolinka vám nepomůže. Spoléháte jen na "garanci" prodejce, která je často plná výjimek.
+                        </p>
+                    </div>
+
+                    <div className="mb-12 border-b border-slate-100 pb-12">
+                        <h2>5. Fantomové ceny (Cached prices)</h2>
+                        <p>
+                            Někdy je nízká cena jen iluze. Vyhledávače si ceny "pamatují" v mezipaměti (cache), aby vám výsledky zobrazily rychle.
+                        </p>
+                        <p>
+                            Když na levnou letenku kliknete, prodejce se teprve v tu chvíli zeptá aerolinky na aktuální stav. A zjistí, že ta levná místa už jsou pryč. Vám pak vyskočí hláška "Cena se změnila" a z 1 500 Kč je náhle 3 000 Kč. Není to vždy podvod, často jen technologické zpoždění dat.
+                        </p>
+                    </div>
+
                     <div className="bg-red-50 p-8 rounded-3xl border border-red-100 mb-12 not-prose">
                         <h2 className="text-2xl font-bold text-red-900 mb-4 flex items-center gap-2">
                             <ShieldAlert className="h-6 w-6 text-red-600" />
