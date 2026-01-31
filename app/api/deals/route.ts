@@ -33,9 +33,22 @@ export async function POST(req: Request) {
 
 
 
+        // Generate slug from title
+        const slug = title
+            .toString()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+
         const deal = await prisma.deal.create({
             data: {
                 title,
+                slug,
                 description: json.description || "", // Fix: Accept description from FE
                 price: parseFloat(price),
                 originalPrice: originalPrice ? parseFloat(originalPrice) : null,
