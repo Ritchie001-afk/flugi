@@ -10,6 +10,7 @@ async function seedSamplePackage() {
         const deal = await prisma.deal.create({
             data: {
                 title: "Luxusní dovolená v Dubaji - Hotel Atlantis The Palm 5*",
+                slug: "luxusni-dovolena-v-dubaji-hotel-atlantis-the-palm-5",
                 description: "Užijte si týden v jednom z nejikoničtějších hotelů světa. Cena zahrnuje letenku, transfery, ubytování a polopenzi. Aquapark v ceně!",
                 price: 34990,
                 originalPrice: 45000,
