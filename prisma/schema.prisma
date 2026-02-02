@@ -28,6 +28,8 @@ model Deal {
   
   startDate       DateTime?
   endDate         DateTime?
+  datePublished   DateTime? @default(now())
+  availableDates  String?   // Free text for additional dates
   type            String    @default("flight") // flight, hotel, package
   tags            String[]
   

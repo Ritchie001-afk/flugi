@@ -109,6 +109,11 @@ export default async function DealPage({ params }: DealPageProps) {
                                     paragraph.trim() && <p key={idx}>{paragraph}</p>
                                 ))}
                             </div>
+                            {deal.datePublished && (
+                                <div className="text-sm text-slate-400 mt-8 italic border-t pt-4">
+                                    Naposledy aktualizováno: {new Date(deal.datePublished).toLocaleDateString('cs-CZ')}
+                                </div>
+                            )}
                         </div>
 
                         {/* Amenities Grid - Hide for flights */}
@@ -226,6 +231,13 @@ export default async function DealPage({ params }: DealPageProps) {
                                         Rezervovat termín
                                     </Button>
                                 </a>
+
+                                {deal.availableDates && (
+                                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm text-slate-700 mb-6">
+                                        <div className="font-bold mb-1 text-slate-900">Další termíny:</div>
+                                        <div className="whitespace-pre-wrap">{deal.availableDates}</div>
+                                    </div>
+                                )}
 
                                 <div className="text-center text-xs text-slate-400 mb-6">
                                     {isFlight && (

@@ -22,6 +22,8 @@ export default function DealForm({ initialData }: DealFormProps) {
     const [isSearchingImage, setIsSearchingImage] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [type, setType] = useState(initialData?.type || 'flight');
+    const [datePublished, setDatePublished] = useState(initialData?.datePublished ? new Date(initialData.datePublished).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+    const [availableDates, setAvailableDates] = useState(initialData?.availableDates || '');
 
     // Reset state when initialData changes (e.g. clicking edit on different item)
     useEffect(() => {
@@ -173,6 +175,8 @@ export default function DealForm({ initialData }: DealFormProps) {
             });
             // Add state values explicitly
             data.images = images;
+            data.availableDates = availableDates;
+            data.datePublished = datePublished;
 
             let url = '/api/deals';
             let method = 'POST';
@@ -197,10 +201,10 @@ export default function DealForm({ initialData }: DealFormProps) {
                 // Reset form or redirect
                 router.refresh(); // Refresh in both cases (edit or create)
                 if (!initialData) {
-                    setDestination('');
-                    setDescription('');
                     setImage('');
                     setType('flight');
+                    setDatePublished(new Date().toISOString().split('T')[0]);
+                    setAvailableDates('');
                 }
             }
         } catch (e: any) {
@@ -380,6 +384,29 @@ export default function DealForm({ initialData }: DealFormProps) {
                         name="endDate"
                         type="date"
                         defaultValue={initialData?.endDate ? new Date(initialData.endDate).toISOString().split('T')[0] : ''}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Další termíny (text)</label>
+                    <textarea
+                        name="availableDates"
+                        value={availableDates}
+                        onChange={(e) => setAvailableDates(e.target.value)}
+                        placeholder="Např. 10.2. - 17.2., 5.3 - 12.3..."
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm h-[42px]"
+                    />
+                </div>
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Datum zveřejnění</label>
+                    <input
+                        name="datePublished"
+                        type="date"
+                        value={datePublished}
+                        onChange={(e) => setDatePublished(e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
                     />
                 </div>

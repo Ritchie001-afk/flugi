@@ -24,7 +24,8 @@ export async function POST(req: Request) {
             title, price, originalPrice, transferCount, baggageInfo,
             entryRequirements, airline, tags, startDate, endDate,
             destination, image, images, url, type, rating,
-            reviewCount, reviewSource, reviewUrl, featuredReviewAuthor, featuredReviewText
+            reviewCount, reviewSource, reviewUrl, featuredReviewAuthor, featuredReviewText,
+            availableDates, datePublished
         } = json;
 
         if (!title || !price || !destination || !url || !image) {
@@ -72,6 +73,8 @@ export async function POST(req: Request) {
                 weatherInfo: json.weatherInfo || null,
                 startDate: startDate ? new Date(startDate) : null,
                 endDate: endDate ? new Date(endDate) : null,
+                datePublished: datePublished ? new Date(datePublished) : new Date(),
+                availableDates: availableDates || null,
                 expiresAt: null,
             }
         });
