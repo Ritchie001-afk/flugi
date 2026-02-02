@@ -143,6 +143,11 @@ export default async function DealsPage(props: {
                                                     )}
                                                 </div>
                                             </div>
+                                            {deal.datePublished && (
+                                                <div className="text-[10px] text-slate-400 mb-2 -mt-1">
+                                                    Zveřejněno: {new Date(deal.datePublished).toLocaleDateString('cs-CZ')}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="mb-3 flex justify-center">
