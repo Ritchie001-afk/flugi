@@ -17,8 +17,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Flugi - Premium Travel Deals",
-  description: "Find the best flight and hotel deals with a premium experience.",
+  title: "Flugi - Exkluzivní letenky a dovolená",
+  description: "Najděte ty nejlepší letenky a pobyty s prémiovým zážitkem.",
 };
 
 import Navbar from "@/components/Navbar";
