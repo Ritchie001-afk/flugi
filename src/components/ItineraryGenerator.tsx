@@ -43,7 +43,7 @@ export function ItineraryGenerator({ destination, length = 7 }: ItineraryGenerat
     return (
         <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 shadow-sm border border-indigo-100">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-indigo-900 flex items-center gap-2">
+                <h2 className="text-2xl font-bold font-display text-indigo-900 flex items-center gap-2">
                     <Sparkles className="h-6 w-6 text-purple-600" />
                     AI Plánovač Cesty
                 </h2>
@@ -107,7 +107,16 @@ export function ItineraryGenerator({ destination, length = 7 }: ItineraryGenerat
             {itinerary && (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <div className="prose prose-indigo max-w-none bg-white p-6 rounded-xl border border-indigo-100 shadow-sm">
-                        <ReactMarkdown>{itinerary}</ReactMarkdown>
+                        <ReactMarkdown
+                            components={{
+                                h1: ({ node, ...props }) => <h1 className="font-display font-bold text-xl mb-4" {...props} />,
+                                h2: ({ node, ...props }) => <h2 className="font-display font-bold text-lg mb-3 mt-6 text-indigo-800" {...props} />,
+                                h3: ({ node, ...props }) => <h3 className="font-display font-bold text-md mb-2 mt-4" {...props} />,
+                                strong: ({ node, ...props }) => <strong className="font-bold text-indigo-900" {...props} />
+                            }}
+                        >
+                            {itinerary}
+                        </ReactMarkdown>
                     </div>
                     <div className="mt-6 text-center">
                         <Button variant="outline" onClick={() => setItinerary(null)} className="text-indigo-600 border-indigo-200 hover:bg-indigo-50">

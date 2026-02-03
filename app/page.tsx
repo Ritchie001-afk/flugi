@@ -125,7 +125,7 @@ export default async function Home() {
                       <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full mb-3">
                         {deal.type === 'package' ? 'Zájezd' : 'Letenka'}
                       </span>
-                      <h3 className="text-2xl font-bold text-white mb-2 line-clamp-2">{deal.title}</h3>
+                      <h3 className="text-2xl font-bold font-display text-white mb-2 line-clamp-2">{deal.title}</h3>
                       <p className="text-blue-100 mb-4">{deal.description && deal.description.substring(0, 30)}...</p>
                       <div className="flex items-center justify-between">
                         <div>

@@ -124,7 +124,7 @@ export default async function DealsPage(props: {
                                         {/* Content */}
                                         <div className="p-5 flex-1 flex flex-col">
                                             <div className="flex items-start justify-between mb-2">
-                                                <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                                <h3 className="text-lg font-bold font-display text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
                                                     {deal.title}
                                                 </h3>
                                                 <div className="text-right whitespace-nowrap ml-2">
