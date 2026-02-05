@@ -18,12 +18,7 @@ export default function GuidePage() {
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-slate-200 shadow-sm">
-                        <Button variant="secondary" size="sm" className="shadow-none">Vše</Button>
-                        <Button variant="ghost" size="sm" className="text-slate-500 hover:text-blue-600">Letiště</Button>
-                        <Button variant="ghost" size="sm" className="text-slate-500 hover:text-blue-600">Tipy</Button>
-                        <Button variant="ghost" size="sm" className="text-slate-500 hover:text-blue-600">Destinace</Button>
-                    </div>
+
                 </div>
 
                 {/* Featured Guide */}
