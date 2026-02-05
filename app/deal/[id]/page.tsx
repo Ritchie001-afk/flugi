@@ -3,7 +3,7 @@ import { Amenities } from '@/components/Amenities';
 import { Button } from '@/components/ui/Button';
 import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
-import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getRentalcarsUrl } from '@/lib/affiliates';
+import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getAgodaUrl, getRentalcarsUrl } from '@/lib/affiliates';
 import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket, ShieldCheck, Sun } from 'lucide-react';
 import { ShareButtons } from '@/components/ShareButtons';
 import Link from 'next/link';
@@ -358,14 +358,14 @@ export default async function DealPage({ params }: DealPageProps) {
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href={getAirbnbUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                            <a href={getAgodaUrl(destinationCity, deal.startDate, deal.endDate)} target="_blank" rel="noopener noreferrer" className="block group">
                                                 <div className="p-3 rounded-lg bg-rose-50 hover:bg-rose-100 transition-colors flex items-center gap-3">
                                                     <div className="p-2 bg-rose-500 rounded-lg text-white">
                                                         <Home className="h-4 w-4" />
                                                     </div>
                                                     <div>
-                                                        <h4 className="font-bold text-rose-900 text-sm group-hover:underline">{AFFILIATE_LINKS.airbnb.name}</h4>
-                                                        <p className="text-xs text-rose-700">{AFFILIATE_LINKS.airbnb.cta}</p>
+                                                        <h4 className="font-bold text-rose-900 text-sm group-hover:underline">{AFFILIATE_LINKS.agoda.name}</h4>
+                                                        <p className="text-xs text-rose-700">{AFFILIATE_LINKS.agoda.cta}</p>
                                                     </div>
                                                 </div>
                                             </a>

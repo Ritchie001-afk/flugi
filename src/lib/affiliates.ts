@@ -14,6 +14,13 @@ export const AFFILIATE_LINKS = {
         description: "Ubytujte se u místních a zažijte destinaci autenticky.",
         cta: "Najít ubytování"
     },
+    agoda: {
+        name: "Agoda",
+        baseUrl: "https://www.agoda.com/cs-cz/search",
+        logo: "/logos/agoda.png",
+        description: "Najděte si perfektní ubytování za nejlepší ceny.",
+        cta: "Najít ubytování"
+    },
     rentalcars: {
         name: "Rentalcars",
         baseUrl: "https://www.rentalcars.com",
@@ -32,6 +39,27 @@ export const getBookingUrl = (destination: string) => {
 export const getAirbnbUrl = (destination: string) => {
     const query = encodeURIComponent(destination);
     return `${AFFILIATE_LINKS.airbnb.baseUrl}/${query}/homes`;
+};
+
+export const getAgodaUrl = (destination: string, checkIn?: Date | string | null, checkOut?: Date | string | null) => {
+    const baseUrl = AFFILIATE_LINKS.agoda.baseUrl;
+    let url = `${baseUrl}?text=${encodeURIComponent(destination)}`;
+
+    if (checkIn) {
+        const checkInDate = typeof checkIn === 'string' ? new Date(checkIn) : checkIn;
+        if (!isNaN(checkInDate.getTime())) {
+            url += `&checkIn=${checkInDate.toISOString().split('T')[0]}`;
+        }
+    }
+
+    if (checkOut) {
+        const checkOutDate = typeof checkOut === 'string' ? new Date(checkOut) : checkOut;
+        if (!isNaN(checkOutDate.getTime())) {
+            url += `&checkOut=${checkOutDate.toISOString().split('T')[0]}`;
+        }
+    }
+
+    return url;
 };
 
 export const getRentalcarsUrl = (destination?: string | null) => {
