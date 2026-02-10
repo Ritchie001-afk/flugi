@@ -54,6 +54,11 @@ model Deal {
   // Aggregator Fields (Future proofing)
   provider        String?   // c.g. "Invia", "Fischer" (for XML feeds)
   externalId      String?   // ID from the XML feed
+  
+  // OG Image Fields
+  origin          String?   // e.g. "Praha (PRG)"
+  mealPlan        String?   // e.g. "All Inclusive"
+  hotel           String?   // e.g. "Hotel Riu"
 
   
   createdAt       DateTime  @default(now())

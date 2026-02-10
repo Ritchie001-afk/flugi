@@ -3,10 +3,14 @@ import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-
 export async function POST(req: Request) {
     try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            return NextResponse.json({ error: "Missing GEMINI_API_KEY" }, { status: 500 });
+        }
+        const genAI = new GoogleGenerativeAI(apiKey);
+
         const { type, destination, startDate, endDate } = await req.json();
 
         if (!destination) {

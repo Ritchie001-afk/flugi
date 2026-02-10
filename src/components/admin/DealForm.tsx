@@ -24,6 +24,7 @@ export default function DealForm({ initialData }: DealFormProps) {
     const [type, setType] = useState(initialData?.type || 'flight');
     const [datePublished, setDatePublished] = useState(initialData?.datePublished ? new Date(initialData.datePublished).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
     const [availableDates, setAvailableDates] = useState(initialData?.availableDates || '');
+    const [slug, setSlug] = useState(initialData?.slug || '');
 
     // Reset state when initialData changes (e.g. clicking edit on different item)
     useEffect(() => {
@@ -31,11 +32,13 @@ export default function DealForm({ initialData }: DealFormProps) {
             setDestination(initialData.destination);
             setDescription(initialData.description || '');
             setImage(initialData.image);
+            setSlug(initialData.slug || '');
         } else {
             // Reset form if no data (Create mode)
             setDestination('');
             setDescription('');
             setImage('');
+            setSlug('');
         }
     }, [initialData]);
 
@@ -177,25 +180,37 @@ export default function DealForm({ initialData }: DealFormProps) {
             data.images = images;
             data.availableDates = availableDates;
             data.datePublished = datePublished;
+            data.slug = slug; // Add slug to payload
 
             let url = '/api/deals';
             let method = 'POST';
 
             if (initialData) {
-                url = `/api/deals/${initialData.id}`;
-                method = 'PATCH';
+                // Use static update route to avoid dynamic route issues
+                url = `/api/admin/updates`;
+                method = 'POST'; // Always POST for this custom route
+                data.id = initialData.id;
             }
 
+            console.log(`Submitting to ${url} with method ${method}`);
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
-            const json = await res.json();
+            // Handle response safely
+            const text = await res.text();
+            let json;
+            try {
+                json = JSON.parse(text);
+            } catch (e) {
+                console.error("Failed to parse response:", text);
+                throw new Error(`Server returned invalid JSON response: ${text.substring(0, 50)}...`);
+            }
 
             if (!res.ok) {
-                alert(json.error || 'Chyba při ukládání.');
+                alert(json.error || `Chyba při ukládání (${res.status}).`);
             } else {
                 alert('Uloženo!');
                 // Reset form or redirect
@@ -205,6 +220,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                     setType('flight');
                     setDatePublished(new Date().toISOString().split('T')[0]);
                     setAvailableDates('');
+                    setSlug('');
                 }
             }
         } catch (e: any) {
@@ -235,6 +251,45 @@ export default function DealForm({ initialData }: DealFormProps) {
                     placeholder="např. Luxusní Dubaj 5*"
                     className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
                 />
+            </div>
+
+            <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">URL Slug (vynechte pro automatické generování)</label>
+                <input
+                    name="slug"
+                    value={slug}
+                    onChange={(e) => setSlug(e.target.value)}
+                    placeholder="dubaj-z-prahy-xyz1"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm font-mono text-slate-600"
+                />
+                <p className="text-[10px] text-slate-400 mt-1">Unikátní identifikátor v URL. Příklad: /deal/<b>dubaj-z-prahy-xyz1</b></p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Místo odletu</label>
+                    <input
+                        name="origin"
+                        defaultValue={initialData?.origin}
+                        placeholder="např. Praha (PRG)"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Místo odletu</label>
+                    <input
+                        name="origin"
+                        defaultValue={initialData?.origin}
+                        placeholder="např. Praha (PRG)"
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
+                    />
+                </div>
+                <div>
+                    {/* Placeholder for symmetry or another field */}
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -598,6 +653,32 @@ export default function DealForm({ initialData }: DealFormProps) {
                 </div>
             </div>
 
+            {/* Package Specific Fields */}
+            {
+                type === 'package' && (
+                    <div className="grid grid-cols-2 gap-4 bg-green-50 p-4 rounded-xl border border-green-100 mb-4">
+                        <div>
+                            <label className="block text-xs font-bold text-green-700 uppercase mb-1">Hotel</label>
+                            <input
+                                name="hotel"
+                                defaultValue={initialData?.hotel}
+                                placeholder="např. Hotel Riu 5*"
+                                className="w-full px-3 py-2 rounded-lg border border-green-200 focus:border-green-500 outline-none text-sm bg-white"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-green-700 uppercase mb-1">Strava</label>
+                            <input
+                                name="mealPlan"
+                                defaultValue={initialData?.mealPlan}
+                                placeholder="např. All Inclusive"
+                                className="w-full px-3 py-2 rounded-lg border border-green-200 focus:border-green-500 outline-none text-sm bg-white"
+                            />
+                        </div>
+                    </div>
+                )
+            }
+
             <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tagy (oddělené čárkou)</label>
                 <input
@@ -751,6 +832,6 @@ export default function DealForm({ initialData }: DealFormProps) {
                 <Save className="h-4 w-4 mr-2" />
                 {initialData ? 'Uložit změny' : 'Vytvořit deal'}
             </Button>
-        </form>
+        </form >
     );
 }

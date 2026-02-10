@@ -29,17 +29,17 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing destination" }, { status: 400 });
         }
 
-        if (!process.env.GEMINI_API_KEY) {
-            return NextResponse.json({ error: "Missing API Key" }, { status: 500 });
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            return NextResponse.json({ error: "Missing GEMINI_API_KEY" }, { status: 500 });
         }
 
-        // 1. Try Gemini 2.5 Flash Image (Nano Banana) as requested
         try {
-            console.log("Attempting Gemini 2.5 Flash Image (Nano Banana)...");
+            console.log("Attempting Gemini 3 Pro Image Preview...");
             const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography, national geographic style`;
 
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${process.env.GEMINI_API_KEY}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -53,50 +53,26 @@ export async function POST(req: Request) {
 
             if (response.ok) {
                 const data = await response.json();
-                // Check candidates for inline_data (image)
-                const part = data.candidates?.[0]?.content?.parts?.find((p: any) => p.inline_data || p.inlineData);
-
-                if (part) {
-                    const base64Image = part.inline_data?.data || part.inlineData?.data;
-                    if (base64Image) {
-                        const buffer = Buffer.from(base64Image, 'base64');
-                        const upload = await uploadBufferToCloudinary(buffer, 'flugi_ai_gemini_flash');
-                        if (upload.url) return NextResponse.json({ url: upload.url });
-                        if (upload.error) throw new Error(upload.error);
-                    }
+                // extraction
+                const part = data.candidates?.[0]?.content?.parts?.[0];
+                if (part && part.inlineData) {
+                    const base64Image = part.inlineData.data;
+                    const mimeType = part.inlineData.mimeType || 'image/jpeg';
+                    return NextResponse.json({ url: `data:${mimeType};base64,${base64Image}` });
                 }
+                // If no inlineData, maybe it returned text? or different structure?
+                console.log("Gemini Response Data:", JSON.stringify(data, null, 2));
+                throw new Error("No image data in response");
             } else {
-                console.warn("Gemini 2.5 Flash Image API failed status:", response.status);
+                const errorText = await response.text();
+                console.error("Gemini API Error:", errorText);
+                return NextResponse.json({ error: `Gemini API Error: ${response.status} - ${errorText}` }, { status: 500 });
             }
-        } catch (e) {
-            console.error("Gemini 2.5 Flash Image Attempt failed:", e);
-        }
-
-        // 2. Fallback: Pollinations Flux
-        try {
-            console.log("Using Fallback: Pollinations Flux (API Route)");
-            const seed = Math.floor(Math.random() * 1000);
-            // Enhanced prompt for travel
-            const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography, national geographic style, high detail`;
-
-            // "model=flux" is generally the best free option on Pollinations
-            const fluxUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&n=${seed}&width=1280&height=720`;
-
-            const res = await fetch(fluxUrl);
-            if (!res.ok) throw new Error(`Pollinations Flux failed with status: ${res.status}`);
-
-            const arrayBuffer = await res.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            const upload = await uploadBufferToCloudinary(buffer, 'flugi_ai_flux');
-
-            if (upload.url) return NextResponse.json({ url: upload.url });
-            return NextResponse.json({ error: upload.error || "Upload failed" }, { status: 500 });
 
         } catch (e: any) {
-            console.error("Image Gen Error:", e);
+            console.error("Gemini Image Gen Error:", e);
             return NextResponse.json({ error: `Image Gen Failed: ${e.message}` }, { status: 500 });
         }
-
     } catch (error: any) {
         console.error("AI Image Gen Route Error:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });

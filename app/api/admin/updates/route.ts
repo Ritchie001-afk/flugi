@@ -4,11 +4,17 @@ import prisma from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-// PATCH: Update deal
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(req: Request) {
+    console.log("POST /api/admin/updates HIT");
     try {
-        const { id } = await params;
         const json = await req.json();
+        console.log("Update Body:", json);
+
+        const { id, ...data } = json;
+
+        if (!id) {
+            return NextResponse.json({ error: "Missing deal ID" }, { status: 400 });
+        }
 
         // Destructure allowed update fields
         const {
@@ -17,16 +23,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
             destination, image, images, url, type, rating,
             reviewCount, reviewSource, reviewUrl, description,
             featuredReviewAuthor, featuredReviewText,
-            availableDates, datePublished
-        } = json;
+            availableDates, datePublished, origin, mealPlan, hotel,
+            slug
+        } = data;
 
         const updateData: any = {
             title, destination, image, url, type, baggageInfo, entryRequirements, airline, description,
             featuredReviewAuthor, featuredReviewText, availableDates,
-            reviewSource, reviewUrl,
+            reviewSource, reviewUrl, origin, mealPlan, hotel, slug,
             datePublished: datePublished ? new Date(datePublished) : undefined,
-            weatherInfo: json.weatherInfo,
-            images: images || undefined, // undefined prevents clearing if not sent, though usually we send full array
+            weatherInfo: data.weatherInfo,
+            images: images || undefined,
             tags: tags || undefined
         };
 
@@ -47,18 +54,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         return NextResponse.json({ success: true, deal });
     } catch (e: any) {
         console.error("API Update Error:", e);
-        return NextResponse.json({ error: e.message }, { status: 500 });
-    }
-}
-
-// DELETE: Delete deal (unchanged)
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-    try {
-        const { id } = await params;
-        await prisma.deal.delete({ where: { id } });
-        return NextResponse.json({ success: true });
-    } catch (e: any) {
-        console.error("API Delete Error:", e);
         return NextResponse.json({ error: e.message }, { status: 500 });
     }
 }

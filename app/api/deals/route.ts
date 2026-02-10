@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             entryRequirements, airline, tags, startDate, endDate,
             destination, image, images, url, type, rating,
             reviewCount, reviewSource, reviewUrl, featuredReviewAuthor, featuredReviewText,
-            availableDates, datePublished
+            availableDates, datePublished, origin, mealPlan, hotel
         } = json;
 
         if (!title || !price || !destination || !url || !image) {
@@ -35,16 +35,28 @@ export async function POST(req: Request) {
 
 
         // Generate slug from title
-        const slug = title
-            .toString()
+        // Generate slug from destination + origin + short suffix
+        // Format: dubaj-z-prahy-x9y2
+        const normalize = (str: string) => str
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
             .replace(/\s+/g, '-')
             .replace(/[^\w\-]+/g, '')
-            .replace(/\-\-+/g, '-')
-            .replace(/^-+/, '')
-            .replace(/-+$/, '');
+            .replace(/\-\-+/g, '-') // Replace multiple hyphens with single hyphen
+            .replace(/^-+/, '')     // Trim start
+            .replace(/-+$/, '');    // Trim end
+
+        const destSlug = normalize(destination.split(',')[0]); // Take first part of destination (e.g. "Dubaj")
+        const originSlug = origin ? normalize(origin.split(' ')[0]) : 'prahy'; // Default or extracted origin
+        const randomSuffix = Math.random().toString(36).substring(2, 6);
+
+        let slug = `${destSlug}-z-${originSlug}-${randomSuffix}`;
+
+        // Fallback if destination is missing/empty (unlikely based on check above)
+        if (!destSlug) {
+            slug = `${normalize(title)}-${randomSuffix}`;
+        }
 
         const deal = await prisma.deal.create({
             data: {
@@ -76,6 +88,9 @@ export async function POST(req: Request) {
                 datePublished: datePublished ? new Date(datePublished) : new Date(),
                 availableDates: availableDates || null,
                 expiresAt: null,
+                origin,
+                mealPlan,
+                hotel
             }
         });
 

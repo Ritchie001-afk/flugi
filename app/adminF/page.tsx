@@ -20,7 +20,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
 
     try {
         deals = await prisma.deal.findMany({
-            select: { id: true, title: true, price: true, destination: true },
+            select: { id: true, title: true, price: true, destination: true, slug: true },
             orderBy: { createdAt: 'desc' },
             take: 50
         });
@@ -104,6 +104,9 @@ export default async function AdminPage(props: { searchParams: Promise<{ edit?: 
                                     <div className="text-xs text-slate-500">
                                         {deal.destination || 'Neznámo'} • {deal.price ? `${deal.price} Kč` : 'Cena neuvedena'}
                                     </div>
+                                    <a href={`/deal/${deal.slug || deal.id}`} target="_blank" className="text-[10px] text-blue-500 hover:underline block mt-1">
+                                        /deal/{deal.slug || deal.id}
+                                    </a>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Link

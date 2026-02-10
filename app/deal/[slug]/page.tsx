@@ -1,3 +1,4 @@
+
 import { BentoGallery } from '@/components/BentoGallery';
 import { Amenities } from '@/components/Amenities';
 import { Button } from '@/components/ui/Button';
@@ -9,21 +10,40 @@ import { ShareButtons } from '@/components/ShareButtons';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
+import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
-// Imports needed for metadata
-import { Metadata } from 'next';
+
+// Helper to find deal by slug or ID
+async function getDeal(slugOrId: string) {
+    // Try finding by slug first
+    let deal = await prisma.deal.findUnique({
+        where: { slug: slugOrId },
+    });
+
+    // Fallback to ID if not found (and if it looks like a CUID/ID)
+    if (!deal) {
+        try {
+            deal = await prisma.deal.findUnique({
+                where: { id: slugOrId },
+            });
+        } catch (e) {
+            // Ignore error if slugOrId is not a valid CUID
+        }
+    }
+    return deal;
+}
 
 interface DealPageProps {
     params: Promise<{
-        id: string;
+        slug: string;
     }>;
 }
 
 export async function generateMetadata({ params }: DealPageProps): Promise<Metadata> {
     try {
-        const { id } = await params;
-        const deal = await prisma.deal.findUnique({ where: { id } });
+        const { slug } = await params;
+        const deal = await getDeal(slug);
 
         if (!deal) {
             return {
@@ -37,7 +57,14 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             openGraph: {
                 title: deal.title,
                 description: deal.description.substring(0, 160) + '...',
-                images: [deal.image],
+                images: [
+                    {
+                        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://flugi.cz'}/api/og?id=${deal.id}`,
+                        width: 1200,
+                        height: 630,
+                        alt: deal.title,
+                    }
+                ],
             },
         };
     } catch (e) {
@@ -49,18 +76,14 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 }
 
 export default async function DealPage({ params }: DealPageProps) {
-    const { id } = await params;
+    const { slug } = await params;
 
-    const deal = await prisma.deal.findUnique({
-        where: { id },
-    });
+    const deal = await getDeal(slug);
 
     if (!deal) {
         notFound();
     }
 
-    // Extract City for GYG and others (Prefer explicit field, then part after comma, then full string)
-    // Example: "Hotel X, Hurghada" -> "Hurghada"
     // Extract City for GYG and others (Prefer explicit field, then part after comma, then full string)
     // Example: "Hotel X, Hurghada" -> "Hurghada"
     const destinationCity = deal.destinationCity || (deal.destination.includes(',') ? deal.destination.split(',').pop()?.trim() : deal.destination) || '';

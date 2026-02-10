@@ -1,7 +1,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 // import { SearchSection } from "@/components/SearchSection";
 import { Search, ArrowRight, CheckCircle2, Globe, ShieldCheck } from "lucide-react";
 import prisma from "@/lib/db";
@@ -37,7 +38,8 @@ export default async function Home() {
         expiresAt: true,
         startDate: true,
         endDate: true,
-        datePublished: true
+        datePublished: true,
+        slug: true
       },
       orderBy: { createdAt: 'desc' }, // Latest deals first
       take: 6
@@ -95,7 +97,7 @@ export default async function Home() {
               </div>
             ) : (
               featuredDeals.map((deal: any) => (
-                <Link href={`/deal/${deal.id}`} key={deal.id} className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
+                <Link href={`/deal/${deal.slug || deal.id}`} key={deal.id} className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300">
                   {/* Image */}
                   <div className="absolute inset-0">
                     <Image
@@ -146,9 +148,9 @@ export default async function Home() {
                             </p>
                           )}
                         </div>
-                        <Button size="sm" variant="secondary" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "opacity-0 group-hover:opacity-100 transition-opacity")}>
                           Zobrazit
-                        </Button>
+                        </span>
                       </div>
                     </div>
                   </div>

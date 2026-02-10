@@ -52,7 +52,7 @@ export default async function ToursPage() {
                             return (
                                 <Link
                                     key={deal.id}
-                                    href={`/deal/${deal.id}`}
+                                    href={`/deal/${deal.slug || deal.id}`}
                                     className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col"
                                 >
                                     <div className="relative h-48 overflow-hidden">
