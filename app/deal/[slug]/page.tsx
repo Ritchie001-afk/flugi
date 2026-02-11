@@ -455,6 +455,22 @@ export default async function DealPage({ params }: DealPageProps) {
                     </div>
                 </div>
             </div>
-        </main >
+
+            {/* Debug: Direct OG Image Visualization */}
+            <div className="container mx-auto px-4 mt-12 pb-12 border-t border-slate-100 pt-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Náhled pro sociální sítě (Debug)</h3>
+                <div className="relative aspect-[1200/630] w-full max-w-2xl rounded-xl overflow-hidden shadow-lg border border-slate-200 bg-slate-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={`/api/og?id=${deal.id}`}
+                        alt="Facebook Preview"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+                <p className="text-sm text-slate-500 mt-2">
+                    Tento obrázek se generuje dynamicky. Pokud ho vidíte zde, funguje API.
+                </p>
+            </div>
+        </main>
     );
 }
