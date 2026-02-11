@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Search, MapPin, Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
+export const dynamic = 'force-dynamic';
+
 // Static content registry for search
 const STATIC_PAGES = [
     {
