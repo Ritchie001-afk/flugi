@@ -63,8 +63,9 @@ export async function GET(req: NextRequest) {
 
         // --- Font Loading ---
         // Need Montserrat Black (900) and Bold (700)
-        const fontBlack = await fetch(new URL('https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Black.ttf')).then(res => res.arrayBuffer());
-        const fontBold = await fetch(new URL('https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Bold.ttf')).then(res => res.arrayBuffer());
+        // Using force-cache to prevent timeouts for bots
+        const fontBlack = await fetch(new URL('https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Black.ttf'), { cache: 'force-cache' }).then(res => res.arrayBuffer());
+        const fontBold = await fetch(new URL('https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Bold.ttf'), { cache: 'force-cache' }).then(res => res.arrayBuffer());
 
         // --- Icons (SVG) ---
         // Using neutral colors for icons inside the white box
@@ -239,6 +240,9 @@ export async function GET(req: NextRequest) {
             {
                 width: 1200,
                 height: 630,
+                headers: {
+                    'Cache-Control': 'public, max-age=3600, immutable',
+                },
                 fonts: [
                     {
                         name: 'Montserrat',
