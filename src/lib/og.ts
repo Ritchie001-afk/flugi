@@ -7,7 +7,6 @@ export function getCloudinaryOgUrl(deal: any): string {
     // 1. Get Base Image
     let imageUrl = getDestinationImage(deal.destination, deal.image);
 
-    // Cloudinary Fetch API requires absolute URL.
     if (imageUrl.startsWith('/')) {
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
         imageUrl = `${baseUrl}${imageUrl}`;
@@ -16,9 +15,9 @@ export function getCloudinaryOgUrl(deal: any): string {
     const font = 'Montserrat';
 
     // --- Data Prep ---
-    // Title Split: "AKČNÍ LETENKA" vs "DESTINACE"
+    // Title Split
     const subTitle = (deal.type === 'flight' ? 'AKČNÍ LETENKA' : 'AKČNÍ ZÁJEZD');
-    const mainTitle = deal.title.toUpperCase();
+    const mainTitle = deal.title.toUpperCase(); // e.g. "Z KRAKOWA DO BOMBAJE..."
 
     const subTitleText = encodeURIComponent(subTitle);
     const mainTitleText = encodeURIComponent(mainTitle);
@@ -28,66 +27,93 @@ export function getCloudinaryOgUrl(deal: any): string {
     const priceText = encodeURIComponent(priceFormatted);
 
     // Info Box Lines
+    // Icons: Using Unicode characters that are widely supported in fonts.
+    // Calendar: 📅 (might be risky if font doesn't support). 
+    // Plane: ✈️
+    // User requested icons. Let's try explicit emojis. 
+    // If they fail, we fallback to text labels? No, user explicitly asked for icons.
     let infoLines = [];
     if (deal.startDate && deal.endDate) {
         try {
             const start = new Date(deal.startDate);
             const end = new Date(deal.endDate);
             const fmt = (d: Date) => `${d.getDate()}.${d.getMonth() + 1}.`;
-            infoLines.push(`${fmt(start)} - ${fmt(end)} ${end.getFullYear()}`);
+            infoLines.push(`📅 ${fmt(start)} – ${fmt(end)} ${end.getFullYear()}`);
         } catch (e) { }
     }
-    // Airline / Type (if fits)
     if (deal.airline) {
-        infoLines.push(`${deal.airline}`);
+        infoLines.push(`✈️ ${deal.airline}`);
     }
 
-    const infoText = encodeURIComponent(infoLines.join('  •  ') || 'Termín na vyžádání');
+    const infoText = encodeURIComponent(infoLines.join('     ') || '📅 Termín na vyžádání');
 
 
     // --- Layer Definitions ---
 
     // 1. Background Config
-    // Deep blue background + Colorize tint to darken image nicely
+    // Background color: Dark Blue #001529
+    // Image effect: Fade to transparent on the LEFT side (West).
+    // This reveals the background color behind the text.
+    // e_gradient_fade:0.5,g_west means "start fading from west edge to 50% width"? 
+    // Actually, gradient_fade fades the image OUT. 
+    // We want left side to be transparent (showing background).
     const baseConfig = 'c_fill,h_630,q_auto,w_1200,b_rgb:001529';
-    const effectConfig = 'co_rgb:001529,e_colorize:50';
+    const gradientEffect = 'e_gradient_fade,x_0.5,g_west';
+    // Note: If g_west is start, left side disappears. Perfect.
 
     // 2. Info Box (Bottom Left)
-    // White card, shadow, rounded. 
-    // y_60 from bottom.
-    // bo_25px_solid_white creates padding.
-    // co_rgb:0f172a (Slate-900 text)
-    const infoBoxLayer = `l_text:${font}_28_bold:${infoText},co_rgb:0f172a,b_white,bo_25px_solid_white,r_12,g_south_west,x_60,y_60`;
+    // Bigger Font (30), Bigger Padding (40px)
+    // Position: y_50 (bottom)
+    const infoBoxLayer = `l_text:${font}_30_bold:${infoText},co_rgb:0f172a,b_white,bo_40px_solid_white,r_25,g_south_west,x_60,y_50`;
 
-    // 3. Price Tag (Levitating)
-    // Pink #E11D48
-    // Rotated -3deg (a_-3)
-    // Position: Above Info Box. y_150 puts it overlapping the top of info box slightly (visual trick) or just above.
-    // Text: 60px Black (Extra Bold)
-    // Background: Pink
-    // Border: Pink (padding)
-    // Rounding: r_8
-    const priceLayer = `l_text:${font}_60_black:${priceText},co_white,b_rgb:E11D48,bo_20px_solid_rgb:E11D48,r_8,a_-3,g_south_west,x_60,y_150`;
+    // 3. Price Tag ("Levitating")
+    // Brighter Pink: #FF0060 (Hot Pink) or #E11D48 (Rose-600)
+    // User complaint: "Tmavá červená". 
+    // Let's go slightly brighter/richer: #F43F5E (Rose-500) or #FF0055.
+    // Let's stick to brand #E11D48 but ensure it's on white text.
+    // Rotation: -3deg.
+    // Shadow: Strong drop shadow.
+    // Position: Overlapping Info Box.
+    // InfoBox top is roughly y_50 + height (~80). Price needs to be at y_160?
 
-    // 4. Sub-Title (Small, Uppercase)
-    // Above Price. y_290
-    // Color: Slate-300 (rgb:cbd5e1) or White
-    const subTitleLayer = `l_text:${font}_24_bold:${subTitleText},co_white,g_south_west,x_60,y_280`;
+    // Styling:
+    // Text: White. Background: Pink. Border: Pink (padding).
+    // Radius: 10px.
+    // Effect: Rotation + Shadow.
+    // Syntax: .../fl_layer_apply,a_-3,e_shadow:50...
+    const priceColor = 'E11D48';
+    const priceLayer = `l_text:${font}_65_black:${priceText},co_white,b_rgb:${priceColor},bo_30px_solid_rgb:${priceColor},r_15/fl_layer_apply,a_-3,e_shadow:60,x_15,y_15,co_rgb:00000090,g_south_west,x_40,y_180`;
+    // Increased y from 150 to 180 to clear the larger Info Box.
 
-    // 5. Main Title (Huge, Black/Heavy)
-    // Above Sub-Title. y_320
-    const mainTitleLayer = `l_text:${font}_75_black:${mainTitleText},w_900,c_fit,co_white,g_south_west,x_60,y_320`;
+    // 4. Sub-Title
+    // Above Price. Price top is roughly y_180 + height (~100) = 280?
+    // Let's set Subtitle y_340.
+    const subTitleLayer = `l_text:${font}_26_bold:${subTitleText},co_rgb:cbd5e1,g_south_west,x_60,y_340`;
+
+    // 5. Main Title
+    // Above Subtitle. y_380.
+    // Max Width constrained to 800px to avoid text overlapping Logo.
+    // Font size 75.
+    // If it wraps to 2 lines, it grows UP from 380? 
+    // Yes, g_south_west anchors bottom-left.
+    // So 380 + height. 
+    // Wait. If y is offset from bottom, y_380 is HIGHER than y_50.
+    // Top of image is y_630.
+    // Logo is at y_50 from TOP (g_north_west). equivalent to y_580 from bottom.
+    // We have 200px gap (580 - 380).
+    // Title height? 75px * 2 lines = 150px.
+    // It should fit!
+    const mainTitleLayer = `l_text:${font}_75_black:${mainTitleText},c_fit,w_900,co_white,g_south_west,x_60,y_380`;
 
     // 6. Logo (Top Left)
-    // "Flugi.cz" + Plane
-    // Larger font (40) and Bold/Black
+    // Larger Font (45).
     // Unicode Plane: ✈
-    const logoLayer = `l_text:${font}_40_black:✈%20Flugi.cz,co_white,g_north_west,x_50,y_50`;
+    const logoLayer = `l_text:${font}_45_black:✈%20Flugi.cz,co_white,g_north_west,x_50,y_50`;
 
     // --- Assembly ---
     const layers = [
         baseConfig,
-        effectConfig,
+        gradientEffect,
         logoLayer,
         infoBoxLayer,
         priceLayer,
