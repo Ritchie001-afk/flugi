@@ -11,13 +11,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
 import { Metadata } from 'next';
-import { getCloudinaryOgUrl } from '@/lib/og';
 
 export const dynamic = 'force-dynamic';
 
 // Helper to find deal by slug or ID
 async function getDeal(slugOrId: string) {
-    // Try finding by slug first
     // Try finding by slug first
     let deal = null;
     try {
@@ -127,7 +125,9 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
         const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
-        const ogImageUrl = getCloudinaryOgUrl(deal);
+        // Use the new API Route (Master Design)
+        // Pass ID to let the API fetch details from DB (Single Source of Truth)
+        const ogImageUrl = `${baseUrl}/api/og?id=${deal.id}`;
 
         return {
             title: `${deal.title} | Flugi`,
