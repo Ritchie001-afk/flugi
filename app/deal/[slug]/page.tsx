@@ -161,8 +161,11 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
     } catch (e: any) {
         console.error("Metadata generation error:", e);
         return {
-            title: `Error: ${e.message}`, // Expose error to user/admin for debugging
-            description: 'Critical error generating metadata',
+            title: `Flugi.cz | Akční letenky a zájezdy`,
+            description: 'Objevte nejlepší akční letenky a zájezdy na Flugi.cz.',
+            openGraph: {
+                images: [{ url: 'https://www.flugi.cz/og-fallback.jpg' }] // Ensure we always have an image
+            }
         };
     }
 }
