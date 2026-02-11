@@ -8,7 +8,9 @@ interface AmenitiesProps {
 }
 
 export function Amenities({ text, tags, type, variant = 'default' }: AmenitiesProps) {
-    const fullText = (text + ' ' + tags.join(' ')).toLowerCase();
+    const safeTags = Array.isArray(tags) ? tags : [];
+    const safeText = text || '';
+    const fullText = (safeText + ' ' + safeTags.join(' ')).toLowerCase();
 
     // Configuration of possible amenities
     const config = [
