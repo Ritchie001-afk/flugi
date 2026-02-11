@@ -17,13 +17,30 @@ export async function GET(req: NextRequest) {
 
         const deal = await prisma.deal.findUnique({
             where: { id },
+            select: {
+                title: true,
+                price: true,
+                image: true,
+                destination: true,
+                airline: true,
+                type: true,
+                startDate: true,
+                endDate: true,
+                // Temporarily disable new columns to prevent crash if DB is not synced
+                // origin: true,
+                // hotel: true,
+                // mealPlan: true,
+            }
         });
 
         if (!deal) {
             return new Response('Not found', { status: 404 });
         }
 
-        const { title, price, image: rawImage, destination, airline, hotel, mealPlan, origin, type, startDate, endDate } = deal;
+        const { title, price, image: rawImage, destination, airline, type, startDate, endDate } = deal as any;
+        const origin = undefined; // Fallback
+        const hotel = undefined;
+        const mealPlan = undefined;
 
         // Resolve Image URL (Handle nulls, destination mapping, etc.)
         let image = getDestinationImage(destination, rawImage);
