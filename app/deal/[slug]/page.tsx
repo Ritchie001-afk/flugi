@@ -17,9 +17,16 @@ export const dynamic = 'force-dynamic';
 // Helper to find deal by slug or ID
 async function getDeal(slugOrId: string) {
     // Try finding by slug first
-    let deal = await prisma.deal.findUnique({
-        where: { slug: slugOrId },
-    });
+    // Try finding by slug first
+    let deal = null;
+    try {
+        deal = await prisma.deal.findUnique({
+            where: { slug: slugOrId },
+        });
+    } catch (error) {
+        console.error("Error fetching deal by slug:", error);
+        // Continue to try by ID
+    }
 
     // Fallback to ID if not found (and if it looks like a CUID/ID)
     if (!deal) {
