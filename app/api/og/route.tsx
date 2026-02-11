@@ -257,7 +257,12 @@ export async function GET(req: NextRequest) {
         );
 
     } catch (e: any) {
-        console.error(e);
-        return new Response('Error generating image', { status: 500 });
+        console.error('OG API Error:', e);
+        return new Response(`Error generating image: ${e.message}\nStack: ${e.stack}`, {
+            status: 500,
+            headers: {
+                'Content-Type': 'text/plain',
+            }
+        });
     }
 }
