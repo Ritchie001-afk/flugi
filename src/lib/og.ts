@@ -38,6 +38,7 @@ export function getCloudinaryOgUrl(deal: any): string {
     const strictMainTitle = deal.title.toUpperCase();
 
     const priceFormatted = new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(deal.price);
+    const priceText = encodeURIComponent(priceFormatted);
 
     // Info Box Content
     // We need separate lines for the "List" look.
