@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
 import { Metadata } from 'next';
+import { getCloudinaryOgUrl } from '@/lib/og';
 
 export const dynamic = 'force-dynamic';
 
@@ -126,6 +127,8 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
         const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
+        const ogImageUrl = getCloudinaryOgUrl(deal);
+
         return {
             title: `${deal.title} | Flugi`,
             description: safeDescription,
@@ -138,7 +141,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
                 type: 'website',
                 images: [
                     {
-                        url: `${baseUrl}/api/og?id=${deal.id}`,
+                        url: ogImageUrl,
                         width: 1200,
                         height: 630,
                         alt: deal.title,
@@ -152,7 +155,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
                 card: 'summary_large_image',
                 title: deal.title,
                 description: safeDescription,
-                images: [`${baseUrl}/api/og?id=${deal.id}`],
+                images: [ogImageUrl],
             },
         };
     } catch (e: any) {
