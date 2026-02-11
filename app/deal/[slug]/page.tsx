@@ -22,6 +22,38 @@ async function getDeal(slugOrId: string) {
     try {
         deal = await prisma.deal.findUnique({
             where: { slug: slugOrId },
+            select: {
+                id: true,
+                slug: true,
+                title: true,
+                description: true,
+                price: true,
+                image: true,
+                images: true,
+                destination: true,
+                destinationCity: true,
+                airline: true,
+                type: true,
+                startDate: true,
+                endDate: true,
+                datePublished: true,
+                tags: true,
+                reviewUrl: true,
+                reviewSource: true,
+                rating: true,
+                url: true,
+                availableDates: true,
+                transferCount: true,
+                baggageInfo: true,
+                weatherInfo: true,
+                entryRequirements: true,
+                isFlashDeal: true,
+                createdAt: true,
+                // Temporarily disable new columns
+                // origin: true,
+                // hotel: true,
+                // mealPlan: true,
+            }
         });
     } catch (error) {
         console.error("Error fetching deal by slug:", error);
@@ -33,6 +65,38 @@ async function getDeal(slugOrId: string) {
         try {
             deal = await prisma.deal.findUnique({
                 where: { id: slugOrId },
+                select: {
+                    id: true,
+                    slug: true,
+                    title: true,
+                    description: true,
+                    price: true,
+                    image: true,
+                    images: true,
+                    destination: true,
+                    destinationCity: true,
+                    airline: true,
+                    type: true,
+                    startDate: true,
+                    endDate: true,
+                    datePublished: true,
+                    tags: true,
+                    reviewUrl: true,
+                    reviewSource: true,
+                    rating: true,
+                    url: true,
+                    availableDates: true,
+                    transferCount: true,
+                    baggageInfo: true,
+                    weatherInfo: true,
+                    entryRequirements: true,
+                    isFlashDeal: true,
+                    createdAt: true,
+                    // Temporarily disable new columns
+                    // origin: true,
+                    // hotel: true,
+                    // mealPlan: true,
+                }
             });
         } catch (e) {
             // Ignore error if slugOrId is not a valid CUID
