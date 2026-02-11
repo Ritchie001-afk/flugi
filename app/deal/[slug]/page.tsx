@@ -124,12 +124,14 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
 
+        const safeDescription = (deal.description || '').substring(0, 160) + '...';
+
         return {
             title: `${deal.title} | Flugi`,
-            description: deal.description.substring(0, 160) + '...',
+            description: safeDescription,
             openGraph: {
                 title: deal.title,
-                description: deal.description.substring(0, 160) + '...',
+                description: safeDescription,
                 url: `${baseUrl}/deal/${slug}`,
                 siteName: 'Flugi.cz',
                 locale: 'cs_CZ',
@@ -149,14 +151,15 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             twitter: {
                 card: 'summary_large_image',
                 title: deal.title,
-                description: deal.description.substring(0, 160) + '...',
+                description: safeDescription,
                 images: [`${baseUrl}/api/og?id=${deal.id}`],
             },
         };
-    } catch (e) {
+    } catch (e: any) {
         console.error("Metadata generation error:", e);
         return {
-            title: 'Flugi Deal',
+            title: `Error: ${e.message}`, // Expose error to user/admin for debugging
+            description: 'Critical error generating metadata',
         };
     }
 }
