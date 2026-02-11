@@ -7,7 +7,36 @@ export function getCloudinaryOgUrl(deal: any): string {
     // 1. Get Base Image
     let imageUrl = getDestinationImage(deal.destination, deal.image);
 
-    if (imageUrl.startsWith('/')) {
+    // Check if it is a Cloudinary URL from the same cloud
+    // Pattern: https://res.cloudinary.com/<cloudName>/image/upload/v<version>/<publicId>.<ext>
+    // or without version.
+
+    let isNative = false;
+    let publicId = '';
+
+    if (imageUrl.includes(`res.cloudinary.com/${cloudName}/image/upload/`)) {
+        // Extract Public ID (everything after 'upload/' and potential version)
+        try {
+            const parts = imageUrl.split('/upload/');
+            if (parts.length > 1) {
+                let suffix = parts[1];
+                // Remove version if present (v123456789/)
+                if (suffix.startsWith('v')) {
+                    const slashIndex = suffix.indexOf('/');
+                    if (slashIndex > -1) {
+                        suffix = suffix.substring(slashIndex + 1);
+                    }
+                }
+                publicId = suffix;
+                isNative = true;
+            }
+        } catch (e) {
+            // fallback to fetch
+            isNative = false;
+        }
+    }
+
+    if (!isNative && imageUrl.startsWith('/')) {
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
         imageUrl = `${baseUrl}${imageUrl}`;
     }
@@ -15,9 +44,8 @@ export function getCloudinaryOgUrl(deal: any): string {
     const font = 'Montserrat';
 
     // --- Data Prep ---
-    // Title Split
     const subTitle = (deal.type === 'flight' ? 'AKČNÍ LETENKA' : 'AKČNÍ ZÁJEZD');
-    const mainTitle = deal.title.toUpperCase(); // e.g. "Z KRAKOWA DO BOMBAJE..."
+    const mainTitle = deal.title.toUpperCase();
 
     const subTitleText = encodeURIComponent(subTitle);
     const mainTitleText = encodeURIComponent(mainTitle);
@@ -27,11 +55,6 @@ export function getCloudinaryOgUrl(deal: any): string {
     const priceText = encodeURIComponent(priceFormatted);
 
     // Info Box Lines
-    // Icons: Using Unicode characters that are widely supported in fonts.
-    // Calendar: 📅 (might be risky if font doesn't support). 
-    // Plane: ✈️
-    // User requested icons. Let's try explicit emojis. 
-    // If they fail, we fallback to text labels? No, user explicitly asked for icons.
     let infoLines = [];
     if (deal.startDate && deal.endDate) {
         try {
@@ -50,64 +73,27 @@ export function getCloudinaryOgUrl(deal: any): string {
 
     // --- Layer Definitions ---
 
-    // 1. Background Config
-    // Background color: Dark Blue #001529
-    // Image effect: Fade to transparent on the LEFT side (West).
-    // This reveals the background color behind the text.
-    // e_gradient_fade:0.5,g_west means "start fading from west edge to 50% width"? 
-    // Actually, gradient_fade fades the image OUT. 
-    // We want left side to be transparent (showing background).
+    // 1. Background & Gradient
     const baseConfig = 'c_fill,h_630,q_auto,w_1200,b_rgb:001529';
     const gradientEffect = 'e_gradient_fade,x_0.5,g_west';
-    // Note: If g_west is start, left side disappears. Perfect.
 
-    // 2. Info Box (Bottom Left)
-    // Bigger Font (30), Bigger Padding (40px)
-    // Position: y_50 (bottom)
+    // 2. Info Box
     const infoBoxLayer = `l_text:${font}_30_bold:${infoText},co_rgb:0f172a,b_white,bo_40px_solid_white,r_25,g_south_west,x_60,y_50`;
 
-    // 3. Price Tag ("Levitating")
-    // Brighter Pink: #FF0060 (Hot Pink) or #E11D48 (Rose-600)
-    // User complaint: "Tmavá červená". 
-    // Let's go slightly brighter/richer: #F43F5E (Rose-500) or #FF0055.
-    // Let's stick to brand #E11D48 but ensure it's on white text.
-    // Rotation: -3deg.
-    // Shadow: Strong drop shadow.
-    // Position: Overlapping Info Box.
-    // InfoBox top is roughly y_50 + height (~80). Price needs to be at y_160?
-
-    // Styling:
-    // Text: White. Background: Pink. Border: Pink (padding).
-    // Radius: 10px.
-    // Effect: Rotation + Shadow.
-    // Syntax: .../fl_layer_apply,a_-3,e_shadow:50...
+    // 3. Price Tag
+    // Fixed Shadow Color (removed alpha 90) -> co_black
+    // Pink: #E11D48
     const priceColor = 'E11D48';
-    const priceLayer = `l_text:${font}_65_black:${priceText},co_white,b_rgb:${priceColor},bo_30px_solid_rgb:${priceColor},r_15/fl_layer_apply,a_-3,e_shadow:60,x_15,y_15,co_rgb:00000090,g_south_west,x_40,y_180`;
-    // Increased y from 150 to 180 to clear the larger Info Box.
+    const priceLayer = `l_text:${font}_65_black:${priceText},co_white,b_rgb:${priceColor},bo_30px_solid_rgb:${priceColor},r_15/fl_layer_apply,a_-3,e_shadow:60,x_15,y_15,co_black,g_south_west,x_40,y_180`;
 
     // 4. Sub-Title
-    // Above Price. Price top is roughly y_180 + height (~100) = 280?
-    // Let's set Subtitle y_340.
     const subTitleLayer = `l_text:${font}_26_bold:${subTitleText},co_rgb:cbd5e1,g_south_west,x_60,y_340`;
 
     // 5. Main Title
-    // Above Subtitle. y_380.
-    // Max Width constrained to 800px to avoid text overlapping Logo.
-    // Font size 75.
-    // If it wraps to 2 lines, it grows UP from 380? 
-    // Yes, g_south_west anchors bottom-left.
-    // So 380 + height. 
-    // Wait. If y is offset from bottom, y_380 is HIGHER than y_50.
-    // Top of image is y_630.
-    // Logo is at y_50 from TOP (g_north_west). equivalent to y_580 from bottom.
-    // We have 200px gap (580 - 380).
-    // Title height? 75px * 2 lines = 150px.
-    // It should fit!
+    // Constrained width to prevent logo overlap
     const mainTitleLayer = `l_text:${font}_75_black:${mainTitleText},c_fit,w_900,co_white,g_south_west,x_60,y_380`;
 
-    // 6. Logo (Top Left)
-    // Larger Font (45).
-    // Unicode Plane: ✈
+    // 6. Logo
     const logoLayer = `l_text:${font}_45_black:✈%20Flugi.cz,co_white,g_north_west,x_50,y_50`;
 
     // --- Assembly ---
@@ -121,5 +107,10 @@ export function getCloudinaryOgUrl(deal: any): string {
         mainTitleLayer
     ].filter(Boolean).join('/');
 
-    return `https://res.cloudinary.com/${cloudName}/image/fetch/${layers}/${imageUrl}`;
+    // Return Native or Fetch URL
+    if (isNative) {
+        return `https://res.cloudinary.com/${cloudName}/image/upload/${layers}/${publicId}`;
+    } else {
+        return `https://res.cloudinary.com/${cloudName}/image/fetch/${layers}/${imageUrl}`;
+    }
 }
