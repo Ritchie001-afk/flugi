@@ -128,6 +128,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
         // Use the new API Route (Master Design)
         // Pass ID to let the API fetch details from DB (Single Source of Truth)
         const ogImageUrl = `${baseUrl}/api/og?id=${deal.id}`;
+        const fallbackOgUrl = `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=`;
 
         return {
             title: `${deal.title} | Flugi`,
@@ -145,6 +146,12 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
                         width: 1200,
                         height: 630,
                         alt: deal.title,
+                    },
+                    {
+                        url: fallbackOgUrl,
+                        width: 1200,
+                        height: 630,
+                        alt: 'Flugi.cz',
                     }
                 ],
             },
@@ -160,11 +167,12 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
         };
     } catch (e: any) {
         console.error("Metadata generation error:", e);
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
         return {
             title: `Flugi.cz | Akční letenky a zájezdy`,
             description: 'Objevte nejlepší akční letenky a zájezdy na Flugi.cz.',
             openGraph: {
-                images: [{ url: 'https://www.flugi.cz/og-fallback.jpg' }] // Ensure we always have an image
+                images: [{ url: `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=` }]
             }
         };
     }
