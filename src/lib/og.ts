@@ -15,44 +15,70 @@ export function getCloudinaryOgUrl(deal: any): string {
     }
 
     // 2. Prepare Text Overlays
-    // Cloudinary text styles: font_size_style...
-    // We use standard fonts available in Cloudinary (Montserrat is usually available, if not, fallback to Arial/Roboto)
     const font = 'Montserrat';
 
-    // Title: Upper case, bold
+    // Title
     const titleText = encodeURIComponent(deal.title.toUpperCase());
 
-    // Price: e.g. "12 990 Kč"
-    // Format price with spaces? deal.price is number.
+    // Price
     const priceFormatted = new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(deal.price);
     const priceText = encodeURIComponent(priceFormatted);
 
-    // 3. Construct URL parts
-    // Base Transformations: 1200x630, fill, quality auto
-    const baseConfig = 'c_fill,h_630,q_auto,w_1200';
+    // Info Box Content
+    let infoLines = [];
 
-    // Blue Tint Overlay (Simulates brand color overlay)
-    // co_rgb:0041A0,e_colorize:40 means 40% strength blue tint
+    // Date Range
+    if (deal.startDate && deal.endDate) {
+        try {
+            const start = new Date(deal.startDate);
+            const end = new Date(deal.endDate);
+            const fmt = (d: Date) => `${d.getDate()}.${d.getMonth() + 1}.`;
+            infoLines.push(`Termín: ${fmt(start)} - ${fmt(end)} ${end.getFullYear()}`);
+        } catch (e) { }
+    }
+
+    // Airline / Type
+    if (deal.airline) {
+        infoLines.push(`Aerolinka: ${deal.airline}`);
+    } else if (deal.type === 'flight') {
+        infoLines.push('Typ: Letenka');
+    } else {
+        infoLines.push('Typ: Zájezd');
+    }
+
+    const infoText = encodeURIComponent(infoLines.join('\n'));
+
+    // 3. Construct URL parts
+    const baseConfig = 'c_fill,h_630,q_auto,w_1200';
     const colorOverlay = 'co_rgb:0041A0,e_colorize:40';
 
+    // Layout Calculation (Bottom-Up)
+    // Bottom padding: 50px
+    // Info Box: ~100px -> y_50
+    const infoY = 50;
+
+    // Price: Above Info Box -> y_180 (allowing space for box height)
+    const priceY = 180;
+
+    // Title: Above Price -> y_280
+    const titleY = 280;
+
+    // Info Box Layer
+    // White background, black text, rounded corners, padding via border
+    const infoLayer = infoText ? `l_text:${font}_26_bold:${infoText},co_rgb:1e293b,b_white,bo_25px_solid_white,r_16,g_south_west,x_60,y_${infoY},w_500,c_fit` : '';
+
+    // Price Layer (Pink Tag)
+    const priceLayer = `l_text:${font}_50_bold:${priceText},co_white,b_rgb:E11D48,bo_15px_solid_rgb:E11D48,g_south_west,x_60,y_${priceY},r_16`;
+
     // Title Layer
-    // White text, bottom left, width 800px limit (crop/fit), offset x60 y160
-    // l_text:<font>_<size>_bold:<text>
-    const titleLayer = `l_text:${font}_60_bold:${titleText},c_fit,w_1000,co_white,g_south_west,x_60,y_180`;
+    const titleLayer = `l_text:${font}_60_bold:${titleText},c_fit,w_1000,co_white,g_south_west,x_60,y_${titleY}`;
 
-    // Price Layer (Pink Tag Simulation)
-    // We use a text layer with background color to simulate the tag.
-    // bg_rgb:E11D48 (Pink)
-    // bo_15px_solid_rgb:E11D48 (Border to create padding)
-    const priceLayer = `l_text:${font}_50_bold:${priceText},co_white,b_rgb:E11D48,bo_15px_solid_rgb:E11D48,g_south_west,x_60,y_80,r_10`;
-    // r_10 adds rounded corners to the background box!
-
-    // Flugi Logo? 
-    // We can add text "Flugi.cz" top left?
-    const logoLayer = `l_text:${font}_40_bold:Flugi.cz ✈️,co_white,g_north_west,x_60,y_60`;
+    // Logo Layer (Top Left)
+    const logoLayer = `l_text:${font}_35_bold:Flugi.cz ✈️,co_white,g_north_west,x_60,y_60`;
 
     // 4. Assemble Final URL
-    // Format: https://res.cloudinary.com/<cloud_name>/image/fetch/<transforms>/<url>
+    // Filter out empty layers
+    const layers = [baseConfig, colorOverlay, titleLayer, priceLayer, infoLayer, logoLayer].filter(Boolean).join('/');
 
-    return `https://res.cloudinary.com/${cloudName}/image/fetch/${baseConfig}/${colorOverlay}/${titleLayer}/${priceLayer}/${logoLayer}/${imageUrl}`;
+    return `https://res.cloudinary.com/${cloudName}/image/fetch/${layers}/${imageUrl}`;
 }
