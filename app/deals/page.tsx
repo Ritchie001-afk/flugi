@@ -47,13 +47,20 @@ export default async function DealsPage(props: {
         where.tags = { hasSome: tags };
     }
 
-    const deals = await prisma.deal.findMany({
-        where,
-        orderBy: [
-            { isFlashDeal: 'desc' },
-            { createdAt: 'desc' }
-        ]
-    });
+    let deals: any[] = [];
+    try {
+        deals = await prisma.deal.findMany({
+            where,
+            orderBy: [
+                { isFlashDeal: 'desc' },
+                { createdAt: 'desc' }
+            ]
+        });
+    } catch (error) {
+        console.error("Error fetching deals:", error);
+        // Fallback to empty array to prevent crash
+        deals = [];
+    }
 
     return (
         <div className="flex flex-col min-h-screen bg-slate-50 pt-24 pb-24">

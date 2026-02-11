@@ -47,8 +47,8 @@ const DESTINATION_IMAGES: Record<string, string> = {
     'caumasee': '/images/lakes/caumasee.png',
 };
 
-export function getDestinationImage(destination: string, fallbackImage?: string): string {
-    if (!destination) return fallbackImage || '';
+export function getDestinationImage(destination: string | null | undefined, fallbackImage?: string | null): string {
+    if (!destination || typeof destination !== 'string') return fallbackImage || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1421&auto=format&fit=crop';
 
     const normalized = destination.toLowerCase().trim();
 
