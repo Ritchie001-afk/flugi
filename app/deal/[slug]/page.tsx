@@ -115,19 +115,27 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
         const { slug } = await params;
         const deal = await getDeal(slug);
 
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
+
         if (!deal) {
             return {
                 title: 'Nabídka nenalezena | Flugi',
+                description: 'Bohužel, tato nabídka již není dostupná.',
+                openGraph: {
+                    images: [{ url: `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=` }]
+                }
             };
         }
-
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
 
         const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
         // Use the new API Route (Master Design)
         // Pass ID to let the API fetch details from DB (Single Source of Truth)
-        const ogImageUrl = `${baseUrl}/api/og?id=${deal.id}`;
+        // Fallback to generic image if ID is missing for some reason
+        const ogImageUrl = deal.id
+            ? `${baseUrl}/api/og?id=${deal.id}`
+            : `${baseUrl}/api/og?title=${encodeURIComponent(deal.title)}&price=${encodeURIComponent(deal.price.toString())}&destination=${encodeURIComponent(deal.destination)}`;
+
         const fallbackOgUrl = `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=`;
 
         return {
