@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
 import { getDestinationImage } from '@/lib/images';
 
-export const runtime = 'edge';
+// export const runtime = 'edge'; // Disabled to allow Prisma to run in Node.js
 
 export async function GET(req: NextRequest) {
     try {
