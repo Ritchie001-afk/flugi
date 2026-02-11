@@ -48,6 +48,7 @@ async function getDeal(slugOrId: string) {
                 entryRequirements: true,
                 isFlashDeal: true,
                 createdAt: true,
+                ogImage: true,
                 // Temporarily disable new columns
                 // origin: true,
                 // hotel: true,
@@ -91,6 +92,7 @@ async function getDeal(slugOrId: string) {
                     entryRequirements: true,
                     isFlashDeal: true,
                     createdAt: true,
+                    ogImage: true,
                     // Temporarily disable new columns
                     // origin: true,
                     // hotel: true,
@@ -137,9 +139,16 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
     const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
     // Construct valid Absolute URLs
-    const ogImageUrl = deal.id
-        ? new URL(`/api/og?id=${deal.id}`, baseUrl).toString()
-        : new URL(`/api/og?title=${encodeURIComponent(deal.title)}&price=${encodeURIComponent(deal.price.toString())}&destination=${encodeURIComponent(deal.destination)}`, baseUrl).toString();
+    let ogImageUrl;
+    if (deal.ogImage) {
+        // Use manual override if available
+        ogImageUrl = deal.ogImage.startsWith('http') ? deal.ogImage : new URL(deal.ogImage, baseUrl).toString();
+    } else {
+        // Fallback to generated
+        ogImageUrl = deal.id
+            ? new URL(`/api/og?id=${deal.id}`, baseUrl).toString()
+            : new URL(`/api/og?title=${encodeURIComponent(deal.title)}&price=${encodeURIComponent(deal.price.toString())}&destination=${encodeURIComponent(deal.destination)}`, baseUrl).toString();
+    }
 
     const fallbackOgUrl = new URL(`/api/og?title=Flugi.cz&price=&destination=Svět`, baseUrl).toString();
 

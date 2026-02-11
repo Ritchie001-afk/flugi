@@ -24,13 +24,13 @@ export async function POST(req: Request) {
             reviewCount, reviewSource, reviewUrl, description,
             featuredReviewAuthor, featuredReviewText,
             availableDates, datePublished, origin, mealPlan, hotel,
-            slug
+            slug, ogImage
         } = data;
 
         const updateData: any = {
             title, destination, image, url, type, baggageInfo, entryRequirements, airline, description,
             featuredReviewAuthor, featuredReviewText, availableDates,
-            reviewSource, reviewUrl, origin, mealPlan, hotel, slug,
+            reviewSource, reviewUrl, origin, mealPlan, hotel, slug, ogImage,
             datePublished: datePublished ? new Date(datePublished) : undefined,
             weatherInfo: data.weatherInfo,
             images: images || undefined,

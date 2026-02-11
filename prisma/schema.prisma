@@ -56,6 +56,7 @@ model Deal {
   externalId      String?   // ID from the XML feed
   
   // OG Image Fields
+  ogImage         String?   // Manual override for OG Image
   origin          String?   // e.g. "Praha (PRG)"
   mealPlan        String?   // e.g. "All Inclusive"
   hotel           String?   // e.g. "Hotel Riu"

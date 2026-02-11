@@ -25,6 +25,7 @@ export default function DealForm({ initialData }: DealFormProps) {
     const [datePublished, setDatePublished] = useState(initialData?.datePublished ? new Date(initialData.datePublished).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
     const [availableDates, setAvailableDates] = useState(initialData?.availableDates || '');
     const [slug, setSlug] = useState(initialData?.slug || '');
+    const [ogImage, setOgImage] = useState(initialData?.ogImage || '');
 
     // Reset state when initialData changes (e.g. clicking edit on different item)
     useEffect(() => {
@@ -33,12 +34,14 @@ export default function DealForm({ initialData }: DealFormProps) {
             setDescription(initialData.description || '');
             setImage(initialData.image);
             setSlug(initialData.slug || '');
+            setOgImage(initialData.ogImage || '');
         } else {
             // Reset form if no data (Create mode)
             setDestination('');
             setDescription('');
             setImage('');
             setSlug('');
+            setOgImage('');
         }
     }, [initialData]);
 

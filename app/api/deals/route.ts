@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             entryRequirements, airline, tags, startDate, endDate,
             destination, image, images, url, type, rating,
             reviewCount, reviewSource, reviewUrl, featuredReviewAuthor, featuredReviewText,
-            availableDates, datePublished, origin, mealPlan, hotel
+            availableDates, datePublished, origin, mealPlan, hotel, ogImage
         } = json;
 
         if (!title || !price || !destination || !url || !image) {
@@ -90,7 +90,8 @@ export async function POST(req: Request) {
                 expiresAt: null,
                 origin,
                 mealPlan,
-                hotel
+                hotel,
+                ogImage
             }
         });
 
