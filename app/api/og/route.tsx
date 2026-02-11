@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
+import { getDestinationImage } from '@/lib/images';
 
 // Ensure we are using Node.js runtime for Prisma compatibility
 // export const runtime = 'edge'; 
@@ -22,7 +23,16 @@ export async function GET(req: NextRequest) {
             return new Response('Not found', { status: 404 });
         }
 
-        const { title, price, image, destination, airline, hotel, mealPlan, origin, type, startDate, endDate } = deal;
+        const { title, price, image: rawImage, destination, airline, hotel, mealPlan, origin, type, startDate, endDate } = deal;
+
+        // Resolve Image URL (Handle nulls, destination mapping, etc.)
+        let image = getDestinationImage(destination, rawImage);
+
+        // Ensure Absolute URL for OG Image (critical for Satori/Vercel)
+        if (image.startsWith('/')) {
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://flugi.cz';
+            image = `${baseUrl}${image}`;
+        }
 
         // Load Font (Montserrat Bold 700)
         const fontData = await fetch(
