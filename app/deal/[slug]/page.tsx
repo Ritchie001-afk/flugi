@@ -111,79 +111,74 @@ interface DealPageProps {
 }
 
 export async function generateMetadata({ params }: DealPageProps): Promise<Metadata> {
-    try {
-        const { slug } = await params;
-        const deal = await getDeal(slug);
+    const { slug } = await params;
+    const deal = await getDeal(slug);
 
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
 
-        if (!deal) {
-            return {
-                title: 'Nabídka nenalezena | Flugi',
-                description: 'Bohužel, tato nabídka již není dostupná.',
-                openGraph: {
-                    images: [{ url: `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=` }]
-                }
-            };
-        }
-
-        const safeDescription = (deal.description || '').substring(0, 160) + '...';
-
-        // Use the new API Route (Master Design)
-        // Pass ID to let the API fetch details from DB (Single Source of Truth)
-        // Fallback to generic image if ID is missing for some reason
-        const ogImageUrl = deal.id
-            ? `${baseUrl}/api/og?id=${deal.id}`
-            : `${baseUrl}/api/og?title=${encodeURIComponent(deal.title)}&price=${encodeURIComponent(deal.price.toString())}&destination=${encodeURIComponent(deal.destination)}`;
-
-        const fallbackOgUrl = `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=`;
-
+    // Default fallback if deal not found
+    if (!deal) {
         return {
-            title: `${deal.title} | Flugi`,
-            description: safeDescription,
+            title: 'Nabídka nenalezena | Flugi',
+            description: 'Bohužel, tato nabídka již není dostupná.',
             openGraph: {
-                title: deal.title,
-                description: safeDescription,
-                url: `${baseUrl}/deal/${slug}`,
-                siteName: 'Flugi.cz',
-                locale: 'cs_CZ',
-                type: 'website',
                 images: [
                     {
-                        url: ogImageUrl,
+                        url: new URL('/api/og?title=Flugi.cz&price=&destination=Svět', baseUrl).toString(),
                         width: 1200,
                         height: 630,
-                        alt: deal.title,
-                    },
-                    {
-                        url: fallbackOgUrl,
-                        width: 1200,
-                        height: 630,
-                        alt: 'Flugi.cz',
+                        alt: 'Flugi.cz'
                     }
-                ],
-            },
-            alternates: {
-                canonical: `${baseUrl}/deal/${slug}`,
-            },
-            twitter: {
-                card: 'summary_large_image',
-                title: deal.title,
-                description: safeDescription,
-                images: [ogImageUrl],
-            },
-        };
-    } catch (e: any) {
-        console.error("Metadata generation error:", e);
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
-        return {
-            title: `Flugi.cz | Akční letenky a zájezdy`,
-            description: 'Objevte nejlepší akční letenky a zájezdy na Flugi.cz.',
-            openGraph: {
-                images: [{ url: `${baseUrl}/api/og?title=Flugi.cz&price=&destination=Svět&date=&airline=` }]
+                ]
             }
         };
     }
+
+    const safeDescription = (deal.description || '').substring(0, 160) + '...';
+
+    // Construct valid Absolute URLs
+    const ogImageUrl = deal.id
+        ? new URL(`/api/og?id=${deal.id}`, baseUrl).toString()
+        : new URL(`/api/og?title=${encodeURIComponent(deal.title)}&price=${encodeURIComponent(deal.price.toString())}&destination=${encodeURIComponent(deal.destination)}`, baseUrl).toString();
+
+    const fallbackOgUrl = new URL(`/api/og?title=Flugi.cz&price=&destination=Svět`, baseUrl).toString();
+
+    return {
+        metadataBase: new URL(baseUrl),
+        title: `${deal.title} | Flugi`,
+        description: safeDescription,
+        openGraph: {
+            title: deal.title,
+            description: safeDescription,
+            url: `${baseUrl}/deal/${slug}`,
+            siteName: 'Flugi.cz',
+            locale: 'cs_CZ',
+            type: 'website',
+            images: [
+                {
+                    url: ogImageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: deal.title,
+                },
+                {
+                    url: fallbackOgUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: 'Flugi.cz',
+                }
+            ],
+        },
+        alternates: {
+            canonical: `${baseUrl}/deal/${slug}`,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: deal.title,
+            description: safeDescription,
+            images: [ogImageUrl],
+        },
+    };
 }
 
 export default async function DealPage({ params }: DealPageProps) {
