@@ -17,8 +17,14 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.flugi.cz"),
   title: "Flugi - Exkluzivní letenky a dovolená",
   description: "Najděte ty nejlepší letenky a pobyty s prémiovým zážitkem.",
+  openGraph: {
+    siteName: "Flugi.cz",
+    type: "website",
+    locale: "cs_CZ",
+  },
 };
 
 import Navbar from "@/components/Navbar";

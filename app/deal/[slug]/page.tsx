@@ -51,20 +51,35 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             };
         }
 
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
+
         return {
             title: `${deal.title} | Flugi`,
             description: deal.description.substring(0, 160) + '...',
             openGraph: {
                 title: deal.title,
                 description: deal.description.substring(0, 160) + '...',
+                url: `${baseUrl}/deal/${slug}`,
+                siteName: 'Flugi.cz',
+                locale: 'cs_CZ',
+                type: 'website',
                 images: [
                     {
-                        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://flugi.cz'}/api/og?id=${deal.id}`,
+                        url: `${baseUrl}/api/og?id=${deal.id}`,
                         width: 1200,
                         height: 630,
                         alt: deal.title,
                     }
                 ],
+            },
+            alternates: {
+                canonical: `${baseUrl}/deal/${slug}`,
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: deal.title,
+                description: deal.description.substring(0, 160) + '...',
+                images: [`${baseUrl}/api/og?id=${deal.id}`],
             },
         };
     } catch (e) {

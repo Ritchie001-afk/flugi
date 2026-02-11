@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 
         // Ensure Absolute URL for OG Image (critical for Satori/Vercel)
         if (image.startsWith('/')) {
-            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://flugi.cz';
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
             image = `${baseUrl}${image}`;
         }
 
