@@ -126,7 +126,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             openGraph: {
                 images: [
                     {
-                        url: new URL('/api/og?title=Flugi.cz&price=&destination=Svět', baseUrl).toString(),
+                        url: new URL('/api/og', baseUrl).toString(),
                         width: 1200,
                         height: 630,
                         alt: 'Flugi.cz'
@@ -138,19 +138,46 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
     const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
+    // Extract necessary fields for Satori image generation
+    const urlParams = new URLSearchParams();
+    urlParams.set('title', deal.title);
+    urlParams.set('price', deal.price.toString());
+    urlParams.set('destination', deal.destination);
+
+    // Attempt best available image
+    const bestImage = deal.image || (deal.images && deal.images[0]) || '';
+    if (bestImage) {
+        urlParams.set('image', bestImage);
+    }
+
+    // Add date range if available
+    if (deal.startDate && deal.endDate) {
+        const start = new Date(deal.startDate);
+        const end = new Date(deal.endDate);
+        const fmt = (d: Date) => `${d.getDate()}.${d.getMonth() + 1}.`;
+        urlParams.set('date', `${fmt(start)} – ${fmt(end)} ${end.getFullYear()}`);
+    } else if (deal.availableDates) {
+        // Fallback to first line of available dates, or 'Na vyžádání'
+        const shortDate = deal.availableDates.split('\n')[0].substring(0, 30);
+        urlParams.set('date', shortDate);
+    }
+
+    if (deal.airline) {
+        urlParams.set('airline', deal.airline);
+    }
+
     // Construct valid Absolute URLs
     let ogImageUrl;
     if (deal.ogImage) {
         // Use manual override if available
         ogImageUrl = deal.ogImage.startsWith('http') ? deal.ogImage : new URL(deal.ogImage, baseUrl).toString();
     } else {
-        // Fallback to generated
-        ogImageUrl = deal.id
-            ? new URL(`/api/og?id=${deal.id}`, baseUrl).toString()
-            : new URL(`/api/og?title=${encodeURIComponent(deal.title)}&price=${encodeURIComponent(deal.price.toString())}&destination=${encodeURIComponent(deal.destination)}`, baseUrl).toString();
+        // Fallback to Satori edge generation
+        ogImageUrl = new URL(`/api/og?${urlParams.toString()}`, baseUrl).toString();
     }
 
-    const fallbackOgUrl = new URL(`/api/og?title=Flugi.cz&price=&destination=Svět`, baseUrl).toString();
+    // Create a fallback URL just in case Satori errors
+    const fallbackOgUrl = new URL(`/api/og?title=Flugi.cz`, baseUrl).toString();
 
     return {
         metadataBase: new URL(baseUrl),
@@ -378,12 +405,12 @@ export default async function DealPage({ params }: DealPageProps) {
                                 )}
 
                                 <div className="text-center text-xs text-slate-400 mb-6">
-                                    {isFlight && (
+                                    {isFlight || deal.airline ? (
                                         <div className="flex items-center text-slate-600 text-sm">
                                             <Plane className="h-4 w-4 mr-3 text-slate-400" />
                                             <span>{deal.airline || 'Letecká společnost'}</span>
                                         </div>
-                                    )}
+                                    ) : null}
                                     <div className="flex items-center text-slate-600 text-sm">
                                         <Calendar className="h-4 w-4 mr-3 text-slate-400" />
                                         <span>Dostupné termíny ověřte u prodejce</span>

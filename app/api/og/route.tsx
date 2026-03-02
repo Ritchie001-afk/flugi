@@ -1,56 +1,22 @@
 
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
-import prisma from '@/lib/db';
-import { getDestinationImage } from '@/lib/images';
 
-// export const runtime = 'edge'; // Disabled to allow Prisma to run in Node.js
+export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
 
         // --- Data Resolution ---
-        // Priority 1: Direct Params (faster, no DB)
-        let title = searchParams.get('title');
-        let price = searchParams.get('price');
+        // We now require all parameters to be passed in the URL to avoid DB calls.
+        const title = searchParams.get('title') || 'Akční Letenka';
+        const priceStr = searchParams.get('price');
+        const price = priceStr ? new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(Number(priceStr)) : '';
         let image = searchParams.get('image');
-        let destination = searchParams.get('destination');
-        let date = searchParams.get('date');
-        let airline = searchParams.get('airline');
-
-        // Priority 2: DB Fetch via ID
-        const id = searchParams.get('id');
-        if (id && (!title || !price)) {
-            const deal = await prisma.deal.findUnique({
-                where: { id },
-                select: {
-                    title: true, price: true, image: true, destination: true,
-                    airline: true, startDate: true, endDate: true, type: true
-                }
-            });
-            if (deal) {
-                title = deal.title;
-                price = new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(deal.price);
-                image = getDestinationImage(deal.destination, deal.image);
-                destination = deal.destination;
-
-                if (deal.startDate && deal.endDate) {
-                    const start = new Date(deal.startDate);
-                    const end = new Date(deal.endDate);
-                    const fmt = (d: Date) => `${d.getDate()}.${d.getMonth() + 1}.`;
-                    date = `${fmt(start)} – ${fmt(end)} ${end.getFullYear()}`;
-                }
-                airline = deal.airline;
-            }
-        }
-
-        // Defaults
-        if (!title) title = 'Akční Letenka';
-        if (!price) price = '';
-        if (!destination) destination = '';
-        if (!date) date = 'Termín na vyžádání';
-        if (!airline) airline = 'Letecky';
+        const destination = searchParams.get('destination') || '';
+        const date = searchParams.get('date') || 'Termín na vyžádání';
+        const airline = searchParams.get('airline') || 'Letecky';
 
         // --- Image URL Resolution ---
         // Ensure absolute URL for Satori
@@ -59,13 +25,14 @@ export async function GET(req: NextRequest) {
             image = `${baseUrl}${image}`;
         }
         // Fallback image if missing
-        if (!image) image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop';
+        if (!image) {
+            image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop';
+        }
 
         // --- Font Loading ---
-        // Need Montserrat Black (900) and Bold (700)
-        // Using force-cache to prevent timeouts for bots
-        const fontBlack = await fetch(new URL('https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Black.ttf'), { cache: 'force-cache' }).then(res => res.arrayBuffer());
-        const fontBold = await fetch(new URL('https://github.com/JulietaUla/Montserrat/raw/master/fonts/ttf/Montserrat-Bold.ttf'), { cache: 'force-cache' }).then(res => res.arrayBuffer());
+        // Fetch bundled fonts directly from the origin URL
+        const fontBlack = await fetch(new URL('@/assets/fonts/Montserrat-Black.ttf', import.meta.url)).then((res) => res.arrayBuffer());
+        const fontBold = await fetch(new URL('@/assets/fonts/Montserrat-Bold.ttf', import.meta.url)).then((res) => res.arrayBuffer());
 
         // --- Icons (SVG) ---
         // Using neutral colors for icons inside the white box
