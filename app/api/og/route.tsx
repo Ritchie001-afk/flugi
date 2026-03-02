@@ -1,8 +1,10 @@
 
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
-export const runtime = 'edge';
+// Removed: export const runtime = 'edge'; // Vercel fails deploy when trying to load local font files in Edge runtime via import.meta.url
 
 export async function GET(req: NextRequest) {
     try {
@@ -30,9 +32,12 @@ export async function GET(req: NextRequest) {
         }
 
         // --- Font Loading ---
-        // Fetch bundled fonts directly from the origin URL
-        const fontBlack = await fetch(new URL('@/assets/fonts/Montserrat-Black.ttf', import.meta.url)).then((res) => res.arrayBuffer());
-        const fontBold = await fetch(new URL('@/assets/fonts/Montserrat-Bold.ttf', import.meta.url)).then((res) => res.arrayBuffer());
+        // Load fonts via fs to avoid obscure Vercel Edge import.meta.url compilation errors
+        const fontBlackPath = path.join(process.cwd(), 'src', 'assets', 'fonts', 'Montserrat-Black.ttf');
+        const fontBlack = await fs.promises.readFile(fontBlackPath);
+
+        const fontBoldPath = path.join(process.cwd(), 'src', 'assets', 'fonts', 'Montserrat-Bold.ttf');
+        const fontBold = await fs.promises.readFile(fontBoldPath);
 
         // --- Icons (SVG) ---
         // Using neutral colors for icons inside the white box
