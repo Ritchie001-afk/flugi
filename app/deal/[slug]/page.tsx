@@ -146,7 +146,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
     // Attempt best available image
     const bestImage = deal.image || (deal.images && deal.images[0]) || '';
-    if (bestImage) {
+    if (bestImage && !bestImage.startsWith('data:image')) {
         urlParams.set('image', bestImage);
     }
 
