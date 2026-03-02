@@ -1,10 +1,7 @@
-
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
-// Removed: export const runtime = 'edge'; // Vercel fails deploy when trying to load local font files in Edge runtime via import.meta.url
+export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
     try {
@@ -21,9 +18,10 @@ export async function GET(req: NextRequest) {
         const airline = searchParams.get('airline') || 'Letecky';
 
         // --- Image URL Resolution ---
+        const baseUrl = req.nextUrl.origin || 'https://www.flugi.cz';
+
         // Ensure absolute URL for Satori
         if (image && image.startsWith('/')) {
-            const baseUrl = req.nextUrl.origin || 'https://www.flugi.cz';
             image = `${baseUrl}${image}`;
         }
         // Fallback image if missing
@@ -32,12 +30,16 @@ export async function GET(req: NextRequest) {
         }
 
         // --- Font Loading ---
-        // Load fonts via fs to avoid obscure Vercel Edge import.meta.url compilation errors
-        const fontBlackPath = path.join(process.cwd(), 'src', 'assets', 'fonts', 'Montserrat-Black.ttf');
-        const fontBlack = await fs.promises.readFile(fontBlackPath);
-
-        const fontBoldPath = path.join(process.cwd(), 'src', 'assets', 'fonts', 'Montserrat-Bold.ttf');
-        const fontBold = await fs.promises.readFile(fontBoldPath);
+        // Fetch bundled fonts directly from the public/ directory using an absolute URL
+        // This avoids Vercel Edge function file trace bugs
+        const fontBlack = await fetch(new URL(`${baseUrl}/fonts/Montserrat-Black.ttf`)).then((res) => {
+            if (!res.ok) throw new Error(`Failed to load Black font: ${res.statusText}`);
+            return res.arrayBuffer();
+        });
+        const fontBold = await fetch(new URL(`${baseUrl}/fonts/Montserrat-Bold.ttf`)).then((res) => {
+            if (!res.ok) throw new Error(`Failed to load Bold font: ${res.statusText}`);
+            return res.arrayBuffer();
+        });
 
         // --- Icons (SVG) ---
         // Using neutral colors for icons inside the white box
