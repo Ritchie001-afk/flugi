@@ -694,6 +694,10 @@ export default function DealForm({ initialData }: DealFormProps) {
                             const eDate = document.getElementsByName('endDate')[0] as HTMLInputElement;
                             const priceInput = document.getElementsByName('price')[0] as HTMLInputElement;
                             const originInput = document.getElementsByName('origin')[0] as HTMLInputElement;
+                            const airlineInput = document.getElementsByName('airline')[0] as HTMLInputElement;
+                            const baggageInput = document.getElementsByName('baggageInfo')[0] as HTMLInputElement;
+                            const typeInput = document.getElementsByName('type')[0] as HTMLSelectElement;
+                            const transferInput = document.getElementsByName('transferCount')[0] as HTMLInputElement;
 
                             btn.disabled = true;
                             btn.innerHTML = '<span class="animate-spin mr-1">⏳</span> Generuji...';
@@ -704,11 +708,15 @@ export default function DealForm({ initialData }: DealFormProps) {
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
                                         type: 'facebook_post',
+                                        dealType: typeInput?.value,
                                         destination,
                                         startDate: sDate?.value,
                                         endDate: eDate?.value,
                                         price: priceInput?.value,
-                                        origin: originInput?.value
+                                        origin: originInput?.value,
+                                        airline: airlineInput?.value,
+                                        baggage: baggageInput?.value,
+                                        transfers: transferInput?.value
                                     })
                                 });
                                 const result = await res.json();

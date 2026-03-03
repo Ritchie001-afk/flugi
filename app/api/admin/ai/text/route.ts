@@ -33,14 +33,29 @@ export async function POST(req: Request) {
             const dates = startDate ? `v termínu od ${startDate} do ${endDate}` : 'v tomto období';
             prompt = `Jsi expert na počasí. Popiš stručně (max 2 věty) typické počasí a teploty pro destinaci "${destination}" ${dates}. Odpověz česky.`;
         } else if (type === 'facebook_post') {
-            const { price, origin } = await req.json().catch(() => ({ price: '', origin: '' }));
-            const priceInfo = price ? `Cena letenky/zájezdu je ${price} Kč.` : '';
-            const originInfo = origin ? `Odlet je z: ${origin}.` : '';
-            prompt = `Jsi copywriter cestovatelského portálu. Napiš informačně bohatý a zajímavý popisný příspěvek na Facebook k naší nové nabídce do destinace "${destination}". 
-            ${priceInfo} 
-            ${originInfo}
-            Zaměř se na to, čím je tato destinace unikátní (např. zajímavosti, kultura, příroda) a proč se tam vyplatí letět právě za tuto cenu z tohoto letiště. Rozveď tyto informace do přitažlivého popisu nabídky.
-            Tón má být nadšený, ale především informativní a užitečný, ne čistě marketingový "teleshopping". Použij pár tematických emoji a na konec přidej výzvu k zobrazení detailů a vhodné hashtagy. Piš přirozeně česky, délka cca 3 stručné odstavce. Nepoužívej markdown.`;
+            const { price, origin, airline, baggage, transfers, dealType } = await req.json().catch(() => ({}));
+
+            // Build context string from available data
+            let details = [];
+            if (price) details.push(`Cena: ${price} Kč`);
+            if (origin) details.push(`Místo odletu: ${origin}`);
+            if (airline) details.push(`Letecká společnost: ${airline}`);
+            if (baggage) details.push(`Zavazadla: ${baggage}`);
+            if (transfers !== undefined && transfers !== '') {
+                const tr = parseInt(transfers);
+                if (tr === 0) details.push('Přestupy: Přímý let');
+                else if (tr === 1) details.push('Přestupy: 1 přestup');
+                else details.push(`Přestupy: ${tr} přestupy`);
+            }
+            const detailsStr = details.length > 0 ? `\nParametry nabídky:\n- ${details.join('\n- ')}` : '';
+            const isPackage = dealType === 'package' ? 'kompletní zájezd' : 'akční letenka';
+
+            prompt = `Jsi copywriter cestovatelského portálu. Napiš krátký úvodní text (cca 1-2 věty) k nové nabídce (${isPackage}) do destinace "${destination}". 
+            Následně shrň uživatelům nejdůležitější informace z těchto parametrů:${detailsStr}
+            
+            Doplň k těmto parametrům pár zajímavých slov (např. krátká zmínka o obvyklém počasí v této destinaci, nebo že letí s výbornou aerolinkou atd.).
+            Text musí sloužit jako přehledný popis konkrétní nabídky, ne jako dlouhá reklamní esej o historii města.
+            Styl: Přehledný, informativní, čtivý. Použij odrážky nebo emotikony pro zpřehlednění parametrů, na konec výzvu k detailům na webu a hashtagy. Nepoužívej markdownové formátování.`;
         } else {
             return NextResponse.json({ error: "Invalid type" }, { status: 400 });
         }
