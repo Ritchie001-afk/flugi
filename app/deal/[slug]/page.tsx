@@ -126,7 +126,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             openGraph: {
                 images: [
                     {
-                        url: new URL('/api/og', baseUrl).toString(),
+                        url: new URL('/api/og.png', baseUrl).toString(),
                         width: 1200,
                         height: 630,
                         alt: 'Flugi.cz'
@@ -173,11 +173,11 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
         ogImageUrl = deal.ogImage.startsWith('http') ? deal.ogImage : new URL(deal.ogImage, baseUrl).toString();
     } else {
         // Fallback to Satori edge generation
-        ogImageUrl = new URL(`/api/og?${urlParams.toString()}`, baseUrl).toString();
+        ogImageUrl = new URL(`/api/og.png?${urlParams.toString()}`, baseUrl).toString();
     }
 
     // Create a fallback URL just in case Satori errors
-    const fallbackOgUrl = new URL(`/api/og?title=Flugi.cz`, baseUrl).toString();
+    const fallbackOgUrl = new URL(`/api/og.png?title=Flugi.cz`, baseUrl).toString();
 
     return {
         metadataBase: new URL(baseUrl),
