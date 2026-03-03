@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { generateAndUploadOgImage } from '@/lib/og-generator';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,6 +59,19 @@ export async function POST(req: Request) {
             slug = `${normalize(title)}-${randomSuffix}`;
         }
 
+        // Automatic OG Image Generation (Variant A)
+        let finalOgImage = ogImage;
+        if (!finalOgImage) {
+            try {
+                // Pass a constructed object mimicking the deal
+                finalOgImage = await generateAndUploadOgImage({
+                    title, price, destination, image, images, startDate, endDate, availableDates, airline, type
+                });
+            } catch (ogErr) {
+                console.error("Failed to pre-generate OG image:", ogErr);
+            }
+        }
+
         const deal = await prisma.deal.create({
             data: {
                 title,
@@ -91,7 +105,7 @@ export async function POST(req: Request) {
                 origin,
                 mealPlan,
                 hotel,
-                ogImage
+                ogImage: finalOgImage
             }
         });
 
