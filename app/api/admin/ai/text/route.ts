@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         }
         const genAI = new GoogleGenerativeAI(apiKey);
 
-        const { type, destination, startDate, endDate } = await req.json();
+        const { type, destination, startDate, endDate, price, origin, airline, baggage, transfers, dealType } = await req.json();
 
         if (!destination) {
             return NextResponse.json({ error: "Missing destination" }, { status: 400 });
@@ -32,10 +32,7 @@ export async function POST(req: Request) {
         } else if (type === 'weather') {
             const dates = startDate ? `v termínu od ${startDate} do ${endDate}` : 'v tomto období';
             prompt = `Jsi expert na počasí. Popiš stručně (max 2 věty) typické počasí a teploty pro destinaci "${destination}" ${dates}. Odpověz česky.`;
-        } else if (type === 'facebook_post') {
-            const { price, origin, airline, baggage, transfers, dealType } = await req.json().catch(() => ({}));
-
-            // Build context string from available data
+        } else if (type === 'facebook_post') {            // Build context string from available data
             let details = [];
             if (price) details.push(`Cena: ${price} Kč`);
             if (origin) details.push(`Místo odletu: ${origin}`);
