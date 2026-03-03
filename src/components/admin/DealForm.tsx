@@ -690,8 +690,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                             const btn = e.currentTarget;
                             if (!destination) return alert('Před generováním příspěvku vyplňte destinaci!');
 
-                            // Gather all data cleanly using the closest form
-                            const formElement = btn.closest('form');
+                            // Gather all data cleanly from the main form
+                            const formElement = document.querySelector('form') as HTMLFormElement;
                             if (!formElement) return alert('Formulář nenalezen.');
                             const formData = new FormData(formElement);
 
