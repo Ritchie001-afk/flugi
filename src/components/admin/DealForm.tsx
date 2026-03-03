@@ -708,22 +708,26 @@ export default function DealForm({ initialData }: DealFormProps) {
                             btn.disabled = true;
                             btn.innerHTML = '<span class="animate-spin mr-1">⏳</span> Generuji...';
 
+                            const payload = {
+                                type: 'facebook_post',
+                                dealType: type,
+                                destination,
+                                startDate: startDate,
+                                endDate: endDate,
+                                price: price,
+                                origin: origin,
+                                airline: airline,
+                                baggage: baggageInfo,
+                                transfers: transferCount
+                            };
+
+                            console.log("=== AI GENERATOR PAYLOAD ===", payload);
+
                             try {
                                 const res = await fetch('/api/admin/ai/text', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        type: 'facebook_post',
-                                        dealType: type,
-                                        destination,
-                                        startDate: startDate,
-                                        endDate: endDate,
-                                        price: price,
-                                        origin: origin,
-                                        airline: airline,
-                                        baggage: baggageInfo,
-                                        transfers: transferCount
-                                    })
+                                    body: JSON.stringify(payload)
                                 });
                                 const result = await res.json();
                                 if (result.text) {
