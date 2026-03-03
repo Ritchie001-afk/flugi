@@ -197,13 +197,6 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
                     height: 630,
                     alt: deal.title,
                     type: 'image/png',
-                },
-                {
-                    url: fallbackOgUrl,
-                    width: 1200,
-                    height: 630,
-                    alt: 'Flugi.cz',
-                    type: 'image/png',
                 }
             ],
         },
