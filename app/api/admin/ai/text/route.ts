@@ -36,10 +36,11 @@ export async function POST(req: Request) {
             const { price, origin } = await req.json().catch(() => ({ price: '', origin: '' }));
             const priceInfo = price ? `Cena letenky/zájezdu je ${price} Kč.` : '';
             const originInfo = origin ? `Odlet je z: ${origin}.` : '';
-            prompt = `Jsi profesionální social media manažer cestovní kanceláře. Napiš vysoce poutavý, konverzní a nadšený příspěvek na Facebook lákající na naši fantastickou nabídku do destinace "${destination}". 
+            prompt = `Jsi copywriter cestovatelského portálu. Napiš informačně bohatý a zajímavý popisný příspěvek na Facebook k naší nové nabídce do destinace "${destination}". 
             ${priceInfo} 
             ${originInfo}
-            Použij atraktivní emoji, vyzvi uživatele k akci (kliknutí na odkaz) a vytvoř pocit exkluzivity či omezené nabídky. Zahrň vhodné hashtagy na konec. Piš česky, délka cca 3-4 krátké odstavce. Nepoužívej markdownové formátování.`;
+            Zaměř se na to, čím je tato destinace unikátní (např. zajímavosti, kultura, příroda) a proč se tam vyplatí letět právě za tuto cenu z tohoto letiště. Rozveď tyto informace do přitažlivého popisu nabídky.
+            Tón má být nadšený, ale především informativní a užitečný, ne čistě marketingový "teleshopping". Použij pár tematických emoji a na konec přidej výzvu k zobrazení detailů a vhodné hashtagy. Piš přirozeně česky, délka cca 3 stručné odstavce. Nepoužívej markdown.`;
         } else {
             return NextResponse.json({ error: "Invalid type" }, { status: 400 });
         }
