@@ -32,6 +32,14 @@ export async function POST(req: Request) {
         } else if (type === 'weather') {
             const dates = startDate ? `v termínu od ${startDate} do ${endDate}` : 'v tomto období';
             prompt = `Jsi expert na počasí. Popiš stručně (max 2 věty) typické počasí a teploty pro destinaci "${destination}" ${dates}. Odpověz česky.`;
+        } else if (type === 'facebook_post') {
+            const { price, origin } = await req.json().catch(() => ({ price: '', origin: '' }));
+            const priceInfo = price ? `Cena letenky/zájezdu je ${price} Kč.` : '';
+            const originInfo = origin ? `Odlet je z: ${origin}.` : '';
+            prompt = `Jsi profesionální social media manažer cestovní kanceláře. Napiš vysoce poutavý, konverzní a nadšený příspěvek na Facebook lákající na naši fantastickou nabídku do destinace "${destination}". 
+            ${priceInfo} 
+            ${originInfo}
+            Použij atraktivní emoji, vyzvi uživatele k akci (kliknutí na odkaz) a vytvoř pocit exkluzivity či omezené nabídky. Zahrň vhodné hashtagy na konec. Piš česky, délka cca 3-4 krátké odstavce. Nepoužívej markdownové formátování.`;
         } else {
             return NextResponse.json({ error: "Invalid type" }, { status: 400 });
         }

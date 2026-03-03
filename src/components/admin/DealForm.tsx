@@ -678,140 +678,70 @@ export default function DealForm({ initialData }: DealFormProps) {
                 />
             </div>
 
-            {/* Review Section */}
+            {/* Section: Facebook Post Generator */}
             <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <h4 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                    <span className="text-yellow-500">★</span> Recenze & Hodnocení
-                </h4>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Hodnocení (0-10)</label>
-                        <input
-                            name="rating"
-                            type="number"
-                            step="0.1"
-                            max="10"
-                            defaultValue={initialData?.rating}
-                            placeholder="e.g. 9.2"
-                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Počet recenzí</label>
-                        <input
-                            name="reviewCount"
-                            type="number"
-                            defaultValue={initialData?.reviewCount}
-                            placeholder="e.g. 150"
-                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
-                        />
-                    </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Zdroj Recenzí</label>
-                        <select
-                            name="reviewSource"
-                            defaultValue={initialData?.reviewSource || ""}
-                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
-                        >
-                            <option value="">-- Žádný --</option>
-                            <option value="Google">Google</option>
-                            <option value="TripAdvisor">TripAdvisor</option>
-                            <option value="TrustPilot">TrustPilot</option>
-                            <option value="Invia">Invia</option>
-                            <option value="Booking">Booking.com</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1 flex justify-between">
-                            Odkaz na recenze
-                            <button
-                                type="button"
-                                onClick={async () => {
-                                    const urlInput = document.getElementsByName('reviewUrl')[0] as HTMLInputElement;
-                                    const url = urlInput?.value;
-                                    if (!url) return alert('Vyplňte URL recenzí (TripAdvisor)');
+                <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-sm font-bold text-slate-700 flex items-center gap-2">
+                        <span className="text-blue-600">📘</span> Příspěvek na Facebook
+                    </h4>
+                    <button
+                        type="button"
+                        onClick={async (e) => {
+                            const btn = e.currentTarget;
+                            if (!destination) return alert('Před generováním příspěvku vyplňte destinaci!');
 
-                                    // Dynamic import or safe call
-                                    try {
-                                        setUploading(true);
-                                        // Importing server action dynamically or passing it via props is cleaner, but here we invoke via a wrapper api or direct import if supported
-                                        // Since we can't easily import server action in client component without 'use server' props or separation, 
-                                        // we'll use a new API route for scraping to avoid build issues with server actions in client components if not set up perfectly.
-                                        // OR: We simply assume `scrapeTripAdvisor` makes it through boundaries if used in a Server Component wrapper. 
-                                        // BUT `DealForm` is `use client`. So we need to call it via a prop OR separate API.
-                                        // EASIEST FIX: Use the existing pattern - create a small API endpoint for scraping.
+                            const sDate = document.getElementsByName('startDate')[0] as HTMLInputElement;
+                            const eDate = document.getElementsByName('endDate')[0] as HTMLInputElement;
+                            const priceInput = document.getElementsByName('price')[0] as HTMLInputElement;
+                            const originInput = document.getElementsByName('origin')[0] as HTMLInputElement;
 
-                                        // NOTE: I will implement a quick API route /api/admin/scrape for this button to work reliably
-                                        const res = await fetch('/api/admin/scrape', {
-                                            method: 'POST',
-                                            body: JSON.stringify({ url }),
-                                            headers: { 'Content-Type': 'application/json' }
-                                        });
-                                        const json = await res.json();
+                            btn.disabled = true;
+                            btn.innerHTML = '<span class="animate-spin mr-1">⏳</span> Generuji...';
 
-                                        if (json.error) {
-                                            alert(json.error);
-                                        } else {
-                                            // Auto-fill fields
-                                            if (json.data.rating) {
-                                                const rInput = document.getElementsByName('rating')[0] as HTMLInputElement;
-                                                if (rInput) rInput.value = json.data.rating;
-                                            }
-                                            if (json.data.reviewCount) {
-                                                const cInput = document.getElementsByName('reviewCount')[0] as HTMLInputElement;
-                                                if (cInput) cInput.value = json.data.reviewCount;
-                                            }
-                                            if (json.data.featuredReviewText) {
-                                                const tInput = document.getElementsByName('featuredReviewText')[0] as HTMLTextAreaElement;
-                                                if (tInput) tInput.value = json.data.featuredReviewText;
-                                            }
-                                            // Images handling if needed...
-                                            alert('Data načtena! Zkontrolujte pole.');
-                                        }
-                                    } catch (e: any) {
-                                        alert('Chyba: ' + e.message);
-                                    } finally {
-                                        setUploading(false);
+                            try {
+                                const res = await fetch('/api/admin/ai/text', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        type: 'facebook_post',
+                                        destination,
+                                        startDate: sDate?.value,
+                                        endDate: eDate?.value,
+                                        price: priceInput?.value,
+                                        origin: originInput?.value
+                                    })
+                                });
+                                const result = await res.json();
+                                if (result.text) {
+                                    const input = document.getElementsByName('facebookPost')[0] as HTMLTextAreaElement;
+                                    if (input) {
+                                        input.value = result.text;
                                     }
-                                }}
-                                className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-bold text-[10px]"
-                            >
-                                <Search className="h-3 w-3" /> NAČÍST DATA
-                            </button>
-                        </label>
-                        <input
-                            name="reviewUrl"
-                            defaultValue={initialData?.reviewUrl}
-                            placeholder="https://www.tripadvisor.com/..."
-                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
-                        />
-                    </div>
+                                } else {
+                                    alert(result.error || "Neznámá chyba při generování příspěvku.");
+                                }
+                            } catch (e: any) {
+                                alert("Chyba: " + e.message);
+                            } finally {
+                                btn.disabled = false;
+                                btn.innerHTML = '✨ Vygenerovat AI Příspěvek';
+                            }
+                        }}
+                        className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-bold text-xs cursor-pointer px-2 py-1 rounded bg-blue-100 hover:bg-blue-200 transition-colors"
+                    >
+                        ✨ Vygenerovat AI Příspěvek
+                    </button>
                 </div>
 
-                {/* New Featured Review Fields */}
-                <div className="space-y-3 pt-3 border-t border-slate-200">
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Hlavní Recenze - Text (Česky)</label>
-                        <textarea
-                            name="featuredReviewText"
-                            rows={3}
-                            defaultValue={initialData?.featuredReviewText}
-                            placeholder="'Naprosto úžasný hotel, skvělé jídlo...'"
-                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm italic"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Autor Recenze</label>
-                        <input
-                            name="featuredReviewAuthor"
-                            defaultValue={initialData?.featuredReviewAuthor}
-                            placeholder="Jana, Praha"
-                            className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
-                        />
-                    </div>
-                </div>
+                <p className="text-[10px] text-slate-500 mb-2">
+                    Tento text slouží pouze pro vaše kopírování při sdílení na sociální sítě. Neukládá se přímo k nabídce na webu.
+                </p>
+                <textarea
+                    name="facebookPost"
+                    rows={6}
+                    placeholder="Vygenerovaný text pro Facebook se zobrazí zde. Klikněte na tlačítko výše..."
+                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
+                />
             </div>
 
             {/* Hidden Input for Images Array */}
