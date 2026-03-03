@@ -690,19 +690,23 @@ export default function DealForm({ initialData }: DealFormProps) {
                             const btn = e.currentTarget;
                             if (!destination) return alert('Před generováním příspěvku vyplňte destinaci!');
 
-                            // Gather all data cleanly from the main form
-                            const formElement = document.querySelector('form') as HTMLFormElement;
-                            if (!formElement) return alert('Formulář nenalezen.');
-                            const formData = new FormData(formElement);
+                            const getValue = (n: string) => {
+                                const el = document.querySelector(`input[name="${n}"], select[name="${n}"]`) as HTMLInputElement | HTMLSelectElement;
+                                return el ? el.value : '';
+                            };
 
-                            const sDate = formData.get('startDate') as string;
-                            const eDate = formData.get('endDate') as string;
-                            const priceVal = formData.get('price') as string;
-                            const originVal = formData.get('origin') as string;
-                            const airlineVal = formData.get('airline') as string;
-                            const baggageVal = formData.get('baggageInfo') as string;
-                            const dealTypeVal = formData.get('type') as string;
-                            const transferVal = formData.get('transferCount') as string;
+                            const sDate = getValue('startDate');
+                            const eDate = getValue('endDate');
+                            const priceVal = getValue('price');
+                            const originVal = getValue('origin');
+                            const airlineVal = getValue('airline');
+                            const baggageVal = getValue('baggageInfo');
+
+                            // Radio buttons specific logic
+                            const checkedType = document.querySelector('input[name="type"]:checked') as HTMLInputElement;
+                            const dealTypeVal = checkedType ? checkedType.value : 'flight';
+
+                            const transferVal = getValue('transferCount');
 
                             btn.disabled = true;
                             btn.innerHTML = '<span class="animate-spin mr-1">⏳</span> Generuji...';
