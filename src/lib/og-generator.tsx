@@ -14,6 +14,10 @@ export async function generateAndUploadOgImage(deal: any): Promise<string | null
         if (image && image.startsWith('/')) {
             image = `${baseUrl}${image}`;
         }
+        if (image && image.startsWith('data:image')) {
+            console.log(`[OG Gen] Found base64 image, stripping to avoid 414 URI Too Long.`);
+            image = null; // Don't send massive strings in GET requests
+        }
         if (!image) {
             image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop';
         }
