@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
         const destination = searchParams.get('destination') || '';
         const date = searchParams.get('date') || 'Termín na vyžádání';
         const airline = searchParams.get('airline') || 'Letecky';
+        const origin = searchParams.get('origin') || 'Vídeň / Praha';
 
         // --- Image URL Resolution ---
         const baseUrl = req.nextUrl.origin || 'https://www.flugi.cz';
@@ -192,7 +193,7 @@ export async function GET(req: NextRequest) {
                             {/* Items */}
                             <div style={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 700, color: '#0f172a' }}>
                                 <PlaneIcon />
-                                <span>Odkud: Vídeň / Praha</span>
+                                <span>Odkud: {origin}</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 700, color: '#0f172a' }}>
                                 <PinIcon />

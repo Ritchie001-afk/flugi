@@ -37,6 +37,7 @@ export async function generateAndUploadOgImage(deal: any): Promise<string | null
         }
 
         const airline = deal.airline || 'Letecky';
+        const origin = deal.origin || 'Vídeň / Praha';
 
         const urlParams = new URLSearchParams();
         urlParams.set('title', title);
@@ -45,6 +46,7 @@ export async function generateAndUploadOgImage(deal: any): Promise<string | null
         urlParams.set('image', image);
         urlParams.set('date', date);
         urlParams.set('airline', airline);
+        urlParams.set('origin', origin);
 
         const satoriUrl = `${baseUrl}/api/og.png?${urlParams.toString()}`;
         console.log(`[OG Gen] Fetching Satori Image from: ${satoriUrl}`);

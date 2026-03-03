@@ -278,20 +278,16 @@ export default function DealForm({ initialData }: DealFormProps) {
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
                     />
                 </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Místo odletu</label>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Místo příletu (Destinace) <span className="text-red-500">*</span></label>
                     <input
-                        name="origin"
-                        defaultValue={initialData?.origin}
-                        placeholder="např. Praha (PRG)"
+                        name="destination"
+                        required
+                        placeholder="např. Maledivy"
+                        value={destination}
+                        onChange={(e) => setDestination(e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
                     />
-                </div>
-                <div>
-                    {/* Placeholder for symmetry or another field */}
                 </div>
             </div>
 
@@ -470,17 +466,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                 </div>
             </div>
 
-            <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Destinace <span className="text-red-500">*</span></label>
-                <input
-                    name="destination"
-                    required
-                    placeholder="Maledivy"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
-                />
-            </div>
+
 
             <div>
                 <div className="flex justify-between items-center mb-1">
