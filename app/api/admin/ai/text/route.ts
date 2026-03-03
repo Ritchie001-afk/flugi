@@ -39,6 +39,14 @@ export async function POST(req: Request) {
             let details = [];
             if (price) details.push(`Cena: ${price} Kč`);
             if (origin) details.push(`Místo odletu: ${origin}`);
+            if (startDate && endDate) {
+                // Parse dates to nice format (e.g. 25.5.2026 - 8.6.2026)
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+                    details.push(`Termín: ${start.getDate()}.${start.getMonth() + 1}.${start.getFullYear()} - ${end.getDate()}.${end.getMonth() + 1}.${end.getFullYear()}`);
+                }
+            }
             if (airline) details.push(`Letecká společnost: ${airline}`);
             if (baggage) details.push(`Zavazadla: ${baggage}`);
             if (transfers !== undefined && transfers !== '') {
@@ -51,11 +59,14 @@ export async function POST(req: Request) {
             const isPackage = dealType === 'package' ? 'kompletní zájezd' : 'akční letenka';
 
             prompt = `Jsi copywriter cestovatelského portálu. Napiš krátký úvodní text (cca 1-2 věty) k nové nabídce (${isPackage}) do destinace "${destination}". 
-            Následně shrň uživatelům nejdůležitější informace z těchto parametrů:${detailsStr}
+            Následně shrň uživatelům tyto exaktní parametry formou bodů:
+            ${detailsStr}
             
-            Doplň k těmto parametrům pár zajímavých slov (např. krátká zmínka o obvyklém počasí v této destinaci, nebo že letí s výbornou aerolinkou atd.).
-            Text musí sloužit jako přehledný popis konkrétní nabídky, ne jako dlouhá reklamní esej o historii města.
-            Styl: Přehledný, informativní, čtivý. Použij odrážky nebo emotikony pro zpřehlednění parametrů, na konec výzvu k detailům na webu a hashtagy. Nepoužívej markdownové formátování.`;
+            DŮLEŽITÉ PRAVIDLO: V bodech použij PŘESNĚ ta data, která ti posílám. NESMÍŠ si vymýšlet detaily navíc (např. váhu zavazadla, města přestupů jako Istanbul, nebo měnit konkrétní datum). 
+            Pokud píšeš o přestupech, napiš pouze počet přestupů bez měst.
+            
+            Můžeš dopsat jednu krátkou lákavou větu (např. o typickém počasí v této destinaci, nebo že se poletí s výbornou aerolinkou).
+            Styl: Přehledný, stručný, informativní. Použij emotikony, na konec vlož jasnou výzvu (CTA) k zobrazení detailů a vhodné hashtagy. Nepoužívej markdownové formátování.`;
         } else {
             return NextResponse.json({ error: "Invalid type" }, { status: 400 });
         }
