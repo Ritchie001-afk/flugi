@@ -56,7 +56,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
             startDate: updateData.startDate,
             endDate: updateData.endDate,
             availableDates: updateData.availableDates || availableDates,
-            airline: updateData.airline || airline
+            airline: updateData.airline || airline,
+            origin: updateData.origin || origin
         });
 
         if (cloudinaryOgUrl) {

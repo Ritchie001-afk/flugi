@@ -65,7 +65,7 @@ export async function POST(req: Request) {
             try {
                 // Pass a constructed object mimicking the deal
                 finalOgImage = await generateAndUploadOgImage({
-                    title, price, destination, image, images, startDate, endDate, availableDates, airline, type
+                    title, price, destination, image, images, startDate, endDate, availableDates, airline, type, origin
                 });
             } catch (ogErr) {
                 console.error("Failed to pre-generate OG image:", ogErr);
