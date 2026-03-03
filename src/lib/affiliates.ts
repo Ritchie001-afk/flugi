@@ -43,7 +43,7 @@ export const getAirbnbUrl = (destination: string) => {
 
 export const getAgodaUrl = (destination: string, checkIn?: Date | string | null, checkOut?: Date | string | null) => {
     const baseUrl = AFFILIATE_LINKS.agoda.baseUrl;
-    let url = `${baseUrl}?text=${encodeURIComponent(destination)}`;
+    let url = `${baseUrl}?city=${encodeURIComponent(destination)}`;
 
     if (checkIn) {
         const checkInDate = typeof checkIn === 'string' ? new Date(checkIn) : checkIn;
