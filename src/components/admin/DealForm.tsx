@@ -22,6 +22,14 @@ export default function DealForm({ initialData }: DealFormProps) {
     const [isSearchingImage, setIsSearchingImage] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [type, setType] = useState(initialData?.type || 'flight');
+    const [price, setPrice] = useState(initialData?.price || '');
+    const [origin, setOrigin] = useState(initialData?.origin || '');
+    const [startDate, setStartDate] = useState(initialData?.startDate ? new Date(initialData.startDate).toISOString().split('T')[0] : '');
+    const [endDate, setEndDate] = useState(initialData?.endDate ? new Date(initialData.endDate).toISOString().split('T')[0] : '');
+    const [airline, setAirline] = useState(initialData?.airline || '');
+    const [baggageInfo, setBaggageInfo] = useState(initialData?.baggageInfo || '');
+    const [transferCount, setTransferCount] = useState(initialData?.transferCount ?? '');
+
     const [datePublished, setDatePublished] = useState(initialData?.datePublished ? new Date(initialData.datePublished).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
     const [availableDates, setAvailableDates] = useState(initialData?.availableDates || '');
     const [slug, setSlug] = useState(initialData?.slug || '');
@@ -273,7 +281,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Místo odletu</label>
                     <input
                         name="origin"
-                        defaultValue={initialData?.origin}
+                        value={origin}
+                        onChange={(e) => setOrigin(e.target.value)}
                         placeholder="např. Praha (PRG)"
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
                     />
@@ -297,7 +306,7 @@ export default function DealForm({ initialData }: DealFormProps) {
                     <select
                         name="type"
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
-                        defaultValue={initialData?.type || 'flight'}
+                        value={type}
                         onChange={(e) => setType(e.target.value)}
                     >
                         <option value="flight">Letenka</option>
@@ -318,7 +327,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                                 <input
                                     name="airline"
                                     type="text"
-                                    defaultValue={initialData?.airline}
+                                    value={airline}
+                                    onChange={(e) => setAirline(e.target.value)}
                                     placeholder="např. Emirates"
                                     className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
                                 />
@@ -328,7 +338,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                                 <input
                                     name="transferCount"
                                     type="number"
-                                    defaultValue={initialData?.transferCount ?? 0}
+                                    value={transferCount}
+                                    onChange={(e) => setTransferCount(e.target.value)}
                                     placeholder="0 = Přímý let"
                                     className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
                                 />
@@ -338,7 +349,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                                 <input
                                     name="baggageInfo"
                                     type="text"
-                                    defaultValue={initialData?.baggageInfo}
+                                    value={baggageInfo}
+                                    onChange={(e) => setBaggageInfo(e.target.value)}
                                     placeholder="např. 20kg odbavené"
                                     className="w-full px-3 py-2 rounded-lg border border-blue-200 focus:border-blue-500 outline-none text-sm bg-white"
                                 />
@@ -405,7 +417,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                         name="price"
                         type="number"
                         required
-                        defaultValue={initialData?.price}
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
                         placeholder="15990"
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm"
                     />
@@ -428,7 +441,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                     <input
                         name="startDate"
                         type="date"
-                        defaultValue={initialData?.startDate ? new Date(initialData.startDate).toISOString().split('T')[0] : ''}
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
                     />
                 </div>
@@ -437,7 +451,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                     <input
                         name="endDate"
                         type="date"
-                        defaultValue={initialData?.endDate ? new Date(initialData.endDate).toISOString().split('T')[0] : ''}
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm bg-white"
                     />
                 </div>
@@ -498,8 +513,6 @@ export default function DealForm({ initialData }: DealFormProps) {
                         type="button"
                         onClick={async () => {
                             if (!destination) return alert('Vyplňte destinaci');
-                            const sDate = document.getElementsByName('startDate')[0] as HTMLInputElement;
-                            const eDate = document.getElementsByName('endDate')[0] as HTMLInputElement;
 
                             try {
                                 const res = await fetch('/api/admin/ai/text', {
@@ -508,8 +521,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                                     body: JSON.stringify({
                                         type: 'weather',
                                         destination,
-                                        startDate: sDate?.value,
-                                        endDate: eDate?.value
+                                        startDate: startDate,
+                                        endDate: endDate
                                     })
                                 });
                                 const result = await res.json();
@@ -620,7 +633,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                             type="radio"
                             name="type"
                             value="package"
-                            defaultChecked={!initialData || initialData.type === 'package'}
+                            checked={type === 'package'}
+                            onChange={(e) => setType(e.target.value)}
                             className="peer sr-only"
                         />
                         <div className="text-center py-1.5 text-xs font-medium text-slate-500 rounded-md peer-checked:bg-white peer-checked:text-blue-600 peer-checked:shadow-sm transition-all">
@@ -632,7 +646,8 @@ export default function DealForm({ initialData }: DealFormProps) {
                             type="radio"
                             name="type"
                             value="flight"
-                            defaultChecked={initialData?.type === 'flight'}
+                            checked={type === 'flight'}
+                            onChange={(e) => setType(e.target.value)}
                             className="peer sr-only"
                         />
                         <div className="text-center py-1.5 text-xs font-medium text-slate-500 rounded-md peer-checked:bg-white peer-checked:text-blue-600 peer-checked:shadow-sm transition-all">
@@ -690,24 +705,6 @@ export default function DealForm({ initialData }: DealFormProps) {
                             const btn = e.currentTarget;
                             if (!destination) return alert('Před generováním příspěvku vyplňte destinaci!');
 
-                            const getValue = (n: string) => {
-                                const el = document.querySelector(`input[name="${n}"], select[name="${n}"]`) as HTMLInputElement | HTMLSelectElement;
-                                return el ? el.value : '';
-                            };
-
-                            const sDate = getValue('startDate');
-                            const eDate = getValue('endDate');
-                            const priceVal = getValue('price');
-                            const originVal = getValue('origin');
-                            const airlineVal = getValue('airline');
-                            const baggageVal = getValue('baggageInfo');
-
-                            // Radio buttons specific logic
-                            const checkedType = document.querySelector('input[name="type"]:checked') as HTMLInputElement;
-                            const dealTypeVal = checkedType ? checkedType.value : 'flight';
-
-                            const transferVal = getValue('transferCount');
-
                             btn.disabled = true;
                             btn.innerHTML = '<span class="animate-spin mr-1">⏳</span> Generuji...';
 
@@ -717,15 +714,15 @@ export default function DealForm({ initialData }: DealFormProps) {
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
                                         type: 'facebook_post',
-                                        dealType: dealTypeVal,
+                                        dealType: type,
                                         destination,
-                                        startDate: sDate,
-                                        endDate: eDate,
-                                        price: priceVal,
-                                        origin: originVal,
-                                        airline: airlineVal,
-                                        baggage: baggageVal,
-                                        transfers: transferVal
+                                        startDate: startDate,
+                                        endDate: endDate,
+                                        price: price,
+                                        origin: origin,
+                                        airline: airline,
+                                        baggage: baggageInfo,
+                                        transfers: transferCount
                                     })
                                 });
                                 const result = await res.json();
