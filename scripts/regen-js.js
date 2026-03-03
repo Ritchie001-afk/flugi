@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env.local' });
 const { PrismaClient } = require('@prisma/client');
 const cloudinary = require('cloudinary').v2;
 const https = require('https');
@@ -55,7 +56,13 @@ async function main(slug) {
         console.log('Uploading to Cloudinary...');
         const result = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
-                { folder: 'flugi_og_cache', resource_type: 'image' },
+                {
+                    folder: 'flugi_og_cache',
+                    resource_type: 'image',
+                    api_key: process.env.CLOUDINARY_API_KEY,
+                    api_secret: process.env.CLOUDINARY_API_SECRET,
+                    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+                },
                 (error, result) => {
                     if (error) reject(error);
                     else resolve(result);
@@ -81,6 +88,4 @@ async function main(slug) {
     }
 }
 
-// Load env
-require('dotenv').config({ path: '.env.local' });
 main('bangkok-z-bangkok-pkfq');

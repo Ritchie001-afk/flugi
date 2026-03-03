@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { generateAndUploadOgImage } from '@/lib/og-generator';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,6 +44,27 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
         if (transferCount !== undefined) updateData.transferCount = transferCount ? parseInt(transferCount) : null;
         if (startDate !== undefined) updateData.startDate = startDate ? new Date(startDate) : null;
         if (endDate !== undefined) updateData.endDate = endDate ? new Date(endDate) : null;
+
+        // Automatically regenerate OG image during Edit so any title/price/image changes reflect on Facebook
+        console.log("Regenerating Cloudinary OG image for edited deal...");
+        const cloudinaryOgUrl = await generateAndUploadOgImage({
+            title: updateData.title || title,
+            price: updateData.price || price,
+            destination: updateData.destination || destination,
+            image: updateData.image || image,
+            images: updateData.images || images,
+            startDate: updateData.startDate,
+            endDate: updateData.endDate,
+            availableDates: updateData.availableDates || availableDates,
+            airline: updateData.airline || airline
+        });
+
+        if (cloudinaryOgUrl) {
+            updateData.ogImage = cloudinaryOgUrl;
+            console.log("Cloudinary URL appended to Update payload:", cloudinaryOgUrl);
+        } else {
+            console.log("Failed to generate OG Image during update");
+        }
 
         const deal = await prisma.deal.update({
             where: { id },
