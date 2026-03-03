@@ -57,8 +57,16 @@ export async function POST(req: Request) {
                 const part = data.candidates?.[0]?.content?.parts?.[0];
                 if (part && part.inlineData) {
                     const base64Image = part.inlineData.data;
-                    const mimeType = part.inlineData.mimeType || 'image/jpeg';
-                    return NextResponse.json({ url: `data:${mimeType};base64,${base64Image}` });
+
+                    console.log("Uploading generated AI image to Cloudinary...");
+                    const buffer = Buffer.from(base64Image, 'base64');
+                    const uploadResult = await uploadBufferToCloudinary(buffer, 'flugi_ai_gemini_flash');
+
+                    if (uploadResult.url) {
+                        return NextResponse.json({ url: uploadResult.url });
+                    } else {
+                        throw new Error(uploadResult.error || "Failed to upload AI image to Cloudinary");
+                    }
                 }
                 // If no inlineData, maybe it returned text? or different structure?
                 console.log("Gemini Response Data:", JSON.stringify(data, null, 2));
