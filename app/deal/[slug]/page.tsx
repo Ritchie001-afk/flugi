@@ -46,12 +46,11 @@ async function getDeal(slugOrId: string) {
                 baggageInfo: true,
                 weatherInfo: true,
                 entryRequirements: true,
-                isFlashDeal: true,
                 createdAt: true,
                 ogImage: true,
+                hotel: true,
                 // Temporarily disable new columns
                 // origin: true,
-                // hotel: true,
                 // mealPlan: true,
             }
         });
@@ -90,12 +89,11 @@ async function getDeal(slugOrId: string) {
                     baggageInfo: true,
                     weatherInfo: true,
                     entryRequirements: true,
-                    isFlashDeal: true,
                     createdAt: true,
                     ogImage: true,
+                    hotel: true,
                     // Temporarily disable new columns
                     // origin: true,
-                    // hotel: true,
                     // mealPlan: true,
                 }
             });
@@ -226,9 +224,15 @@ export default async function DealPage({ params }: DealPageProps) {
     const destinationCity = deal.destinationCity || (deal.destination.includes(',') ? deal.destination.split(',').pop()?.trim() : deal.destination) || '';
     const images = deal.images && deal.images.length > 0 ? deal.images : [deal.image];
 
-    // Normalize type check (Handle English 'flight', Czech 'letenka', etc.)
     const rawType = deal.type?.toLowerCase().trim() || '';
     const isFlight = rawType === 'flight' || rawType === 'letenka' || rawType.includes('let');
+
+    // Determine the map search query
+    // If we have a specific hotel, search for the hotel within the destination city.
+    // Otherwise, just search for the general destination.
+    const mapQuery = deal.hotel 
+        ? `${deal.hotel}, ${destinationCity || deal.destination}` 
+        : deal.destination;
 
     return (
         <main className="min-h-screen bg-white pb-20">
@@ -351,7 +355,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                     style={{ border: 0 }}
                                     loading="lazy"
                                     allowFullScreen
-                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(deal.destination)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
                                     title="Mapa destinace"
                                 />
                             </div>
