@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         }
         // Fallback image if missing
         if (!image) {
-            image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop';
+            image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2400&auto=format&fit=crop';
         }
 
         // --- Font Loading ---
@@ -44,24 +44,24 @@ export async function GET(req: NextRequest) {
 
         // --- Icons (SVG) ---
         // Using neutral colors for icons inside the white box
-        const iconStyle = { width: 24, height: 24, marginRight: 10 };
+        const iconStyle = { width: 48, height: 48, marginRight: 20 };
         const PlaneIcon = () => (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
             </svg>
         );
         const PinIcon = () => (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>
             </svg>
         );
         const CalendarIcon = () => (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
         );
         const UserIcon = () => (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
             </svg>
         );
@@ -85,6 +85,7 @@ export async function GET(req: NextRequest) {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
+                        objectPosition: 'right center',
                     }} />
 
                     {/* 2. Gradient Overlay (Left to Right) */}
@@ -103,7 +104,7 @@ export async function GET(req: NextRequest) {
                         flexDirection: 'column',
                         width: '65%',
                         height: '100%',
-                        paddingLeft: 60,
+                        paddingLeft: 120,
                         justifyContent: 'center', // Center vertically roughly
                         alignItems: 'flex-start',
                     }}>
@@ -111,10 +112,10 @@ export async function GET(req: NextRequest) {
                         {/* Logo */}
                         <div style={{
                             position: 'absolute',
-                            top: 50,
-                            left: 60,
+                            top: 100,
+                            left: 120,
                             color: 'white',
-                            fontSize: 32,
+                            fontSize: 64,
                             fontWeight: 900,
                             display: 'flex',
                             alignItems: 'center'
@@ -126,26 +127,26 @@ export async function GET(req: NextRequest) {
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            marginBottom: 20,
-                            marginTop: 60, // Push down a bit
+                            marginBottom: 40,
+                            marginTop: 120, // Push down a bit
                         }}>
                             <span style={{
                                 color: 'white',
-                                fontSize: 30,
+                                fontSize: 60,
                                 fontWeight: 700,
                                 textTransform: 'uppercase',
-                                textShadow: '0 4px 20px rgba(0,0,0,0.5)',
-                                marginBottom: 5
+                                textShadow: '0 8px 40px rgba(0,0,0,0.5)',
+                                marginBottom: 10
                             }}>
                                 AKČNÍ LETENKA
                             </span>
                             <span style={{
                                 color: 'white',
-                                fontSize: 70,
+                                fontSize: 140,
                                 fontWeight: 900,
                                 textTransform: 'uppercase',
                                 lineHeight: 0.9,
-                                textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                                textShadow: '0 8px 40px rgba(0,0,0,0.5)',
                             }}>
                                 {title}
                             </span>
@@ -154,26 +155,26 @@ export async function GET(req: NextRequest) {
                         {/* Price Tag (Levitating) */}
                         <div style={{
                             backgroundColor: '#E11D48',
-                            borderRadius: 15,
+                            borderRadius: 30,
                             transform: 'rotate(-4deg)',
-                            padding: '10px 30px',
-                            boxShadow: '0 15px 35px rgba(225, 29, 72, 0.4)',
-                            marginBottom: 30,
+                            padding: '20px 60px',
+                            boxShadow: '0 30px 70px rgba(225, 29, 72, 0.4)',
+                            marginBottom: 60,
                             display: 'flex',
                             alignItems: 'center',
                             position: 'relative'
                         }}>
                             {/* Hole */}
                             <div style={{
-                                width: 12, height: 12, borderRadius: '50%', backgroundColor: '#881337',
-                                position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)'
+                                width: 24, height: 24, borderRadius: '50%', backgroundColor: '#881337',
+                                position: 'absolute', left: 30, top: '50%', transform: 'translateY(-50%)'
                             }} />
 
                             <span style={{
                                 color: 'white',
-                                fontSize: 50,
+                                fontSize: 100,
                                 fontWeight: 900,
-                                marginLeft: 10
+                                marginLeft: 20
                             }}>
                                 {price}
                             </span>
@@ -182,28 +183,28 @@ export async function GET(req: NextRequest) {
                         {/* White Info Card */}
                         <div style={{
                             backgroundColor: 'white',
-                            borderRadius: 20,
-                            padding: '25px',
+                            borderRadius: 40,
+                            padding: '50px',
                             width: '90%',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 15,
-                            boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                            gap: 30,
+                            boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
                         }}>
                             {/* Items */}
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 700, color: '#0f172a' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 44, fontWeight: 700, color: '#0f172a' }}>
                                 <PlaneIcon />
                                 <span>Odkud: {origin}</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 700, color: '#0f172a' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 44, fontWeight: 700, color: '#0f172a' }}>
                                 <PinIcon />
                                 <span>Kam: {destination}</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 700, color: '#0f172a' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 44, fontWeight: 700, color: '#0f172a' }}>
                                 <CalendarIcon />
                                 <span>Termín: {date}</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 700, color: '#0f172a' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 44, fontWeight: 700, color: '#0f172a' }}>
                                 <UserIcon />
                                 <span>Aerolinka: {airline}</span>
                             </div>
@@ -213,8 +214,8 @@ export async function GET(req: NextRequest) {
                 </div>
             ),
             {
-                width: 1200,
-                height: 630,
+                width: 2400,
+                height: 1260,
                 headers: {
                     'Cache-Control': 'public, max-age=3600, immutable',
                 },

@@ -48,7 +48,7 @@ const DESTINATION_IMAGES: Record<string, string> = {
 };
 
 export function getDestinationImage(destination: string | null | undefined, fallbackImage?: string | null): string {
-    if (!destination || typeof destination !== 'string') return fallbackImage || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1421&auto=format&fit=crop';
+    if (!destination || typeof destination !== 'string') return fallbackImage || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1470&auto=format&fit=crop';
 
     const normalized = destination.toLowerCase().trim();
 
@@ -80,5 +80,5 @@ export function getDestinationImage(destination: string | null | undefined, fall
     }
 
     // 3. Fallback
-    return fallbackImage || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1421&auto=format&fit=crop'; // Generic Travel
+    return fallbackImage || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1470&auto=format&fit=crop'; // Generic Travel
 }
