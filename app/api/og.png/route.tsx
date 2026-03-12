@@ -27,6 +27,10 @@ export async function GET(req: NextRequest) {
         if (image && image.startsWith('/')) {
             image = `${baseUrl}${image}`;
         }
+        // Optimize Cloudinary images to prevent massive edge buffer memory crashes and timeouts
+        if (image && image.includes('res.cloudinary.com') && !image.includes('w_')) {
+            image = image.replace('/upload/', '/upload/w_1200,q_80,f_jpg/');
+        }
         // Fallback image if missing
         if (!image) {
             image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2400&auto=format&fit=crop';
