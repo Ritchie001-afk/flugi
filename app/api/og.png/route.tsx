@@ -133,7 +133,7 @@ export async function GET(req: NextRequest) {
                             <span style={{
                                 color: 'white',
                                 fontSize: 60,
-                                fontWeight: 700,
+                                fontWeight: 600,
                                 textTransform: 'uppercase',
                                 textShadow: '0 8px 40px rgba(0,0,0,0.5)',
                                 marginBottom: 10
@@ -143,7 +143,7 @@ export async function GET(req: NextRequest) {
                             <span style={{
                                 color: 'white',
                                 fontSize: 140,
-                                fontWeight: 900,
+                                fontWeight: 700,
                                 textTransform: 'uppercase',
                                 lineHeight: 0.9,
                                 textShadow: '0 8px 40px rgba(0,0,0,0.5)',
@@ -223,6 +223,12 @@ export async function GET(req: NextRequest) {
                     {
                         name: 'Montserrat',
                         data: fontBold,
+                        style: 'normal',
+                        weight: 600, // Using Bold for 600 internally
+                    },
+                    {
+                        name: 'Montserrat',
+                        data: fontBold, // Use bold instead of black to be slightly thinner, let's remap 700 to bold
                         style: 'normal',
                         weight: 700,
                     },

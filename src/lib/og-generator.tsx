@@ -19,7 +19,7 @@ export async function generateAndUploadOgImage(deal: any): Promise<string | null
             image = null; // Don't send massive strings in GET requests
         }
         if (!image) {
-            image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop';
+            image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2400&auto=format&fit=crop';
         }
 
         const title = deal.title || 'Akční Letenka';
