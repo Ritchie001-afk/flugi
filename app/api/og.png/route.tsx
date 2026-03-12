@@ -15,7 +15,9 @@ export async function GET(req: NextRequest) {
         let image = searchParams.get('image');
         const destination = searchParams.get('destination') || '';
         const date = searchParams.get('date') || 'Termín na vyžádání';
+        const type = searchParams.get('type') || 'flight';
         const airline = searchParams.get('airline') || 'Letecky';
+        const board = searchParams.get('board') || 'Bez stravy';
         const origin = searchParams.get('origin') || 'Vídeň / Praha';
 
         // --- Image URL Resolution ---
@@ -63,6 +65,15 @@ export async function GET(req: NextRequest) {
         const UserIcon = () => (
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        );
+        const CoffeeIcon = () => (
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={iconStyle}>
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
             </svg>
         );
 
@@ -205,8 +216,8 @@ export async function GET(req: NextRequest) {
                                 <span>Termín: {date}</span>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', fontSize: 44, fontWeight: 700, color: '#0f172a' }}>
-                                <UserIcon />
-                                <span>Aerolinka: {airline}</span>
+                                {type === 'package' ? <CoffeeIcon /> : <UserIcon />}
+                                <span>{type === 'package' ? `Strava: ${board}` : `Aerolinka: ${airline}`}</span>
                             </div>
                         </div>
 

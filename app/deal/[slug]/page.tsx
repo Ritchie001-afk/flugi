@@ -50,8 +50,8 @@ async function getDeal(slugOrId: string) {
                 ogImage: true,
                 hotel: true,
                 // Temporarily disable new columns
-                // origin: true,
-                // mealPlan: true,
+                origin: true,
+                mealPlan: true,
             }
         });
     } catch (error) {
@@ -93,8 +93,8 @@ async function getDeal(slugOrId: string) {
                     ogImage: true,
                     hotel: true,
                     // Temporarily disable new columns
-                    // origin: true,
-                    // mealPlan: true,
+                    origin: true,
+                    mealPlan: true,
                 }
             });
         } catch (e) {
@@ -162,6 +162,12 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
     if (deal.airline) {
         urlParams.set('airline', deal.airline);
+    }
+    if (deal.type) {
+        urlParams.set('type', deal.type);
+    }
+    if (deal.mealPlan) {
+        urlParams.set('board', deal.mealPlan);
     }
 
     // Construct valid Absolute URLs
