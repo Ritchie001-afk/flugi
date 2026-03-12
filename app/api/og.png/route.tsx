@@ -153,10 +153,10 @@ export async function GET(req: NextRequest) {
                             </span>
                             <span style={{
                                 color: 'white',
-                                fontSize: 140,
+                                fontSize: title.length > 25 ? 100 : 130,
                                 fontWeight: 700,
                                 textTransform: 'uppercase',
-                                lineHeight: 0.9,
+                                lineHeight: 1.1,
                                 textShadow: '0 8px 40px rgba(0,0,0,0.5)',
                             }}>
                                 {title}

@@ -59,7 +59,9 @@ export async function POST(req: Request) {
             endDate: updateData.endDate,
             availableDates: updateData.availableDates || availableDates,
             airline: updateData.airline || airline,
-            origin: updateData.origin || origin
+            origin: updateData.origin || origin,
+            type: updateData.type || type,
+            mealPlan: updateData.mealPlan || mealPlan
         });
 
         if (cloudinaryOgUrl) {
