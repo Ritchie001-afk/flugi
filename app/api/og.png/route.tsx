@@ -153,7 +153,7 @@ export async function GET(req: NextRequest) {
                                 textShadow: '0 8px 40px rgba(0,0,0,0.5)',
                                 marginBottom: 10
                             }}>
-                                AKČNÍ LETENKA
+                                {type === 'package' ? 'AKČNÍ ZÁJEZD' : 'AKČNÍ LETENKA'}
                             </span>
                             <span style={{
                                 color: 'white',
