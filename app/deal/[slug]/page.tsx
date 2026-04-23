@@ -136,12 +136,25 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
     const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
+    // Format dates & price for the OG title since the raw image doesn't contain text anymore
+    const startObj = deal.startDate ? new Date(deal.startDate) : null;
+    const endObj = deal.endDate ? new Date(deal.endDate) : null;
+    let dateStr = "";
+    if (startObj && endObj) {
+        dateStr = ` | Termín: ${startObj.getDate()}.${startObj.getMonth() + 1}. - ${endObj.getDate()}.${endObj.getMonth() + 1}. ${endObj.getFullYear()}`;
+    } else if (deal.availableDates) {
+        dateStr = ` | ${deal.availableDates.split('\n')[0].substring(0, 30)}`;
+    }
+    
+    const priceStr = deal.price ? ` za ${deal.price.toLocaleString('cs-CZ')} Kč` : '';
+    const ogTitle = `${deal.title}${priceStr}${dateStr}`;
+
     return {
         metadataBase: new URL(baseUrl),
         title: `${deal.title} | Flugi`,
         description: safeDescription,
         openGraph: {
-            title: deal.title,
+            title: ogTitle,
             description: safeDescription,
             url: `${baseUrl}/deal/${slug}`,
             siteName: 'Flugi.cz',
@@ -154,7 +167,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
         },
         twitter: {
             card: 'summary_large_image',
-            title: deal.title,
+            title: ogTitle,
             description: safeDescription,
             images: [deal.image],
         },
