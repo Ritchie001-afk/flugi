@@ -136,53 +136,6 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
     const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
-    // Extract necessary fields for Satori image generation
-    const urlParams = new URLSearchParams();
-    urlParams.set('title', deal.title);
-    urlParams.set('price', deal.price.toString());
-    urlParams.set('destination', deal.destination);
-
-    // Attempt best available image
-    const bestImage = deal.image || (deal.images && deal.images[0]) || '';
-    if (bestImage && !bestImage.startsWith('data:image')) {
-        urlParams.set('image', bestImage);
-    }
-
-    // Add date range if available
-    if (deal.startDate && deal.endDate) {
-        const start = new Date(deal.startDate);
-        const end = new Date(deal.endDate);
-        const fmt = (d: Date) => `${d.getDate()}.${d.getMonth() + 1}.`;
-        urlParams.set('date', `${fmt(start)} – ${fmt(end)} ${end.getFullYear()}`);
-    } else if (deal.availableDates) {
-        // Fallback to first line of available dates, or 'Na vyžádání'
-        const shortDate = deal.availableDates.split('\n')[0].substring(0, 30);
-        urlParams.set('date', shortDate);
-    }
-
-    if (deal.airline) {
-        urlParams.set('airline', deal.airline);
-    }
-    if (deal.type) {
-        urlParams.set('type', deal.type);
-    }
-    if (deal.mealPlan) {
-        urlParams.set('board', deal.mealPlan);
-    }
-
-    // Construct valid Absolute URLs
-    let ogImageUrl;
-    if (deal.ogImage) {
-        // Use manual override if available
-        ogImageUrl = deal.ogImage.startsWith('http') ? deal.ogImage : new URL(deal.ogImage, baseUrl).toString();
-    } else {
-        // Fallback to Satori edge generation
-        ogImageUrl = new URL(`/api/og.png?${urlParams.toString()}`, baseUrl).toString();
-    }
-
-    // Create a fallback URL just in case Satori errors
-    const fallbackOgUrl = new URL(`/api/og.png?title=Flugi.cz`, baseUrl).toString();
-
     return {
         metadataBase: new URL(baseUrl),
         title: `${deal.title} | Flugi`,
@@ -194,15 +147,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             siteName: 'Flugi.cz',
             locale: 'cs_CZ',
             type: 'website',
-            images: [
-                {
-                    url: ogImageUrl,
-                    width: 1200,
-                    height: 630,
-                    alt: deal.title,
-                    type: 'image/png',
-                }
-            ],
+            images: [deal.image],
         },
         alternates: {
             canonical: `${baseUrl}/deal/${slug}`,
@@ -211,7 +156,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             card: 'summary_large_image',
             title: deal.title,
             description: safeDescription,
-            images: [ogImageUrl],
+            images: [deal.image],
         },
     };
 }
