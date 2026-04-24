@@ -21,8 +21,9 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
         );
 
         if (!response.ok) {
-           console.error("Gemini API Image Error", await response.text());
-           return "https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena";
+           const errorText = await response.text();
+           console.error("Gemini API Image Error", errorText);
+           return `https://placehold.co/1200x600/e2e8f0/475569.png?text=Gemini+API+Error+${response.status}`;
         }
 
         const data = await response.json();
@@ -35,26 +36,27 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
             return await new Promise<string>((resolve) => {
                 try {
                     cloudinary.uploader.upload_stream(
-                        { resource_type: 'image', folder: 'flugi_flights_automation' },
+                        { resource_type: 'image', folder: 'flugi_ai_gemini_flash' },
                         (error, result) => {
                             if (error || !result?.secure_url) {
                                 console.error('Cloudinary flight image upload error:', error);
-                                resolve("https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena");
+                                resolve(`https://placehold.co/1200x600/e2e8f0/475569.png?text=Cloudinary+Upload+Error`);
                             } else {
                                 resolve(result.secure_url);
                             }
                         }
                     ).end(buffer);
-                } catch (cloudinaryErr) {
+                } catch (cloudinaryErr: any) {
                     console.error("Synchronous Cloudinary Error:", cloudinaryErr);
-                    resolve("https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena");
+                    resolve(`https://placehold.co/1200x600/e2e8f0/475569.png?text=Cloudinary+Sync+Error`);
                 }
             });
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error("Failed to generate image:", e);
+        return `https://placehold.co/1200x600/e2e8f0/475569.png?text=Exception+${encodeURIComponent(e.message || "Unknown")}`;
     }
-    return "https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena";
+    return "https://placehold.co/1200x600/e2e8f0/475569.png?text=No+Image+Data";
 }
 
 export async function POST(req: Request) {
