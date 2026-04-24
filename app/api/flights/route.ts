@@ -1,6 +1,56 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prisma from "@/lib/db";
+import cloudinary from '@/lib/cloudinary';
+
+// Pomocná funkce pro vygenerování a upload obrázku
+async function generateAndUploadImage(destination: string, apiKey: string): Promise<string> {
+    try {
+        console.log("Generating Gemini image for:", destination);
+        const prompt = `Hyper-realistic travel photography of ${destination}, stunning view, 4k, sunny weather, tourism, cinematic lighting, photorealistic, professional photography, national geographic style. No text, no people.`;
+
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=${apiKey}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                }),
+            }
+        );
+
+        if (!response.ok) {
+           console.error("Gemini API Image Error", await response.text());
+           return "https://via.placeholder.com/1200x600?text=Flugi+Letenka";
+        }
+
+        const data = await response.json();
+        const part = data.candidates?.[0]?.content?.parts?.[0];
+        
+        if (part && part.inlineData) {
+            const base64Image = part.inlineData.data;
+            const buffer = Buffer.from(base64Image, 'base64');
+            
+            return new Promise<string>((resolve) => {
+                cloudinary.uploader.upload_stream(
+                    { resource_type: 'image', folder: 'flugi_flights_automation' },
+                    (error, result) => {
+                        if (error || !result?.secure_url) {
+                            console.error('Cloudinary flight image upload error:', error);
+                            resolve("https://via.placeholder.com/1200x600?text=Flugi+Letenka");
+                        } else {
+                            resolve(result.secure_url);
+                        }
+                    }
+                ).end(buffer);
+            });
+        }
+    } catch (e) {
+        console.error("Failed to generate image:", e);
+    }
+    return "https://via.placeholder.com/1200x600?text=Flugi+Letenka";
+}
 
 export async function POST(req: Request) {
   try {
@@ -67,9 +117,11 @@ export async function POST(req: Request) {
     
     const flightData = JSON.parse(text);
 
-    // Vytvoření dynamického obrázku z názvu destinace
-    const normalizedDest = flightData.destination ? flightData.destination.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "").toLowerCase() : "travel";
-    const dynamicImage = `https://loremflickr.com/1200/600/${normalizedDest},city,travel`;
+    // Vytvoření dynamického obrázku z názvu destinace pomocí Gemini
+    let dynamicImage = "https://via.placeholder.com/1200x600?text=Flugi+Letenka";
+    if (flightData.destination) {
+        dynamicImage = await generateAndUploadImage(flightData.destination, process.env.GEMINI_API_KEY!);
+    }
 
     // 4. Uložení do DB do tabulky Deal
     const savedDeal = await prisma.deal.create({
