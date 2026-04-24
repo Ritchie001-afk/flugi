@@ -22,7 +22,7 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
 
         if (!response.ok) {
            console.error("Gemini API Image Error", await response.text());
-           return "https://via.placeholder.com/1200x600?text=Flugi+Letenka";
+           return "https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena";
         }
 
         const data = await response.json();
@@ -39,7 +39,7 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
                         (error, result) => {
                             if (error || !result?.secure_url) {
                                 console.error('Cloudinary flight image upload error:', error);
-                                resolve("https://via.placeholder.com/1200x600?text=Flugi+Letenka");
+                                resolve("https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena");
                             } else {
                                 resolve(result.secure_url);
                             }
@@ -47,14 +47,14 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
                     ).end(buffer);
                 } catch (cloudinaryErr) {
                     console.error("Synchronous Cloudinary Error:", cloudinaryErr);
-                    resolve("https://via.placeholder.com/1200x600?text=Flugi+Letenka");
+                    resolve("https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena");
                 }
             });
         }
     } catch (e) {
         console.error("Failed to generate image:", e);
     }
-    return "https://via.placeholder.com/1200x600?text=Flugi+Letenka";
+    return "https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena";
 }
 
 export async function POST(req: Request) {
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
     const flightData = JSON.parse(text);
 
     // Vytvoření dynamického obrázku z názvu destinace pomocí Gemini
-    let dynamicImage = "https://via.placeholder.com/1200x600?text=Flugi+Letenka";
+    let dynamicImage = "https://placehold.co/1200x600/e2e8f0/475569.png?text=Fotografie+bude+doplnena";
     if (flightData.destination) {
         dynamicImage = await generateAndUploadImage(flightData.destination, process.env.GEMINI_API_KEY!);
     }
