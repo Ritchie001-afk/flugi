@@ -92,7 +92,7 @@ export async function POST(req: Request) {
       PRAVIDLA:
       - Titulek musí být chytlavý (použij emoji).
       - STRIKTNÍ ZÁKAZ MARKDOWNU: V popisu (description) NEPOUŽÍVEJ formátování Markdown (absolutně žádné hvězdičky ** pro tučné písmo), vracej jen čistý text!
-      - Z textu vyčti informace o letu: letecká společnost, počet přestupů (číslo, 0=přímý), konkrétní data odletu a návratu.
+      - Z textu vyčti informace o letu: letecká společnost, odletové letiště (origin - např. "Praha (PRG)"), počet přestupů (číslo, 0=přímý), konkrétní data odletu a návratu.
       - ZAVAZADLO: Z textu vytáhni JEN rozměry a váhu základního zavazadla v ceně podle aerolinky (např. "40x30x20 cm, 8 kg").
       - POPIS (CESTOPIS): V poli description vůbec nepopisuj detaily letenky (zavazadla, aerolinky, přestupy). Místo toho napiš poutavého cestovatelského průvodce destinací (délka cca 2-3 kratší odstavce). Zmiň hlavní památky, co tam vidět, jaké aktivity se tam dají dělat a jakou to má atmosféru. Znovu opakuji: ZÁKAZ MARKDOWNU v tomto textu.
       - ODKAZ NA SKYSCANNER: Z cílové a výchozí destinace a termínů odvoď IATA kódy a přesná data letu, a sestav URL odkaz v přesně tomto formátu: "https://www.skyscanner.cz/transport/flights/[IATA_odletu]/[IATA_priletu]/[YYMMDD_tam]/[YYMMDD_zpet]/". Vlož jej do pole "link".
@@ -104,6 +104,7 @@ export async function POST(req: Request) {
       {
         "title": "Titulek příspěvku",
         "price": "1234 Kč",
+        "origin": "Praha (PRG)",
         "destination": "Město",
         "dates": "Krátce textově termín",
         "description": "Poutavý cestopis o destinaci. 2-3 odstavce. Čistý text BEZ markdownu.",
@@ -142,6 +143,7 @@ export async function POST(req: Request) {
         url: flightData.link,
         image: dynamicImage,
         type: 'flight',
+        origin: flightData.origin || null,
         airline: flightData.airline || null,
         transferCount: flightData.transfers ?? 0,
         baggageInfo: flightData.baggage || null,
