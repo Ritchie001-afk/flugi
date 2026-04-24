@@ -32,18 +32,23 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
             const base64Image = part.inlineData.data;
             const buffer = Buffer.from(base64Image, 'base64');
             
-            return new Promise<string>((resolve) => {
-                cloudinary.uploader.upload_stream(
-                    { resource_type: 'image', folder: 'flugi_flights_automation' },
-                    (error, result) => {
-                        if (error || !result?.secure_url) {
-                            console.error('Cloudinary flight image upload error:', error);
-                            resolve("https://via.placeholder.com/1200x600?text=Flugi+Letenka");
-                        } else {
-                            resolve(result.secure_url);
+            return await new Promise<string>((resolve) => {
+                try {
+                    cloudinary.uploader.upload_stream(
+                        { resource_type: 'image', folder: 'flugi_flights_automation' },
+                        (error, result) => {
+                            if (error || !result?.secure_url) {
+                                console.error('Cloudinary flight image upload error:', error);
+                                resolve("https://via.placeholder.com/1200x600?text=Flugi+Letenka");
+                            } else {
+                                resolve(result.secure_url);
+                            }
                         }
-                    }
-                ).end(buffer);
+                    ).end(buffer);
+                } catch (cloudinaryErr) {
+                    console.error("Synchronous Cloudinary Error:", cloudinaryErr);
+                    resolve("https://via.placeholder.com/1200x600?text=Flugi+Letenka");
+                }
             });
         }
     } catch (e) {
@@ -150,8 +155,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, data: flightData });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Chyba API:", error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error?.message || String(error) || 'Internal Server Error' }, { status: 500 });
   }
 }
