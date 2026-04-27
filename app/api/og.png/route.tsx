@@ -1,9 +1,12 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 30;
 
 export async function GET(req: NextRequest) {
     try {
@@ -21,24 +24,26 @@ export async function GET(req: NextRequest) {
 
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.flugi.cz';
 
-        // Format price
+        // Load fonts from filesystem (avoids HTTP fetch issues on Vercel)
+        const fontsDir = join(process.cwd(), 'public', 'fonts');
+        const fontBlack = readFileSync(join(fontsDir, 'Montserrat-Black.ttf'));
+        const fontBold = readFileSync(join(fontsDir, 'Montserrat-Bold.ttf'));
+
+        // Format deal data
         const price = deal.price
             ? new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(deal.price)
             : '';
-
-        // Format dates
         const startObj = deal.startDate ? new Date(deal.startDate) : null;
         const endObj = deal.endDate ? new Date(deal.endDate) : null;
         const date = startObj && endObj
             ? `${startObj.getDate()}. ${startObj.getMonth() + 1}. – ${endObj.getDate()}. ${endObj.getMonth() + 1}. ${endObj.getFullYear()}`
             : (deal.availableDates || '').split('\n')[0].substring(0, 40) || 'Termín na vyžádání';
-
         const type = deal.type || 'flight';
         const origin = deal.origin || 'Praha / Vídeň';
         const destination = deal.destination || '';
         const airline = deal.airline || 'Letecky';
 
-        // Optimise Cloudinary image for OG (resize + webp)
+        // Optimise Cloudinary image for OG
         let image = deal.image || '';
         if (image.includes('res.cloudinary.com') && !image.includes('/w_')) {
             image = image.replace('/upload/', '/upload/w_1200,q_80,f_jpg/');
@@ -46,18 +51,6 @@ export async function GET(req: NextRequest) {
         if (!image) {
             image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2400&auto=format&fit=crop';
         }
-
-        // Load fonts from /public/fonts/
-        const [fontBlack, fontBold] = await Promise.all([
-            fetch(new URL(`${baseUrl}/fonts/Montserrat-Black.ttf`)).then(r => {
-                if (!r.ok) throw new Error(`Font Black failed: ${r.status}`);
-                return r.arrayBuffer();
-            }),
-            fetch(new URL(`${baseUrl}/fonts/Montserrat-Bold.ttf`)).then(r => {
-                if (!r.ok) throw new Error(`Font Bold failed: ${r.status}`);
-                return r.arrayBuffer();
-            }),
-        ]);
 
         // SVG Icons
         const iconStyle = { width: 48, height: 48, marginRight: 20 };
