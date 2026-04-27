@@ -148,8 +148,8 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
     const priceStr = deal.price ? ` za ${deal.price.toLocaleString('cs-CZ')} Kč` : '';
     const ogTitle = `${deal.title}${priceStr}${dateStr}`;
 
-    // Short, clean OG image URL → generates the design server-side
-    const ogImageUrl = `${baseUrl}/api/og.png?slug=${encodeURIComponent(slug)}`;
+    // Short, clean OG image URL → generates the design server-side (?v= busts Facebook/CDN cache)
+    const ogImageUrl = `${baseUrl}/api/og.png?slug=${encodeURIComponent(slug)}&v=3`;
 
     return {
         metadataBase: new URL(baseUrl),

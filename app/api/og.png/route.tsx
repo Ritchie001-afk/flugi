@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
         const titleText = origin && destination
             ? `Z ${origin.split('(')[0].trim()} do ${destination}`
             : destination;
-        const titleFontSize = titleText.length > 24 ? 28 : titleText.length > 18 ? 34 : 40;
+        const titleFontSize = titleText.length > 24 ? 20 : titleText.length > 18 ? 25 : 30;
 
         let image = deal.image || '';
         if (image.includes('res.cloudinary.com') && !image.includes('/w_')) {
@@ -54,36 +54,36 @@ export async function GET(req: NextRequest) {
                     <div style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '760px', height: '630px', background: 'linear-gradient(90deg, #0046a3 0%, rgba(0,70,163,0.95) 55%, rgba(0,70,163,0.2) 100%)' }}></div>
 
                     {/* Content column */}
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '660px', height: '630px', padding: '26px 38px', position: 'relative' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '660px', height: '630px', padding: '22px 32px', position: 'relative' }}>
 
                         {/* Logo */}
-                        <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 20, fontWeight: 700, marginBottom: 10 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 16, fontWeight: 700, marginBottom: 8 }}>
                             ✈ Flugi.cz
                         </div>
 
                         {/* Type label */}
-                        <div style={{ display: 'flex', color: '#93C5FD', fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 4 }}>
+                        <div style={{ display: 'flex', color: '#93C5FD', fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 3 }}>
                             {typeLabel}:
                         </div>
 
                         {/* Title */}
-                        <div style={{ display: 'flex', color: 'white', fontSize: titleFontSize, fontWeight: 900, lineHeight: 1.1, marginBottom: 10 }}>
+                        <div style={{ display: 'flex', color: 'white', fontSize: titleFontSize, fontWeight: 900, lineHeight: 1.1, marginBottom: 8 }}>
                             {titleText.toUpperCase()}
                         </div>
 
                         {/* Price badge */}
                         {price !== '' && (
-                            <div style={{ display: 'flex', marginBottom: 12 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#E11D48', borderRadius: '30px', padding: '8px 22px', boxShadow: '0 8px 24px rgba(225,29,72,0.4)' }}>
-                                    <span style={{ color: 'white', fontSize: 30, fontWeight: 900 }}>{price}</span>
+                            <div style={{ display: 'flex', marginBottom: 10 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#E11D48', borderRadius: '24px', padding: '6px 18px', boxShadow: '0 6px 18px rgba(225,29,72,0.4)' }}>
+                                    <span style={{ color: 'white', fontSize: 24, fontWeight: 900 }}>{price}</span>
                                 </div>
                             </div>
                         )}
 
                         {/* Info card */}
-                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '16px', padding: '12px 16px', gap: 6 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '14px', padding: '10px 14px', gap: 5 }}>
                             {origin !== '' && (
-                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 13, fontWeight: 700 }}>
                                     <span style={{ marginRight: 10, display: 'flex' }}>✈</span>
                                     <span style={{ display: 'flex' }}>Odkud: {origin}</span>
                                 </div>
@@ -93,13 +93,13 @@ export async function GET(req: NextRequest) {
                                 <span style={{ display: 'flex' }}>Kam: {destination}</span>
                             </div>
                             {date !== '' && (
-                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 13, fontWeight: 700 }}>
                                     <span style={{ marginRight: 10, display: 'flex' }}>📅</span>
                                     <span style={{ display: 'flex' }}>Termín: {date}</span>
                                 </div>
                             )}
                             {airline !== '' && (
-                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 13, fontWeight: 700 }}>
                                     <span style={{ marginRight: 10, display: 'flex' }}>🛫</span>
                                     <span style={{ display: 'flex' }}>Letecká společnost: {airline}</span>
                                 </div>
@@ -111,7 +111,7 @@ export async function GET(req: NextRequest) {
             {
                 width: 1200,
                 height: 630,
-                headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=86400' },
+                headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
             }
         );
     } catch (e: any) {
