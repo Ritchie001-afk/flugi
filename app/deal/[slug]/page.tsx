@@ -151,47 +151,42 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
     // Build Cloudinary OG image with text overlays (only if stored on Cloudinary)
     let ogImageUrl = deal.image;
     if (deal.image && deal.image.includes('res.cloudinary.com')) {
-        // Extract the part after /upload/
         const uploadIdx = deal.image.indexOf('/upload/');
         if (uploadIdx !== -1) {
-            const base = deal.image.substring(0, uploadIdx + 8); // up to and including /upload/
+            const base = deal.image.substring(0, uploadIdx + 8);
             const publicIdWithVersion = deal.image.substring(uploadIdx + 8);
 
-            // Destination text (top left)
-            const destText = encodeURIComponent(deal.destination || '');
-            // Price text (bottom right)
-            const priceText = deal.price
-                ? encodeURIComponent(`${Math.round(deal.price).toLocaleString('cs-CZ')} Kc`)
-                : '';
-            // Dates text (bottom center)
-            const datesText = encodeURIComponent(
+            // Helper: strip Czech diacritics and encode for Cloudinary URL
+            const cldText = (str: string) =>
+                str.normalize('NFD')
+                   .replace(/[\u0300-\u036f]/g, '')  // remove diacritics
+                   .replace(/[,/]/g, ' ')             // remove Cloudinary reserved chars
+                   .substring(0, 50)
+                   .trim()
+                   .replace(/ +/g, '%20');
+
+            const destText  = cldText(deal.destination || '');
+            const priceText = deal.price ? `${Math.round(deal.price)} Kc` : '';
+            const datesText = cldText(
                 startObj && endObj
                     ? `${startObj.getDate()}.${startObj.getMonth()+1}. - ${endObj.getDate()}.${endObj.getMonth()+1}. ${endObj.getFullYear()}`
                     : (deal.availableDates || '').split('\n')[0].substring(0, 35)
             );
 
-            // Cloudinary transformation chain:
-            // 1. Dark gradient overlay at bottom for readability
-            // 2. Destination name top-left
-            // 3. Price bottom-right (orange pill)
-            // 4. Dates bottom-left
-            // 5. Flugi.cz branding top-right
-            const transforms = [
-                // Resize to OG dimensions
+            // Simple, short Cloudinary transformation chain (no external fetches)
+            const parts = [
                 'w_1200,h_630,c_fill,g_auto',
-                // Semi-transparent dark bar at bottom
-                'l_fetch:aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGVtby9pbWFnZS91cGxvYWQvYmxhY2sudXJs,o_55,h_180,w_1200,g_south,fl_relative',
-                // Destination text - top left
-                ...(destText ? [`l_text:Arial_38_bold:${destText},co_white,g_north_west,x_40,y_40,o_90`] : []),
-                // Dates - bottom left
-                ...(datesText ? [`l_text:Arial_34:${datesText},co_rgb:E2E8F0,g_south_west,x_40,y_50`] : []),
-                // Price - bottom right (bold, bright)
-                ...(priceText ? [`l_text:Arial_46_bold:${priceText},co_rgb:FCD34D,g_south_east,x_40,y_45`] : []),
-                // Flugi.cz branding - top right
-                'l_text:Arial_26_bold:flugi.cz,co_rgb:FFFFFF,g_north_east,x_40,y_44,o_75',
-            ].join('/');
+                // Destination – top left, white text on dark bg
+                ...(destText ? [`l_text:Arial_38_bold:${destText},co_white,b_rgb:00000099,g_north_west,x_30,y_30`] : []),
+                // flugi.cz – top right
+                'l_text:Arial_24_bold:flugi.cz,co_white,b_rgb:00000099,g_north_east,x_30,y_30',
+                // Dates – bottom left
+                ...(datesText ? [`l_text:Arial_32:${datesText},co_rgb:E2E8F0,b_rgb:00000099,g_south_west,x_30,y_30`] : []),
+                // Price – bottom right, golden
+                ...(priceText ? [`l_text:Arial_46_bold:${priceText},co_rgb:FCD34D,b_rgb:00000099,g_south_east,x_30,y_30`] : []),
+            ];
 
-            ogImageUrl = `${base}${transforms}/${publicIdWithVersion}`;
+            ogImageUrl = `${base}${parts.join('/')}/${publicIdWithVersion}`;
         }
     }
 
