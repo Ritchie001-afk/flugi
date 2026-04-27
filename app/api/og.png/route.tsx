@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
         const titleText = origin && destination
             ? `Z ${origin.split('(')[0].trim()} do ${destination}`
             : destination;
-        const titleFontSize = titleText.length > 24 ? 40 : titleText.length > 18 ? 48 : 56;
+        const titleFontSize = titleText.length > 24 ? 28 : titleText.length > 18 ? 34 : 40;
 
         let image = deal.image || '';
         if (image.includes('res.cloudinary.com') && !image.includes('/w_')) {
@@ -54,34 +54,34 @@ export async function GET(req: NextRequest) {
                     <div style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '760px', height: '630px', background: 'linear-gradient(90deg, #0046a3 0%, rgba(0,70,163,0.95) 55%, rgba(0,70,163,0.2) 100%)' }}></div>
 
                     {/* Content column */}
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '660px', height: '630px', padding: '36px 48px', position: 'relative' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '660px', height: '630px', padding: '26px 38px', position: 'relative' }}>
 
                         {/* Logo */}
-                        <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 26, fontWeight: 700, marginBottom: 14 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 20, fontWeight: 700, marginBottom: 10 }}>
                             ✈ Flugi.cz
                         </div>
 
                         {/* Type label */}
-                        <div style={{ display: 'flex', color: '#93C5FD', fontSize: 15, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>
+                        <div style={{ display: 'flex', color: '#93C5FD', fontSize: 12, fontWeight: 700, letterSpacing: 2, marginBottom: 4 }}>
                             {typeLabel}:
                         </div>
 
                         {/* Title */}
-                        <div style={{ display: 'flex', color: 'white', fontSize: titleFontSize, fontWeight: 900, lineHeight: 1.1, marginBottom: 16 }}>
+                        <div style={{ display: 'flex', color: 'white', fontSize: titleFontSize, fontWeight: 900, lineHeight: 1.1, marginBottom: 10 }}>
                             {titleText.toUpperCase()}
                         </div>
 
                         {/* Price badge */}
                         {price !== '' && (
-                            <div style={{ display: 'flex', marginBottom: 18 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#E11D48', borderRadius: '30px', padding: '10px 30px', boxShadow: '0 8px 24px rgba(225,29,72,0.4)' }}>
-                                    <span style={{ color: 'white', fontSize: 40, fontWeight: 900 }}>{price}</span>
+                            <div style={{ display: 'flex', marginBottom: 12 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#E11D48', borderRadius: '30px', padding: '8px 22px', boxShadow: '0 8px 24px rgba(225,29,72,0.4)' }}>
+                                    <span style={{ color: 'white', fontSize: 30, fontWeight: 900 }}>{price}</span>
                                 </div>
                             </div>
                         )}
 
                         {/* Info card */}
-                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '18px', padding: '16px 20px', gap: 8 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '16px', padding: '12px 16px', gap: 6 }}>
                             {origin !== '' && (
                                 <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
                                     <span style={{ marginRight: 10, display: 'flex' }}>✈</span>
