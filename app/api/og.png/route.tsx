@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
         const deal = await prisma.deal.findUnique({ where: { slug } });
         if (!deal) return new Response('Not found', { status: 404 });
 
-        // Format deal data
         const price = deal.price
             ? new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(deal.price)
             : '';
@@ -23,14 +22,19 @@ export async function GET(req: NextRequest) {
         const endObj = deal.endDate ? new Date(deal.endDate) : null;
         const date = startObj && endObj
             ? `${startObj.getDate()}. ${startObj.getMonth() + 1}. – ${endObj.getDate()}. ${endObj.getMonth() + 1}. ${endObj.getFullYear()}`
-            : (deal.availableDates || '').split('\n')[0].substring(0, 40) || 'Termín na vyžádání';
+            : (deal.availableDates || '').split('\n')[0].substring(0, 40) || '';
 
         const type = deal.type || 'flight';
-        const origin = deal.origin || 'Praha / Vídeň';
+        const typeLabel = type === 'package' ? 'AKČNÍ ZÁJEZD' : 'AKČNÍ LETENKA';
+        const origin = deal.origin || '';
         const destination = deal.destination || '';
-        const airline = deal.airline || 'Letecky';
+        const airline = deal.airline || '';
 
-        // Optimise Cloudinary image (resize for faster load)
+        const titleText = origin && destination
+            ? `Z ${origin.split('(')[0].trim()} do ${destination}`
+            : destination;
+        const titleFontSize = titleText.length > 24 ? 40 : titleText.length > 18 ? 48 : 56;
+
         let image = deal.image || '';
         if (image.includes('res.cloudinary.com') && !image.includes('/w_')) {
             image = image.replace('/upload/', '/upload/w_1200,q_80,f_jpg/');
@@ -39,135 +43,65 @@ export async function GET(req: NextRequest) {
             image = 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1200&auto=format&fit=crop';
         }
 
-        const typeLabel = type === 'package' ? 'AKČNÍ ZÁJEZD' : 'AKČNÍ LETENKA';
-        const titleText = origin && destination
-            ? `Z ${origin.split('(')[0].trim()} do ${destination}`
-            : destination;
-        const titleFontSize = titleText.length > 22 ? 46 : 56;
-
-        // SVG icons (scaled for 1200x630)
-        const is = 24; // icon size
-        const PlaneIcon = () => (
-            <svg width={is} height={is} viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ marginRight: 10 }}>
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-            </svg>
-        );
-        const PinIcon = () => (
-            <svg width={is} height={is} viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ marginRight: 10 }}>
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
-            </svg>
-        );
-        const CalIcon = () => (
-            <svg width={is} height={is} viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ marginRight: 10 }}>
-                <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-        );
-        const AirIcon = () => (
-            <svg width={is} height={is} viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ marginRight: 10 }}>
-                <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 2c-2-2-4-2-5.5-.5L10 5 1.8 6.2l-1 1 5 5L4 15l-1 1 6.5 2.5 2.5 6.5 1-1 1.3-8.3 5 5 1-1z" />
-            </svg>
-        );
-
         return new ImageResponse(
             (
-                <div style={{
-                    display: 'flex', width: '100%', height: '100%',
-                    backgroundColor: 'white', position: 'relative', overflow: 'hidden',
-                    fontFamily: 'sans-serif',
-                }}>
+                <div style={{ display: 'flex', width: '1200px', height: '630px', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif', backgroundColor: '#0056b3' }}>
+
                     {/* Background photo */}
-                    <img src={image} style={{
-                        position: 'absolute', top: 0, left: 0,
-                        width: '100%', height: '100%',
-                        objectFit: 'cover', objectPosition: 'right center',
-                    }} />
+                    <img src={image} style={{ position: 'absolute', top: 0, left: 0, width: '1200px', height: '630px', objectFit: 'cover', objectPosition: 'right center' }} />
 
-                    {/* Blue gradient overlay */}
-                    <div style={{
-                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                        background: 'linear-gradient(90deg, #0056b3 0%, rgba(0,86,179,0.88) 42%, rgba(0,86,179,0.1) 100%)',
-                        display: 'flex',
-                    }} />
+                    {/* Blue gradient overlay left */}
+                    <div style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '760px', height: '630px', background: 'linear-gradient(90deg, #0046a3 0%, rgba(0,70,163,0.95) 55%, rgba(0,70,163,0.2) 100%)' }}></div>
 
-                    {/* Left content */}
-                    <div style={{
-                        display: 'flex', flexDirection: 'column',
-                        width: '62%', height: '100%',
-                        padding: '36px 50px',
-                        position: 'relative',
-                    }}>
+                    {/* Content column */}
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '660px', height: '630px', padding: '36px 48px', position: 'relative' }}>
+
                         {/* Logo */}
-                        <div style={{
-                            display: 'flex', alignItems: 'center', gap: 8,
-                            color: 'white', fontSize: 28, fontWeight: 900, marginBottom: 16,
-                        }}>
+                        <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 26, fontWeight: 700, marginBottom: 14 }}>
                             ✈ Flugi.cz
                         </div>
 
                         {/* Type label */}
-                        <div style={{
-                            color: '#93C5FD', fontSize: 16, fontWeight: 700,
-                            letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6,
-                        }}>
+                        <div style={{ display: 'flex', color: '#93C5FD', fontSize: 15, fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>
                             {typeLabel}:
                         </div>
 
                         {/* Title */}
-                        <div style={{
-                            color: 'white', fontSize: titleFontSize, fontWeight: 900,
-                            lineHeight: 1.1, textTransform: 'uppercase',
-                            textShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                            marginBottom: 18,
-                            display: 'flex',
-                        }}>
-                            {titleText}
+                        <div style={{ display: 'flex', color: 'white', fontSize: titleFontSize, fontWeight: 900, lineHeight: 1.1, marginBottom: 16 }}>
+                            {titleText.toUpperCase()}
                         </div>
 
                         {/* Price badge */}
-                        {price && (
-                            <div style={{ display: 'flex', marginBottom: 20 }}>
-                                <div style={{
-                                    backgroundColor: '#E11D48',
-                                    borderRadius: 30, padding: '10px 28px',
-                                    boxShadow: '0 10px 30px rgba(225,29,72,0.35)',
-                                    display: 'flex', alignItems: 'center', position: 'relative',
-                                }}>
-                                    <div style={{
-                                        width: 12, height: 12, borderRadius: '50%',
-                                        backgroundColor: '#881337',
-                                        position: 'absolute', left: 16, top: '50%',
-                                        display: 'flex',
-                                    }} />
-                                    <span style={{ color: 'white', fontSize: 42, fontWeight: 900, marginLeft: 16 }}>
-                                        {price}
-                                    </span>
+                        {price !== '' && (
+                            <div style={{ display: 'flex', marginBottom: 18 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#E11D48', borderRadius: '30px', padding: '10px 30px', boxShadow: '0 8px 24px rgba(225,29,72,0.4)' }}>
+                                    <span style={{ color: 'white', fontSize: 40, fontWeight: 900 }}>{price}</span>
                                 </div>
                             </div>
                         )}
 
                         {/* Info card */}
-                        <div style={{
-                            backgroundColor: 'rgba(255,255,255,0.95)',
-                            borderRadius: 20, padding: '16px 22px',
-                            display: 'flex', flexDirection: 'column', gap: 10,
-                            boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-                        }}>
-                            {origin && (
-                                <div style={{ display: 'flex', alignItems: 'center', fontSize: 19, fontWeight: 700, color: '#0f172a' }}>
-                                    <PlaneIcon />Odkud: {origin}
+                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '18px', padding: '16px 20px', gap: 8 }}>
+                            {origin !== '' && (
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                    <span style={{ marginRight: 10, display: 'flex' }}>✈</span>
+                                    <span style={{ display: 'flex' }}>Odkud: {origin}</span>
                                 </div>
                             )}
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: 19, fontWeight: 700, color: '#0f172a' }}>
-                                <PinIcon />Kam: {destination}
+                            <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                <span style={{ marginRight: 10, display: 'flex' }}>📍</span>
+                                <span style={{ display: 'flex' }}>Kam: {destination}</span>
                             </div>
-                            {date && (
-                                <div style={{ display: 'flex', alignItems: 'center', fontSize: 19, fontWeight: 700, color: '#0f172a' }}>
-                                    <CalIcon />Termín: {date}
+                            {date !== '' && (
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                    <span style={{ marginRight: 10, display: 'flex' }}>📅</span>
+                                    <span style={{ display: 'flex' }}>Termín: {date}</span>
                                 </div>
                             )}
-                            {airline && (
-                                <div style={{ display: 'flex', alignItems: 'center', fontSize: 19, fontWeight: 700, color: '#0f172a' }}>
-                                    <AirIcon />Letecká společnost: {airline}
+                            {airline !== '' && (
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
+                                    <span style={{ marginRight: 10, display: 'flex' }}>🛫</span>
+                                    <span style={{ display: 'flex' }}>Letecká společnost: {airline}</span>
                                 </div>
                             )}
                         </div>
@@ -181,7 +115,7 @@ export async function GET(req: NextRequest) {
             }
         );
     } catch (e: any) {
-        console.error('OG Image Error:', e.message, e.stack);
+        console.error('OG Image Error:', e.message);
         return new Response(`Error: ${e.message}`, { status: 500, headers: { 'Content-Type': 'text/plain' } });
     }
 }
