@@ -140,55 +140,16 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
     const endObj = deal.endDate ? new Date(deal.endDate) : null;
     let dateStr = "";
     if (startObj && endObj) {
-        dateStr = ` | ${startObj.getDate()}.${startObj.getMonth() + 1}. - ${endObj.getDate()}.${endObj.getMonth() + 1}. ${endObj.getFullYear()}`;
+        dateStr = ` | ${startObj.getDate()}.${startObj.getMonth() + 1}. – ${endObj.getDate()}.${endObj.getMonth() + 1}. ${endObj.getFullYear()}`;
     } else if (deal.availableDates) {
         dateStr = ` | ${deal.availableDates.split('\n')[0].substring(0, 30)}`;
     }
 
-    const priceStr = deal.price ? ` za ${deal.price.toLocaleString('cs-CZ')} Kc` : '';
+    const priceStr = deal.price ? ` za ${deal.price.toLocaleString('cs-CZ')} Kč` : '';
     const ogTitle = `${deal.title}${priceStr}${dateStr}`;
 
-    // Build Cloudinary OG image with text overlays (only if stored on Cloudinary)
-    let ogImageUrl = deal.image;
-    if (deal.image && deal.image.includes('res.cloudinary.com')) {
-        const uploadIdx = deal.image.indexOf('/upload/');
-        if (uploadIdx !== -1) {
-            const base = deal.image.substring(0, uploadIdx + 8);
-            const publicIdWithVersion = deal.image.substring(uploadIdx + 8);
-
-            // Helper: strip Czech diacritics and encode for Cloudinary URL
-            const cldText = (str: string) =>
-                str.normalize('NFD')
-                   .replace(/[\u0300-\u036f]/g, '')  // remove diacritics
-                   .replace(/[,/]/g, ' ')             // remove Cloudinary reserved chars
-                   .substring(0, 50)
-                   .trim()
-                   .replace(/ +/g, '%20');
-
-            const destText  = cldText(deal.destination || '');
-            const priceText = deal.price ? `${Math.round(deal.price)} Kc` : '';
-            const datesText = cldText(
-                startObj && endObj
-                    ? `${startObj.getDate()}.${startObj.getMonth()+1}. - ${endObj.getDate()}.${endObj.getMonth()+1}. ${endObj.getFullYear()}`
-                    : (deal.availableDates || '').split('\n')[0].substring(0, 35)
-            );
-
-            // Simple, short Cloudinary transformation chain (no external fetches)
-            const parts = [
-                'w_1200,h_630,c_fill,g_auto',
-                // Destination – top left, white text on dark bg
-                ...(destText ? [`l_text:Arial_38_bold:${destText},co_white,b_rgb:00000099,g_north_west,x_30,y_30`] : []),
-                // flugi.cz – top right
-                'l_text:Arial_24_bold:flugi.cz,co_white,b_rgb:00000099,g_north_east,x_30,y_30',
-                // Dates – bottom left
-                ...(datesText ? [`l_text:Arial_32:${datesText},co_rgb:E2E8F0,b_rgb:00000099,g_south_west,x_30,y_30`] : []),
-                // Price – bottom right, golden
-                ...(priceText ? [`l_text:Arial_46_bold:${priceText},co_rgb:FCD34D,b_rgb:00000099,g_south_east,x_30,y_30`] : []),
-            ];
-
-            ogImageUrl = `${base}${parts.join('/')}/${publicIdWithVersion}`;
-        }
-    }
+    // Short, clean OG image URL → generates the design server-side
+    const ogImageUrl = `${baseUrl}/api/og.png?slug=${encodeURIComponent(slug)}`;
 
     return {
         metadataBase: new URL(baseUrl),
