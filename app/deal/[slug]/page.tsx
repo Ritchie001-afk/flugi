@@ -136,18 +136,64 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
 
     const safeDescription = (deal.description || '').substring(0, 160) + '...';
 
-    // Format dates & price for the OG title since the raw image doesn't contain text anymore
     const startObj = deal.startDate ? new Date(deal.startDate) : null;
     const endObj = deal.endDate ? new Date(deal.endDate) : null;
     let dateStr = "";
     if (startObj && endObj) {
-        dateStr = ` | Termín: ${startObj.getDate()}.${startObj.getMonth() + 1}. - ${endObj.getDate()}.${endObj.getMonth() + 1}. ${endObj.getFullYear()}`;
+        dateStr = ` | ${startObj.getDate()}.${startObj.getMonth() + 1}. - ${endObj.getDate()}.${endObj.getMonth() + 1}. ${endObj.getFullYear()}`;
     } else if (deal.availableDates) {
         dateStr = ` | ${deal.availableDates.split('\n')[0].substring(0, 30)}`;
     }
-    
-    const priceStr = deal.price ? ` za ${deal.price.toLocaleString('cs-CZ')} Kč` : '';
+
+    const priceStr = deal.price ? ` za ${deal.price.toLocaleString('cs-CZ')} Kc` : '';
     const ogTitle = `${deal.title}${priceStr}${dateStr}`;
+
+    // Build Cloudinary OG image with text overlays (only if stored on Cloudinary)
+    let ogImageUrl = deal.image;
+    if (deal.image && deal.image.includes('res.cloudinary.com')) {
+        // Extract the part after /upload/
+        const uploadIdx = deal.image.indexOf('/upload/');
+        if (uploadIdx !== -1) {
+            const base = deal.image.substring(0, uploadIdx + 8); // up to and including /upload/
+            const publicIdWithVersion = deal.image.substring(uploadIdx + 8);
+
+            // Destination text (top left)
+            const destText = encodeURIComponent(deal.destination || '');
+            // Price text (bottom right)
+            const priceText = deal.price
+                ? encodeURIComponent(`${Math.round(deal.price).toLocaleString('cs-CZ')} Kc`)
+                : '';
+            // Dates text (bottom center)
+            const datesText = encodeURIComponent(
+                startObj && endObj
+                    ? `${startObj.getDate()}.${startObj.getMonth()+1}. - ${endObj.getDate()}.${endObj.getMonth()+1}. ${endObj.getFullYear()}`
+                    : (deal.availableDates || '').split('\n')[0].substring(0, 35)
+            );
+
+            // Cloudinary transformation chain:
+            // 1. Dark gradient overlay at bottom for readability
+            // 2. Destination name top-left
+            // 3. Price bottom-right (orange pill)
+            // 4. Dates bottom-left
+            // 5. Flugi.cz branding top-right
+            const transforms = [
+                // Resize to OG dimensions
+                'w_1200,h_630,c_fill,g_auto',
+                // Semi-transparent dark bar at bottom
+                'l_fetch:aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGVtby9pbWFnZS91cGxvYWQvYmxhY2sudXJs,o_55,h_180,w_1200,g_south,fl_relative',
+                // Destination text - top left
+                ...(destText ? [`l_text:Arial_38_bold:${destText},co_white,g_north_west,x_40,y_40,o_90`] : []),
+                // Dates - bottom left
+                ...(datesText ? [`l_text:Arial_34:${datesText},co_rgb:E2E8F0,g_south_west,x_40,y_50`] : []),
+                // Price - bottom right (bold, bright)
+                ...(priceText ? [`l_text:Arial_46_bold:${priceText},co_rgb:FCD34D,g_south_east,x_40,y_45`] : []),
+                // Flugi.cz branding - top right
+                'l_text:Arial_26_bold:flugi.cz,co_rgb:FFFFFF,g_north_east,x_40,y_44,o_75',
+            ].join('/');
+
+            ogImageUrl = `${base}${transforms}/${publicIdWithVersion}`;
+        }
+    }
 
     return {
         metadataBase: new URL(baseUrl),
@@ -160,7 +206,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             siteName: 'Flugi.cz',
             locale: 'cs_CZ',
             type: 'website',
-            images: [deal.image],
+            images: [{ url: ogImageUrl, width: 1200, height: 630, alt: deal.title }],
         },
         alternates: {
             canonical: `${baseUrl}/deal/${slug}`,
@@ -169,7 +215,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
             card: 'summary_large_image',
             title: ogTitle,
             description: safeDescription,
-            images: [deal.image],
+            images: [ogImageUrl],
         },
     };
 }
