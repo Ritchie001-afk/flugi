@@ -149,7 +149,7 @@ export async function generateMetadata({ params }: DealPageProps): Promise<Metad
     const ogTitle = `${deal.title}${priceStr}${dateStr}`;
 
     // Short, clean OG image URL → generates the design server-side (?v= busts Facebook/CDN cache)
-    const ogImageUrl = `${baseUrl}/api/og.png?slug=${encodeURIComponent(slug)}&v=3`;
+    const ogImageUrl = `${baseUrl}/api/og.png?slug=${encodeURIComponent(slug)}&v=4`;
 
     return {
         metadataBase: new URL(baseUrl),

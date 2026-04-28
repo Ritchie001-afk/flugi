@@ -22,19 +22,21 @@ export async function GET(req: NextRequest) {
         const endObj = deal.endDate ? new Date(deal.endDate) : null;
         const date = startObj && endObj
             ? `${startObj.getDate()}. ${startObj.getMonth() + 1}. – ${endObj.getDate()}. ${endObj.getMonth() + 1}. ${endObj.getFullYear()}`
-            : (deal.availableDates || '').split('\n')[0].substring(0, 40) || '';
+            : (deal.availableDates || '').split('\n')[0].substring(0, 45) || '';
 
         const type = deal.type || 'flight';
-        const typeLabel = type === 'package' ? 'AKČNÍ ZÁJEZD' : 'AKČNÍ LETENKA';
+        const typeLabel = type === 'package' ? 'AKČNÍ ZÁJEZD:' : 'AKČNÍ LETENKA:';
         const origin = deal.origin || '';
         const destination = deal.destination || '';
         const airline = deal.airline || '';
 
+        // Title: "Z Prahy do Kodaně" style
         const titleText = origin && destination
             ? `Z ${origin.split('(')[0].trim()} do ${destination}`
             : destination;
-        const titleFontSize = titleText.length > 24 ? 20 : titleText.length > 18 ? 25 : 30;
+        const titleFontSize = titleText.length > 28 ? 38 : titleText.length > 20 ? 46 : 54;
 
+        // Optimise Cloudinary image
         let image = deal.image || '';
         if (image.includes('res.cloudinary.com') && !image.includes('/w_')) {
             image = image.replace('/upload/', '/upload/w_1200,q_80,f_jpg/');
@@ -45,63 +47,130 @@ export async function GET(req: NextRequest) {
 
         return new ImageResponse(
             (
-                <div style={{ display: 'flex', width: '1200px', height: '630px', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif', backgroundColor: '#0056b3' }}>
+                <div style={{
+                    display: 'flex',
+                    width: '1200px',
+                    height: '630px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    fontFamily: 'sans-serif',
+                }}>
+                    {/* Full-bleed background photo */}
+                    <img
+                        src={image}
+                        style={{
+                            position: 'absolute',
+                            top: 0, left: 0,
+                            width: '1200px', height: '630px',
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
+                    />
 
-                    {/* Background photo */}
-                    <img src={image} style={{ position: 'absolute', top: 0, left: 0, width: '1200px', height: '630px', objectFit: 'cover', objectPosition: 'right center' }} />
-
-                    {/* Blue gradient overlay left */}
-                    <div style={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '760px', height: '630px', background: 'linear-gradient(90deg, #0046a3 0%, rgba(0,70,163,0.95) 55%, rgba(0,70,163,0.2) 100%)' }}></div>
+                    {/* Smooth gradient overlay: solid blue left → transparent right */}
+                    <div style={{
+                        display: 'flex',
+                        position: 'absolute',
+                        top: 0, left: 0,
+                        width: '1200px', height: '630px',
+                        background: 'linear-gradient(100deg, #1a50b8 0%, #1a50b8 28%, rgba(26,80,184,0.92) 42%, rgba(26,80,184,0.55) 58%, rgba(26,80,184,0.15) 72%, rgba(26,80,184,0) 85%)',
+                    }}></div>
 
                     {/* Content column */}
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '660px', height: '630px', padding: '22px 32px', position: 'relative' }}>
-
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        width: '640px',
+                        height: '630px',
+                        padding: '36px 44px',
+                        position: 'relative',
+                    }}>
                         {/* Logo */}
-                        <div style={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 16, fontWeight: 700, marginBottom: 8 }}>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            color: 'white',
+                            fontSize: 28,
+                            fontWeight: 700,
+                            marginBottom: 20,
+                        }}>
                             ✈ Flugi.cz
                         </div>
 
                         {/* Type label */}
-                        <div style={{ display: 'flex', color: '#93C5FD', fontSize: 11, fontWeight: 700, letterSpacing: 2, marginBottom: 3 }}>
-                            {typeLabel}:
+                        <div style={{
+                            display: 'flex',
+                            color: '#93C5FD',
+                            fontSize: 18,
+                            fontWeight: 700,
+                            letterSpacing: 1,
+                            marginBottom: 6,
+                        }}>
+                            {typeLabel}
                         </div>
 
-                        {/* Title */}
-                        <div style={{ display: 'flex', color: 'white', fontSize: titleFontSize, fontWeight: 900, lineHeight: 1.1, marginBottom: 8 }}>
+                        {/* Main title */}
+                        <div style={{
+                            display: 'flex',
+                            color: 'white',
+                            fontSize: titleFontSize,
+                            fontWeight: 900,
+                            lineHeight: 1.1,
+                            marginBottom: 22,
+                        }}>
                             {titleText.toUpperCase()}
                         </div>
 
-                        {/* Price badge */}
+                        {/* Price badge – magenta pill */}
                         {price !== '' && (
-                            <div style={{ display: 'flex', marginBottom: 10 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#E11D48', borderRadius: '24px', padding: '6px 18px', boxShadow: '0 6px 18px rgba(225,29,72,0.4)' }}>
-                                    <span style={{ color: 'white', fontSize: 24, fontWeight: 900 }}>{price}</span>
+                            <div style={{ display: 'flex', marginBottom: 24 }}>
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    backgroundColor: '#e91e8c',
+                                    borderRadius: '50px',
+                                    padding: '10px 28px',
+                                    boxShadow: '0 8px 28px rgba(233,30,140,0.45)',
+                                }}>
+                                    <span style={{ color: 'white', fontSize: 38, fontWeight: 900 }}>
+                                        {price}
+                                    </span>
                                 </div>
                             </div>
                         )}
 
-                        {/* Info card */}
-                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '14px', padding: '10px 14px', gap: 5 }}>
+                        {/* Info card – compact, white */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            backgroundColor: 'rgba(255,255,255,0.95)',
+                            borderRadius: '18px',
+                            padding: '14px 20px',
+                            gap: 8,
+                            width: '520px',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+                        }}>
                             {origin !== '' && (
-                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 13, fontWeight: 700 }}>
-                                    <span style={{ marginRight: 10, display: 'flex' }}>✈</span>
-                                    <span style={{ display: 'flex' }}>Odkud: {origin}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 600 }}>
+                                    <span style={{ display: 'flex', marginRight: 10, fontSize: 20 }}>✈</span>
+                                    <span style={{ display: 'flex' }}>Odkud: <span style={{ fontWeight: 900, marginLeft: 6 }}>{origin}</span></span>
                                 </div>
                             )}
-                            <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 700 }}>
-                                <span style={{ marginRight: 10, display: 'flex' }}>📍</span>
-                                <span style={{ display: 'flex' }}>Kam: {destination}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 600 }}>
+                                <span style={{ display: 'flex', marginRight: 10, fontSize: 20 }}>📍</span>
+                                <span style={{ display: 'flex' }}>Kam: <span style={{ fontWeight: 900, marginLeft: 6 }}>{destination}</span></span>
                             </div>
                             {date !== '' && (
-                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 13, fontWeight: 700 }}>
-                                    <span style={{ marginRight: 10, display: 'flex' }}>📅</span>
-                                    <span style={{ display: 'flex' }}>Termín: {date}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 600 }}>
+                                    <span style={{ display: 'flex', marginRight: 10, fontSize: 20 }}>📅</span>
+                                    <span style={{ display: 'flex' }}>Termín: <span style={{ fontWeight: 900, marginLeft: 6 }}>{date}</span></span>
                                 </div>
                             )}
                             {airline !== '' && (
-                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 13, fontWeight: 700 }}>
-                                    <span style={{ marginRight: 10, display: 'flex' }}>🛫</span>
-                                    <span style={{ display: 'flex' }}>Letecká společnost: {airline}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', color: '#0f172a', fontSize: 18, fontWeight: 600 }}>
+                                    <span style={{ display: 'flex', marginRight: 10, fontSize: 20 }}>🛫</span>
+                                    <span style={{ display: 'flex' }}>Letecká spol.: <span style={{ fontWeight: 900, marginLeft: 6 }}>{airline}</span></span>
                                 </div>
                             )}
                         </div>
