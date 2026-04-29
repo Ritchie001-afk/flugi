@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, MapPin, Calendar, Clock, Pizza, Landmark, Coins } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Pizza, Landmark, Coins } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Řím: Věčné město za víkend | Flugi Magazín',
     description: 'Jak stihnout Koloseum, Vatikán a nejlepší pizzu za 48 hodin.',
-};
+    path: '/magazin/rim-vecne-mesto-za-vikend',
+    type: 'article',
+});
 
 export default function RomeArticle() {
     return (

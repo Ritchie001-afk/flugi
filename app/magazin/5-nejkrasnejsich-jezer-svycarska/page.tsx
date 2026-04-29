@@ -3,12 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, MapPin, Calendar, Clock, Share2 } from "lucide-react";
-import { getDestinationImage } from "@/lib/images";
+import { getDestinationImage } from "@/lib/images";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: '5 nejkrásnějších jezer ve Švýcarsku | Flugi Magazín',
     description: 'Tipy na nejkrásnější jezera ve Švýcarsku, která musíte vidět.',
-};
+    path: '/magazin/5-nejkrasnejsich-jezer-svycarska',
+    type: 'article',
+});
 
 export default function SwissLakesArticle() {
     return (

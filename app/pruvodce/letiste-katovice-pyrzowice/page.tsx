@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Průvodce Letištěm Katovice (KTW) | Flugi',
-    description: 'Nejlepší letiště pro nízkonákladové a charterové lety. Vše o terminálech A, B, C a parkování.',
-};
+export const metadata = createPageMetadata({
+    title: 'Průvodce letištěm Katovice (KTW) | Flugi',
+    description: 'Ráj pro Wizz Air a charterové lety. Levné parkování, autobusy a snadná dostupnost z Moravy.',
+    path: '/pruvodce/letiste-katovice-pyrzowice',
+    type: 'article',
+});
 
 export default function KatowiceAirportGuide() {
     return (

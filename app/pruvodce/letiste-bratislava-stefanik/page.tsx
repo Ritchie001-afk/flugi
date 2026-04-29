@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Průvodce Letištěm Bratislava (BTS) | Flugi',
-    description: 'Letiště M. R. Štefánika. Tipy na levné parkování a jak se dostat autobusem na nádraží.',
-};
+export const metadata = createPageMetadata({
+    title: 'Průvodce letištěm Bratislava (BTS) | Flugi',
+    description: 'Menší, klidné letiště ideální pro lety Smartwings. Tipy na dopravu z Brna a levné parkování.',
+    path: '/pruvodce/letiste-bratislava-stefanik',
+    type: 'article',
+});
 
 export default function BratislavaAirportGuide() {
     return (

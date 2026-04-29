@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, ArrowRight, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Hidden City Ticketing: Jak ušetřit až 70% na letenkách | Flugi',
-    description: 'Tajemství, které aerolinky nenávidí. Naučte se létat levněji pomocí strategie skrytého města.',
-};
+export const metadata = createPageMetadata({
+    title: 'Jak najít skryté letenky (Hidden City Ticketing) | Flugi',
+    description: 'Tajná strategie, kterou experti používají k ušetření až 70 % na mezinárodních letech. Pozor na rizika.',
+    path: '/pruvodce/skryte-letenky-hidden-city-ticketing',
+    type: 'article',
+});
 
 export default function HiddenCityGuide() {
     return (

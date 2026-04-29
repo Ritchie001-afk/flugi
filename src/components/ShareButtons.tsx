@@ -2,6 +2,7 @@
 
 import { Share2, Facebook, Link as LinkIcon, Check } from "lucide-react";
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { Button } from "./ui/Button";
 
 interface ShareButtonsProps {
@@ -27,12 +28,25 @@ export function ShareButtons({ title }: ShareButtonsProps) {
                 shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
                 break;
         }
+
+        trackEvent("share_click", {
+            share_method: platform,
+            deal_title: title,
+            page_url: url,
+        });
+
         window.open(shareUrl, '_blank', 'width=600,height=400');
     };
 
     const handleCopy = async () => {
         try {
-            await navigator.clipboard.writeText(window.location.href);
+            const url = window.location.href;
+            await navigator.clipboard.writeText(url);
+            trackEvent("share_click", {
+                share_method: "copy_link",
+                deal_title: title,
+                page_url: url,
+            });
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {

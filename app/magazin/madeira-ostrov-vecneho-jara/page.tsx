@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, MapPin, Calendar, Clock, Mountain, Flower, Footprints, Sun } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Mountain, Flower, Footprints, Sun } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Madeira: Ostrov věčného jara | Flugi Magazín',
-    description: 'Průvodce po nejkrásnějších levádách, vyhlídkách a zahradách Madeiry.',
-};
+    description: 'Divoká příroda, levády a hory. Ideální destinace pro aktivní dovolenou po celý rok.',
+    path: '/magazin/madeira-ostrov-vecneho-jara',
+    type: 'article',
+});
 
 export default function MadeiraArticle() {
     return (

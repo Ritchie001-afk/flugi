@@ -3,12 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info } from "lucide-react";
-import { getDestinationImage } from "@/lib/images";
+import { getDestinationImage } from "@/lib/images";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Průvodce Letištěm Václava Havla Praha (PRG) | Flugi',
     description: 'Vše, co potřebujete vědět o Terminálu 1 a 2, parkování, dopravě do centra a kde se nejlépe najíst.',
-};
+    path: '/pruvodce/letiste-vaclava-havla-praha',
+    type: 'article',
+});
 
 export default function PragueAirportGuide() {
     return (

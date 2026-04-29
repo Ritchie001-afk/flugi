@@ -6,6 +6,7 @@ import { Plane, Search, Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { trackEvent } from "@/lib/analytics";
 import { NewsletterModal } from "./NewsletterModal";
 
 export default function Navbar() {
@@ -97,7 +98,13 @@ export default function Navbar() {
                             variant="premium"
                             size="sm"
                             className="hidden md:flex whitespace-nowrap"
-                            onClick={() => setIsNewsletterOpen(true)}
+                            onClick={() => {
+                                trackEvent("cta_click", {
+                                    cta_name: "newsletter_open",
+                                    placement: "navbar_desktop",
+                                });
+                                setIsNewsletterOpen(true);
+                            }}
                         >
                             Hlídat letenky
                         </Button>
@@ -132,6 +139,10 @@ export default function Navbar() {
                             className="w-full mt-4"
                             onClick={() => {
                                 setIsMenuOpen(false);
+                                trackEvent("cta_click", {
+                                    cta_name: "newsletter_open",
+                                    placement: "navbar_mobile",
+                                });
                                 setIsNewsletterOpen(true);
                             }}
                         >

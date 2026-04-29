@@ -2,24 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
-
-const GA_MEASUREMENT_ID = 'G-8W2VM3MVQK';
+import { GA_MEASUREMENT_ID } from '@/lib/analytics';
 
 export default function GoogleAnalytics() {
-    const [consentGranted, setConsentGranted] = useState(false);
+    const [consentGranted, setConsentGranted] = useState(
+        () =>
+            typeof window !== 'undefined' &&
+            localStorage.getItem('cookie_consent') === 'granted'
+    );
 
     useEffect(() => {
-        // Check initial status
-        const consent = localStorage.getItem('cookie_consent');
-        if (consent === 'granted') {
-            setConsentGranted(true);
-        }
-
         // Listen for updates from the banner
         const handleConsentUpdate = () => {
-            if (localStorage.getItem('cookie_consent') === 'granted') {
-                setConsentGranted(true);
-            }
+            setConsentGranted(localStorage.getItem('cookie_consent') === 'granted');
         };
 
         window.addEventListener('cookie_consent_updated', handleConsentUpdate);
@@ -29,7 +24,7 @@ export default function GoogleAnalytics() {
         };
     }, []);
 
-    if (!consentGranted) return null;
+    if (!consentGranted || !GA_MEASUREMENT_ID) return null;
 
     return (
         <>
@@ -40,7 +35,7 @@ export default function GoogleAnalytics() {
             <Script id="google-analytics" strategy="afterInteractive">
                 {`
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+          window.gtag = function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
           gtag('config', '${GA_MEASUREMENT_ID}');

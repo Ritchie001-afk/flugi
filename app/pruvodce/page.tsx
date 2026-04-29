@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import Image from "next/image"; // Added import
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+    title: 'Cestovní průvodce | Flugi',
+    description: 'Expertní tipy, průvodce letišti a cestovatelské triky, jak létat chytřeji.',
+    path: '/pruvodce',
+});
 
 export default function GuidePage() {
     return (

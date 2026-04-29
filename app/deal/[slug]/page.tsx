@@ -6,7 +6,9 @@ import { ItineraryGenerator } from '@/components/ItineraryGenerator';
 import { getDestinationImage } from '@/lib/images';
 import { AFFILIATE_LINKS, getBookingUrl, getAirbnbUrl, getAgodaUrl, getRentalcarsUrl } from '@/lib/affiliates';
 import { ArrowLeft, ArrowRight, MapPin, Calendar, ExternalLink, Bed, Car, Home, Plane, Ticket, ShieldCheck, Sun } from 'lucide-react';
+import { DealViewTracker } from '@/components/DealViewTracker';
 import { ShareButtons } from '@/components/ShareButtons';
+import { TrackedOutboundLink } from '@/components/TrackedOutboundLink';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/db';
@@ -202,6 +204,13 @@ export default async function DealPage({ params }: DealPageProps) {
 
     return (
         <main className="min-h-screen bg-white pb-20">
+            <DealViewTracker
+                slug={slug}
+                title={deal.title}
+                dealType={deal.type}
+                price={deal.price}
+                destination={deal.destination}
+            />
             {/* Header / Nav */}
             <div className="border-b border-slate-100 bg-white sticky top-0 z-50">
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -265,15 +274,20 @@ export default async function DealPage({ params }: DealPageProps) {
                                     )}
                                 </div>
                                 <div className="mt-4">
-                                    <a
+                                    <TrackedOutboundLink
                                         href={deal.reviewUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center gap-2 text-blue-600 font-medium hover:text-blue-800 hover:underline"
+                                        eventParams={{
+                                            placement: 'deal_review',
+                                            deal_slug: slug,
+                                            deal_title: deal.title,
+                                        }}
                                     >
                                         <ExternalLink className="h-4 w-4" />
                                         Číst recenze na {deal.reviewSource || 'TripAdvisor'}
-                                    </a>
+                                    </TrackedOutboundLink>
                                 </div>
                             </div>
                         )}
@@ -296,15 +310,22 @@ export default async function DealPage({ params }: DealPageProps) {
                                             Objevte nejlepší zážitky, výlety a vstupenky v destinaci {destinationCity}.
                                         </p>
                                     </div>
-                                    <a
+                                    <TrackedOutboundLink
                                         href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(destinationCity)}&partner_id=YOUR_PARTNER_ID`}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        eventName="cta_click"
+                                        eventParams={{
+                                            cta_name: 'getyourguide',
+                                            placement: 'deal_upsell',
+                                            deal_slug: slug,
+                                            deal_title: deal.title,
+                                        }}
                                     >
                                         <Button className="bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20 w-full md:w-auto">
                                             Zobrazit aktivity na GYG
                                         </Button>
-                                    </a>
+                                    </TrackedOutboundLink>
                                 </div>
                             </div>
                         </div>
@@ -356,11 +377,23 @@ export default async function DealPage({ params }: DealPageProps) {
                                     </div>
                                 )}
 
-                                <a href={deal.url} target="_blank" rel="noopener noreferrer" className="block mb-3">
+                                <TrackedOutboundLink
+                                    href={deal.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block mb-3"
+                                    eventName="cta_click"
+                                    eventParams={{
+                                        cta_name: 'book_deal',
+                                        placement: 'deal_primary',
+                                        deal_slug: slug,
+                                        deal_title: deal.title,
+                                    }}
+                                >
                                     <Button size="lg" className="w-full h-14 text-lg font-bold shadow-lg shadow-blue-600/20">
                                         Rezervovat termín
                                     </Button>
-                                </a>
+                                </TrackedOutboundLink>
 
                                 {deal.availableDates && (
                                     <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm text-slate-700 mb-6">
@@ -435,15 +468,20 @@ export default async function DealPage({ params }: DealPageProps) {
                                         <div className="flex flex-col gap-2">
                                             <span className="text-sm text-slate-700">{text}</span>
                                             {url && (
-                                                <a
+                                                <TrackedOutboundLink
                                                     href={url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1.5 rounded-lg self-start transition-colors hover:bg-blue-100"
+                                                    eventParams={{
+                                                        placement: 'entry_requirements',
+                                                        deal_slug: slug,
+                                                        deal_title: deal.title,
+                                                    }}
                                                 >
                                                     <ExternalLink className="h-3 w-3 mr-1" />
                                                     Oficiální info (MZV)
-                                                </a>
+                                                </TrackedOutboundLink>
                                             )}
                                         </div>
                                     </div>
@@ -457,7 +495,17 @@ export default async function DealPage({ params }: DealPageProps) {
                                         <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
                                             <MapPin className="h-4 w-4 text-green-600" /> Tipy na výlety
                                         </h4>
-                                        <a href={`https://www.tripadvisor.com/Search?q=${encodeURIComponent(deal.destination)}`} target="_blank" rel="noopener noreferrer" className="block group">
+                                        <TrackedOutboundLink
+                                            href={`https://www.tripadvisor.com/Search?q=${encodeURIComponent(deal.destination)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block group"
+                                            eventParams={{
+                                                placement: 'sidebar_tripadvisor',
+                                                deal_slug: slug,
+                                                deal_title: deal.title,
+                                            }}
+                                        >
                                             <div className="p-3 rounded-lg bg-green-50 hover:bg-green-100 transition-colors flex items-center gap-3">
                                                 <div className="p-2 bg-green-600 rounded-lg text-white">
                                                     <MapPin className="h-4 w-4" />
@@ -467,7 +515,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                                     <p className="text-xs text-green-700">TripAdvisor</p>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </TrackedOutboundLink>
                                     </div>
                                 ) : null}
 
@@ -477,7 +525,17 @@ export default async function DealPage({ params }: DealPageProps) {
                                             <Bed className="h-4 w-4 text-blue-600" /> Kde se ubytovat?
                                         </h4>
                                         <div className="space-y-3">
-                                            <a href={getBookingUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                            <TrackedOutboundLink
+                                                href={getBookingUrl(destinationCity)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block group"
+                                                eventParams={{
+                                                    placement: 'sidebar_booking',
+                                                    deal_slug: slug,
+                                                    deal_title: deal.title,
+                                                }}
+                                            >
                                                 <div className="p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-3">
                                                     <div className="p-2 bg-blue-600 rounded-lg text-white">
                                                         <Bed className="h-4 w-4" />
@@ -487,8 +545,18 @@ export default async function DealPage({ params }: DealPageProps) {
                                                         <p className="text-xs text-blue-700">{AFFILIATE_LINKS.booking.cta}</p>
                                                     </div>
                                                 </div>
-                                            </a>
-                                            <a href={getAgodaUrl(destinationCity, deal.startDate, deal.endDate)} target="_blank" rel="noopener noreferrer" className="block group">
+                                            </TrackedOutboundLink>
+                                            <TrackedOutboundLink
+                                                href={getAgodaUrl(destinationCity, deal.startDate, deal.endDate)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block group"
+                                                eventParams={{
+                                                    placement: 'sidebar_agoda',
+                                                    deal_slug: slug,
+                                                    deal_title: deal.title,
+                                                }}
+                                            >
                                                 <div className="p-3 rounded-lg bg-rose-50 hover:bg-rose-100 transition-colors flex items-center gap-3">
                                                     <div className="p-2 bg-rose-500 rounded-lg text-white">
                                                         <Home className="h-4 w-4" />
@@ -498,7 +566,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                                         <p className="text-xs text-rose-700">{AFFILIATE_LINKS.agoda.cta}</p>
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </TrackedOutboundLink>
                                         </div>
                                     </div>
                                 )}
@@ -511,7 +579,17 @@ export default async function DealPage({ params }: DealPageProps) {
 
                                     {/* Buttons Grid */}
                                     <div className="grid grid-cols-2 gap-3">
-                                        <a href={getRentalcarsUrl(destinationCity)} target="_blank" rel="noopener noreferrer" className="block group">
+                                        <TrackedOutboundLink
+                                            href={getRentalcarsUrl(destinationCity)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block group"
+                                            eventParams={{
+                                                placement: 'sidebar_rentalcars',
+                                                deal_slug: slug,
+                                                deal_title: deal.title,
+                                            }}
+                                        >
                                             <div className="p-3 h-full rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors flex flex-col items-center text-center gap-2">
                                                 <div className="p-2 bg-orange-500 rounded-lg text-white">
                                                     <Car className="h-4 w-4" />
@@ -520,9 +598,19 @@ export default async function DealPage({ params }: DealPageProps) {
                                                     <h4 className="font-bold text-orange-900 text-xs leading-tight group-hover:underline">Půjčovna aut</h4>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </TrackedOutboundLink>
 
-                                        <a href="https://www.top-pojisteni.cz/cestovni-pojisteni/kalkulacka" target="_blank" rel="noopener noreferrer" className="block group">
+                                        <TrackedOutboundLink
+                                            href="https://www.top-pojisteni.cz/cestovni-pojisteni/kalkulacka"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block group"
+                                            eventParams={{
+                                                placement: 'sidebar_insurance',
+                                                deal_slug: slug,
+                                                deal_title: deal.title,
+                                            }}
+                                        >
                                             <div className="p-3 h-full rounded-lg bg-indigo-50 hover:bg-indigo-100 transition-colors flex flex-col items-center text-center gap-2">
                                                 <div className="p-2 bg-indigo-500 rounded-lg text-white">
                                                     <ShieldCheck className="h-4 w-4" />
@@ -531,7 +619,7 @@ export default async function DealPage({ params }: DealPageProps) {
                                                     <h4 className="font-bold text-indigo-900 text-xs leading-tight group-hover:underline">Pojištění</h4>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </TrackedOutboundLink>
                                     </div>
                                 </div>
                             </div>

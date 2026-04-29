@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, AlertTriangle, TrendingDown, Globe, ShieldAlert } from "lucide-react";
+import { ArrowLeft, AlertTriangle, TrendingDown, Globe, ShieldAlert } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Proč jsou překupníci levnější než aerolinky? | Flugi Magazín',
     description: 'Tajemství IT tarifů, měnových kurzů a dumpingu. Kdy se vyplatí koupit letenku od agentury a kdy je to hazard.',
-};
+    path: '/magazin/proc-jsou-prekupnici-levnejsi',
+    type: 'article',
+});
 
 export default function ResellerArticle() {
     return (

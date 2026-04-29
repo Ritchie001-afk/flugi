@@ -3,12 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane } from "lucide-react";
-import { getDestinationImage } from "@/lib/images";
+import { getDestinationImage } from "@/lib/images";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Průvodce Letištěm Brno-Tuřany (BRQ) | Flugi',
-    description: 'Vše o brněnském letišti: doprava z centra, parkování, odbavení a služby pro cestovatele.',
-};
+export const metadata = createPageMetadata({
+    title: 'Průvodce letištěm Brno-Tuřany (BRQ) | Flugi',
+    description: 'Kompletní průvodce parkováním, dopravou a službami na letišti v Brně.',
+    path: '/pruvodce/letiste-brno-turany',
+    type: 'article',
+});
 
 export default function BrnoAirportGuide() {
     return (

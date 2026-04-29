@@ -2,12 +2,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
-import { Badge } from 'lucide-react'; // Placeholder icon, we'll use text badges
+import { Badge } from 'lucide-react'; // Placeholder icon, we'll use text badges
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = createPageMetadata({
     title: 'Magazín o cestování | Flugi',
     description: 'Nejnovější tipy, triky a inspirace pro vaše cesty.',
-};
+    path: '/magazin',
+});
 
 export default function MagazinePage() {
     return (

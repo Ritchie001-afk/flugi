@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Průvodce Letištěm Krakov (KRK) | Flugi',
-    description: 'Nejlepší polské letiště pro Čechy. Vše o dopravě, parkování a terminálu.',
-};
+export const metadata = createPageMetadata({
+    title: 'Průvodce letištěm Krakov-Balice (KRK) | Flugi',
+    description: 'Skvělá alternativa pro cestující z Ostravska. Moderní terminál, vlak do centra a tipy na parking.',
+    path: '/pruvodce/letiste-krakov-balice',
+    type: 'article',
+});
 
 export default function KrakowAirportGuide() {
     return (

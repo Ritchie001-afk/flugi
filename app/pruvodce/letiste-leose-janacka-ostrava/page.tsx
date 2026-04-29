@@ -3,12 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane } from "lucide-react";
-import { getDestinationImage } from "@/lib/images";
+import { getDestinationImage } from "@/lib/images";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Průvodce Letištěm Leoše Janáčka Ostrava (OSR) | Flugi',
-    description: 'Vlakem až k terminálu? Vše o letišti v Ostravě, parkování a spojení.',
-};
+export const metadata = createPageMetadata({
+    title: 'Průvodce letištěm Leoše Janáčka Ostrava (OSR) | Flugi',
+    description: 'Jediné letiště v ČR s vlakovým spojením. Tipy na dopravu, parkování zdarma a občerstvení.',
+    path: '/pruvodce/letiste-leose-janacka-ostrava',
+    type: 'article',
+});
 
 export default function OstravaAirportGuide() {
     return (

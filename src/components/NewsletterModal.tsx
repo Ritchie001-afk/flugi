@@ -5,6 +5,7 @@ import { useState } from "react";
 import { X, Mail, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { subscribeToNewsletter } from "../../app/actions/subscribe";
+import { trackEvent } from "@/lib/analytics";
 
 interface NewsletterModalProps {
     isOpen: boolean;
@@ -30,6 +31,9 @@ export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
             const result = await subscribeToNewsletter(formData);
 
             if (result.success) {
+                trackEvent("newsletter_submit", {
+                    placement: "newsletter_modal",
+                });
                 setStatus("success");
                 setTimeout(() => {
                     onClose();
@@ -40,7 +44,7 @@ export function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
                 setStatus("error");
                 setErrorMessage(result.error || "Něco se pokazilo.");
             }
-        } catch (error) {
+        } catch {
             setStatus("error");
             setErrorMessage("Chyba připojení. Zkuste to prosím znovu.");
         }

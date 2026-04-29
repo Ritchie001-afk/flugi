@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Car, Train, Clock, Coffee, Info, Plane, Bus } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Průvodce Letištěm Vídeň (VIE) | Flugi',
-    description: 'Největší letiště v okolí. Jak ušetřit na parkování a vybrat správný vlak.',
-};
+export const metadata = createPageMetadata({
+    title: 'Průvodce letištěm Vídeň Schwechat (VIE) | Flugi',
+    description: 'Přímé vlaky z Brna, obrovská nabídka dálkových letů a tipy na nejlevnější parkování.',
+    path: '/pruvodce/letiste-viden-schwechat',
+    type: 'article',
+});
 
 export default function ViennaAirportGuide() {
     return (

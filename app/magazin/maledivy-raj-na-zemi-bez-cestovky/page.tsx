@@ -2,12 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, MapPin, Calendar, Clock, Fish, Sun, Wallet } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Fish, Sun, Wallet } from "lucide-react";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata = {
-    title: 'Maledivy bez cestovky: Ráj dostupný pro každého | Flugi Magazín',
-    description: 'Jak ušetřit desítky tisíc korun a zažít Maledivy na vlastní pěst. Lokální ostrovy vs. resorty.',
-};
+export const metadata = createPageMetadata({
+    title: 'Maledivy: Ráj na zemi bez cestovky | Flugi Magazín',
+    description: 'Zapomeňte na drahé resorty. Ukážeme vám, jak si užít Maledivy i s normálním rozpočtem.',
+    path: '/magazin/maledivy-raj-na-zemi-bez-cestovky',
+    type: 'article',
+});
 
 export default function MaldivesArticle() {
     return (
