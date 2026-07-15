@@ -40,7 +40,7 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
                         (error, result) => {
                             if (error || !result?.secure_url) {
                                 console.error('Cloudinary flight image upload error:', error);
-                                resolve(`https://placehold.co/1200x600/e2e8f0/475569.png?text=Cloudinary+Upload+Error`);
+                                resolve('https://placehold.co/1200x600/e2e8f0/475569.png?text=Cloudinary+Upload+Error');
                             } else {
                                 resolve(result.secure_url);
                             }
@@ -48,7 +48,7 @@ async function generateAndUploadImage(destination: string, apiKey: string): Prom
                     ).end(buffer);
                 } catch (cloudinaryErr: any) {
                     console.error("Synchronous Cloudinary Error:", cloudinaryErr);
-                    resolve(`https://placehold.co/1200x600/e2e8f0/475569.png?text=Cloudinary+Sync+Error`);
+                    resolve('https://placehold.co/1200x600/e2e8f0/475569.png?text=Cloudinary+Sync+Error');
                 }
             });
         }
@@ -64,9 +64,9 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { raw_text, url } = body;
     
-    // 1. Jednoduchá ochrana - kontrola tokenu
+    // 1. Jednoduchá ochrana - kontrola tokenu (pouze pokud je nastaven v .env)
     const authHeader = req.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.FLUGI_SECRET_TOKEN}`) {
+    if (process.env.FLUGI_SECRET_TOKEN && authHeader !== `Bearer ${process.env.FLUGI_SECRET_TOKEN}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

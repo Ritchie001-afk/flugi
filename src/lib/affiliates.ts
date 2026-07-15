@@ -70,3 +70,8 @@ export const getRentalcarsUrl = (destination?: string | null) => {
     // Rentalcars generic link for now, detail search is harder to construct without dates/coords
     return baseUrl;
 };
+
+export const getAffiliateFlightUrl = (url: string) => {
+    // Basic passthrough for now, can be expanded to add affiliate IDs
+    return url;
+};
